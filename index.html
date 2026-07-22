@@ -66,7 +66,7 @@
           <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
         </button>
         <button onclick="openModal()" class="w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
-          <i data-lucide="plus-circle" class="w-5 h-5"></i> Add Expense
+          <i data-lucide="plus-circle" class="w-5 h-5"></i> Add Entry
         </button>
         <button onclick="switchTab('transactions')" id="nav-transactions" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
           <i data-lucide="list-todo" class="w-5 h-5"></i> Transactions
@@ -122,14 +122,14 @@
     <header class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6 md:mb-8">
       <div>
         <h1 class="text-xl md:text-2xl font-bold text-slate-900" id="welcome-heading">Hello 👋</h1>
-        <p class="text-xs md:text-sm text-slate-500" id="header-subtitle">Here's your expense overview</p>
+        <p class="text-xs md:text-sm text-slate-500" id="header-subtitle">Here's your financial overview</p>
       </div>
       <div class="flex items-center gap-2 sm:gap-3">
         <button onclick="exportData()" class="flex-1 sm:flex-none bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-3 py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center justify-center gap-2 shadow-sm transition">
           <i data-lucide="download" class="w-4 h-4 text-slate-500"></i> Export
         </button>
         <button onclick="openModal()" class="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center justify-center gap-2 transition">
-          <i data-lucide="plus" class="w-4 h-4"></i> Add Expense
+          <i data-lucide="plus" class="w-4 h-4"></i> Add Entry
         </button>
         <div onclick="switchTab('profile')" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-600 text-white items-center justify-center cursor-pointer font-bold border-2 border-white shadow-sm overflow-hidden" id="header-avatar">
           A
@@ -143,14 +143,14 @@
       <section class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
         <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
           <div>
-            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total Income</span>
+            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total Receipts</span>
             <h2 id="total-income" class="text-lg md:text-2xl font-bold text-emerald-600 mt-1">₹0.00</h2>
           </div>
           <div class="bg-emerald-50 p-2.5 md:p-3 rounded-2xl text-emerald-500"><i data-lucide="wallet" class="w-5 h-5 md:w-6 md:h-6"></i></div>
         </div>
         <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
           <div>
-            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total Expense</span>
+            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total Payments</span>
             <h2 id="total-expense" class="text-lg md:text-2xl font-bold text-rose-500 mt-1">₹0.00</h2>
           </div>
           <div class="bg-rose-50 p-2.5 md:p-3 rounded-2xl text-rose-500"><i data-lucide="arrow-down-left" class="w-5 h-5 md:w-6 md:h-6"></i></div>
@@ -174,7 +174,7 @@
       <!-- Charts -->
       <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="md:col-span-2 bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm">
-          <h3 class="font-bold text-slate-800 text-sm md:text-base mb-4">Expense Overview</h3>
+          <h3 class="font-bold text-slate-800 text-sm md:text-base mb-4">Payment Overview</h3>
           <div class="h-48 md:h-64"><canvas id="overviewChart"></canvas></div>
         </div>
         <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
@@ -210,7 +210,7 @@
         <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-4">
-              <h3 class="font-bold text-slate-800 text-sm md:text-base">Top Spending</h3>
+              <h3 class="font-bold text-slate-800 text-sm md:text-base">Top Payments</h3>
               <button onclick="switchTab('categories')" class="text-xs font-semibold text-indigo-600 hover:underline">View All</button>
             </div>
             <div id="top-spending-container" class="space-y-4"></div>
@@ -256,7 +256,7 @@
         <p class="text-xs text-slate-500 mb-6">Automated breakdown based on your entries</p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
-            <span class="text-xs text-slate-500 font-medium">Highest Expense Category</span>
+            <span class="text-xs text-slate-500 font-medium">Highest Payment Category</span>
             <h4 id="report-highest-cat" class="text-base md:text-lg font-bold text-slate-800 mt-1">-</h4>
           </div>
           <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
@@ -315,7 +315,7 @@
           <div class="flex items-center justify-between pb-4 border-b border-slate-100">
             <div>
               <h4 class="font-semibold text-sm text-slate-800">Clear Data</h4>
-              <p class="text-[11px] text-slate-500">Reset all expenses and local storage data</p>
+              <p class="text-[11px] text-slate-500">Reset all entries and local storage data</p>
             </div>
             <button onclick="clearAllData()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-3 py-2 rounded-xl text-xs font-semibold transition">Reset App</button>
           </div>
@@ -359,7 +359,7 @@
   <div id="modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl max-w-md w-full p-5 md:p-6 shadow-2xl">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="text-base md:text-lg font-bold text-slate-900">Add New Transaction</h3>
+        <h3 class="text-base md:text-lg font-bold text-slate-900">Add New Entry</h3>
         <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
 
@@ -367,8 +367,8 @@
         <div>
           <label class="block text-xs font-medium text-slate-600 mb-1">Type</label>
           <select id="type" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600">
-            <option value="expense">Expense</option>
-            <option value="income">Income</option>
+            <option value="payment">Payment</option>
+            <option value="receipt">Receipt</option>
           </select>
         </div>
 
@@ -390,7 +390,7 @@
             <option value="Shopping">Shopping</option>
             <option value="Bills & Utilities">Bills & Utilities</option>
             <option value="Entertainment">Entertainment</option>
-            <option value="Income">Income / Allowance</option>
+            <option value="Receipt / Allowance">Receipt / Allowance</option>
           </select>
         </div>
 
@@ -417,7 +417,7 @@
   <script>
     lucide.createIcons();
 
-    // Default Seed Data (Set to empty array so users start completely clean)
+    // Default Seed Data
     const defaultData = [];
 
     let transactions = JSON.parse(localStorage.getItem('ledger_transactions')) || defaultData;
@@ -486,7 +486,7 @@
       alert('Profile details updated!');
     });
 
-    // NAVIGATION TABS (Mobile + Desktop Sync)
+    // NAVIGATION TABS
     function switchTab(tab) {
       document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('nav-active'));
@@ -495,7 +495,6 @@
       const activeNavBtn = document.getElementById(`nav-${tab}`);
       if(activeNavBtn) activeNavBtn.classList.add('nav-active');
 
-      // Update mobile bottom nav highlights
       document.querySelectorAll('nav.md\\:hidden button').forEach(btn => {
         btn.classList.remove('text-indigo-400');
       });
@@ -503,7 +502,7 @@
       if(mobileNavBtn) mobileNavBtn.classList.add('text-indigo-400');
 
       const subtitles = {
-        dashboard: "Here's your expense overview",
+        dashboard: "Here's your financial overview",
         transactions: "Track and search all recorded transactions",
         categories: "Breakdown of expenditure by categories",
         reports: "Automated analysis of your spending habits",
@@ -527,13 +526,13 @@
 
     function renderKPIs() {
       const curr = currentUser ? currentUser.currency : '₹';
-      const income = transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
-      const expense = transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
-      const savings = income - expense;
-      const dailyAvg = expense / 30;
+      const receipts = transactions.filter(t => t.type === 'receipt' || t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
+      const payments = transactions.filter(t => t.type === 'payment' || t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
+      const savings = receipts - payments;
+      const dailyAvg = payments / 30;
 
-      document.getElementById('total-income').innerText = `${curr}${income.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('total-expense').innerText = `${curr}${expense.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+      document.getElementById('total-income').innerText = `${curr}${receipts.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+      document.getElementById('total-expense').innerText = `${curr}${payments.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
       document.getElementById('total-savings').innerText = `${curr}${savings.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
       document.getElementById('card-total-balance').innerText = `${curr}${savings.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
       document.getElementById('daily-average').innerText = `${curr}${dailyAvg.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
@@ -551,14 +550,14 @@
 
       transactions.slice().reverse().slice(0, 5).forEach(item => {
         const tr = document.createElement('tr');
-        const isExpense = item.type === 'expense';
+        const isPayment = item.type === 'payment' || item.type === 'expense';
         
         tr.innerHTML = `
           <td class="py-3 text-slate-500">${item.date}</td>
           <td class="py-3 font-semibold text-slate-800">${item.description}</td>
           <td class="py-3"><span class="bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-md text-[10px]">${item.category}</span></td>
-          <td class="py-3 font-semibold ${isExpense ? 'text-rose-500' : 'text-emerald-600'}">
-            ${isExpense ? '' : '+'}${curr}${item.amount.toLocaleString('en-IN', {minimumFractionDigits: 2})}
+          <td class="py-3 font-semibold ${isPayment ? 'text-rose-500' : 'text-emerald-600'}">
+            ${isPayment ? '' : '+'}${curr}${item.amount.toLocaleString('en-IN', {minimumFractionDigits: 2})}
           </td>
           <td class="py-3 text-slate-500">${item.method || 'UPI'}</td>
         `;
@@ -571,16 +570,16 @@
       container.innerHTML = '';
       const curr = currentUser ? currentUser.currency : '₹';
 
-      const expenses = transactions.filter(t => t.type === 'expense');
-      if (expenses.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-400">No expense entries yet.</p>`;
+      const payments = transactions.filter(t => t.type === 'payment' || t.type === 'expense');
+      if (payments.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400">No payment entries yet.</p>`;
         return;
       }
 
-      const totalExpenseSum = expenses.reduce((acc, t) => acc + t.amount, 0) || 1;
+      const totalPaymentSum = payments.reduce((acc, t) => acc + t.amount, 0) || 1;
 
       const categoryMap = {};
-      expenses.forEach(t => categoryMap[t.category] = (categoryMap[t.category] || 0) + t.amount);
+      payments.forEach(t => categoryMap[t.category] = (categoryMap[t.category] || 0) + t.amount);
 
       const colors = ['bg-indigo-600', 'bg-cyan-500', 'bg-emerald-400', 'bg-amber-400', 'bg-rose-500'];
       
@@ -588,7 +587,7 @@
         .sort((a, b) => b[1] - a[1])
         .slice(0, 5)
         .forEach(([cat, amount], index) => {
-          const pct = ((amount / totalExpenseSum) * 100).toFixed(1);
+          const pct = ((amount / totalPaymentSum) * 100).toFixed(1);
           const barColor = colors[index % colors.length];
 
           container.innerHTML += `
@@ -617,14 +616,14 @@
 
       data.slice().reverse().forEach(item => {
         const tr = document.createElement('tr');
-        const isExpense = item.type === 'expense';
+        const isPayment = item.type === 'payment' || item.type === 'expense';
         
         tr.innerHTML = `
           <td class="py-3 text-slate-500">${item.date}</td>
           <td class="py-3 font-semibold text-slate-800">${item.description}</td>
           <td class="py-3"><span class="bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-md text-[10px]">${item.category}</span></td>
-          <td class="py-3 font-semibold ${isExpense ? 'text-rose-500' : 'text-emerald-600'}">
-            ${isExpense ? '' : '+'}${curr}${item.amount.toLocaleString('en-IN', {minimumFractionDigits: 2})}
+          <td class="py-3 font-semibold ${isPayment ? 'text-rose-500' : 'text-emerald-600'}">
+            ${isPayment ? '' : '+'}${curr}${item.amount.toLocaleString('en-IN', {minimumFractionDigits: 2})}
           </td>
           <td class="py-3 text-slate-500">${item.method || 'UPI'}</td>
           <td class="py-3 text-right">
@@ -651,14 +650,14 @@
       const curr = currentUser ? currentUser.currency : '₹';
 
       const categoryTotals = {};
-      const expenses = transactions.filter(t => t.type === 'expense');
+      const payments = transactions.filter(t => t.type === 'payment' || t.type === 'expense');
 
-      if (expenses.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400 text-xs">No expense categories to display yet.</div>`;
+      if (payments.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400 text-xs">No payment categories to display yet.</div>`;
         return;
       }
 
-      expenses.forEach(t => {
+      payments.forEach(t => {
         categoryTotals[t.category] = (categoryTotals[t.category] || 0) + t.amount;
       });
 
@@ -667,22 +666,22 @@
           <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm">
             <span class="bg-indigo-50 text-indigo-600 text-[10px] md:text-xs px-2.5 py-1 rounded-md font-semibold">${cat}</span>
             <h3 class="text-xl md:text-2xl font-bold text-slate-800 mt-3">${curr}${amount.toLocaleString('en-IN', {minimumFractionDigits: 2})}</h3>
-            <p class="text-xs text-slate-400 mt-1">Total Spent</p>
+            <p class="text-xs text-slate-400 mt-1">Total Paid</p>
           </div>
         `;
       });
     }
 
     function renderReports() {
-      const expenses = transactions.filter(t => t.type === 'expense');
-      const income = transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
-      const totalExpense = expenses.reduce((acc, t) => acc + t.amount, 0);
+      const payments = transactions.filter(t => t.type === 'payment' || t.type === 'expense');
+      const receipts = transactions.filter(t => t.type === 'receipt' || t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
+      const totalPayments = payments.reduce((acc, t) => acc + t.amount, 0);
 
       const catCounts = {};
-      expenses.forEach(t => catCounts[t.category] = (catCounts[t.category] || 0) + t.amount);
+      payments.forEach(t => catCounts[t.category] = (catCounts[t.category] || 0) + t.amount);
       const topCat = Object.keys(catCounts).length > 0 ? Object.keys(catCounts).reduce((a, b) => catCounts[a] > catCounts[b] ? a : b) : '-';
 
-      const savingsRate = income > 0 ? (((income - totalExpense) / income) * 100).toFixed(1) : 0;
+      const savingsRate = receipts > 0 ? (((receipts - totalPayments) / receipts) * 100).toFixed(1) : 0;
 
       document.getElementById('report-highest-cat').innerText = topCat;
       document.getElementById('report-total-count').innerText = transactions.length;
@@ -716,17 +715,17 @@
 
     function updateCharts() {
       const curr = currentUser ? currentUser.currency : '₹';
-      const expensesOnly = transactions.filter(t => t.type === 'expense');
+      const paymentsOnly = transactions.filter(t => t.type === 'payment' || t.type === 'expense');
       const groupedByDate = {};
       
-      expensesOnly.forEach(t => groupedByDate[t.date] = (groupedByDate[t.date] || 0) + t.amount);
+      paymentsOnly.forEach(t => groupedByDate[t.date] = (groupedByDate[t.date] || 0) + t.amount);
 
       lineChart.data.labels = Object.keys(groupedByDate);
       lineChart.data.datasets[0].data = Object.values(groupedByDate);
       lineChart.update();
 
       const categoryMap = {};
-      expensesOnly.forEach(t => categoryMap[t.category] = (categoryMap[t.category] || 0) + t.amount);
+      paymentsOnly.forEach(t => categoryMap[t.category] = (categoryMap[t.category] || 0) + t.amount);
 
       const categories = Object.keys(categoryMap);
       const amounts = Object.values(categoryMap);
@@ -736,7 +735,7 @@
       doughnutChart.update();
 
       const legendContainer = document.getElementById('category-legend');
-      const totalExpenseSum = amounts.reduce((a, b) => a + b, 0) || 1;
+      const totalPaymentSum = amounts.reduce((a, b) => a + b, 0) || 1;
       legendContainer.innerHTML = '';
 
       if (categories.length === 0) {
@@ -746,7 +745,7 @@
 
       categories.forEach((cat, index) => {
         const amt = categoryMap[cat];
-        const pct = ((amt / totalExpenseSum) * 100).toFixed(1);
+        const pct = ((amt / totalPaymentSum) * 100).toFixed(1);
         const color = doughnutChart.data.datasets[0].backgroundColor[index % 5];
 
         legendContainer.innerHTML += `
