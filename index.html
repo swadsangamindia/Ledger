@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Ledger - Track. Manage. Save.</title>
   
   <!-- Tailwind CSS CDN -->
@@ -19,7 +19,7 @@
     .nav-active { background-color: #4f46e5; color: white !important; }
   </style>
 </head>
-<body class="bg-[#F8FAFC] text-slate-800 flex h-screen overflow-hidden">
+<body class="bg-[#F8FAFC] text-slate-800 flex flex-col md:flex-row h-screen overflow-hidden">
 
   <!-- LOCAL AUTH / USER SETUP OVERLAY -->
   <div id="auth-overlay" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
@@ -29,7 +29,7 @@
           <i data-lucide="book-open" class="w-8 h-8"></i>
         </div>
         <h2 id="auth-title" class="text-xl font-bold text-slate-900">Welcome to Ledger</h2>
-        <p id="auth-subtitle" class="text-xs text-slate-500 mt-1">Enter your details to access your local workspace</p>
+        <p id="auth-subtitle" class="text-xs text-slate-500 mt-1">Enter your details to access your workspace</p>
       </div>
 
       <form id="auth-form" class="space-y-4">
@@ -48,10 +48,9 @@
     </div>
   </div>
 
-  <!-- SIDEBAR -->
-  <aside class="w-64 bg-[#111625] text-slate-400 flex flex-col justify-between p-5 shrink-0">
+  <!-- DESKTOP SIDEBAR -->
+  <aside class="hidden md:flex w-64 bg-[#111625] text-slate-400 flex-col justify-between p-5 shrink-0">
     <div>
-      <!-- Ledger Brand Logo -->
       <div class="flex items-center gap-3 px-2 py-3 mb-6">
         <div class="bg-indigo-600 p-2.5 rounded-xl text-white">
           <i data-lucide="book-open" class="w-6 h-6"></i>
@@ -62,7 +61,6 @@
         </div>
       </div>
 
-      <!-- Navigation Tabs -->
       <nav class="space-y-1">
         <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn nav-active w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition text-slate-400 hover:text-white hover:bg-slate-800/50">
           <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
@@ -104,100 +102,115 @@
     </div>
   </aside>
 
+  <!-- MOBILE HEADER -->
+  <div class="md:hidden bg-[#111625] text-white p-4 flex justify-between items-center shrink-0 border-b border-slate-800">
+    <div class="flex items-center gap-2">
+      <div class="bg-indigo-600 p-2 rounded-lg text-white">
+        <i data-lucide="book-open" class="w-5 h-5"></i>
+      </div>
+      <span class="font-bold text-base">Ledger</span>
+    </div>
+    <div onclick="switchTab('profile')" class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs cursor-pointer" id="mobile-header-avatar">
+      A
+    </div>
+  </div>
+
   <!-- MAIN CONTENT AREA -->
-  <main class="flex-1 overflow-y-auto p-8 relative">
+  <main class="flex-1 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8 relative">
     
     <!-- Top Header -->
-    <header class="flex justify-between items-center mb-8">
+    <header class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6 md:mb-8">
       <div>
-        <h1 class="text-2xl font-bold text-slate-900" id="welcome-heading">Hello 👋</h1>
-        <p class="text-sm text-slate-500" id="header-subtitle">Here's your expense overview</p>
+        <h1 class="text-xl md:text-2xl font-bold text-slate-900" id="welcome-heading">Hello 👋</h1>
+        <p class="text-xs md:text-sm text-slate-500" id="header-subtitle">Here's your expense overview</p>
       </div>
-      <div class="flex items-center gap-3">
-        <button onclick="exportData()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-sm transition">
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="exportData()" class="flex-1 sm:flex-none bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-3 py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center justify-center gap-2 shadow-sm transition">
           <i data-lucide="download" class="w-4 h-4 text-slate-500"></i> Export
         </button>
-        <button onclick="openModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 transition">
+        <button onclick="openModal()" class="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center justify-center gap-2 transition">
           <i data-lucide="plus" class="w-4 h-4"></i> Add Expense
         </button>
-        <div onclick="switchTab('profile')" class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center cursor-pointer font-bold border-2 border-white shadow-sm overflow-hidden" id="header-avatar">
+        <div onclick="switchTab('profile')" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-600 text-white items-center justify-center cursor-pointer font-bold border-2 border-white shadow-sm overflow-hidden" id="header-avatar">
           A
         </div>
       </div>
     </header>
 
     <!-- 1. DASHBOARD VIEW -->
-    <div id="view-dashboard" class="tab-view space-y-8">
+    <div id="view-dashboard" class="tab-view space-y-6 md:space-y-8">
       <!-- KPI Cards -->
-      <section class="grid grid-cols-4 gap-6">
-        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
+      <section class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
           <div>
-            <span class="text-xs font-medium text-slate-500">Total Income</span>
-            <h2 id="total-income" class="text-2xl font-bold text-emerald-600 mt-1">₹0.00</h2>
+            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total Income</span>
+            <h2 id="total-income" class="text-lg md:text-2xl font-bold text-emerald-600 mt-1">₹0.00</h2>
           </div>
-          <div class="bg-emerald-50 p-3 rounded-2xl text-emerald-500"><i data-lucide="wallet" class="w-6 h-6"></i></div>
+          <div class="bg-emerald-50 p-2.5 md:p-3 rounded-2xl text-emerald-500"><i data-lucide="wallet" class="w-5 h-5 md:w-6 md:h-6"></i></div>
         </div>
-        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
+        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
           <div>
-            <span class="text-xs font-medium text-slate-500">Total Expense</span>
-            <h2 id="total-expense" class="text-2xl font-bold text-rose-500 mt-1">₹0.00</h2>
+            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total Expense</span>
+            <h2 id="total-expense" class="text-lg md:text-2xl font-bold text-rose-500 mt-1">₹0.00</h2>
           </div>
-          <div class="bg-rose-50 p-3 rounded-2xl text-rose-500"><i data-lucide="arrow-down-left" class="w-6 h-6"></i></div>
+          <div class="bg-rose-50 p-2.5 md:p-3 rounded-2xl text-rose-500"><i data-lucide="arrow-down-left" class="w-5 h-5 md:w-6 md:h-6"></i></div>
         </div>
-        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
+        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
           <div>
-            <span class="text-xs font-medium text-slate-500">Savings</span>
-            <h2 id="total-savings" class="text-2xl font-bold text-blue-600 mt-1">₹0.00</h2>
+            <span class="text-[10px] md:text-xs font-medium text-slate-500">Savings</span>
+            <h2 id="total-savings" class="text-lg md:text-2xl font-bold text-blue-600 mt-1">₹0.00</h2>
           </div>
-          <div class="bg-blue-50 p-3 rounded-2xl text-blue-500"><i data-lucide="piggy-bank" class="w-6 h-6"></i></div>
+          <div class="bg-blue-50 p-2.5 md:p-3 rounded-2xl text-blue-500"><i data-lucide="piggy-bank" class="w-5 h-5 md:w-6 md:h-6"></i></div>
         </div>
-        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
+        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
           <div>
-            <span class="text-xs font-medium text-slate-500">Daily Average</span>
-            <h2 id="daily-average" class="text-2xl font-bold text-amber-500 mt-1">₹0.00</h2>
+            <span class="text-[10px] md:text-xs font-medium text-slate-500">Daily Average</span>
+            <h2 id="daily-average" class="text-lg md:text-2xl font-bold text-amber-500 mt-1">₹0.00</h2>
           </div>
-          <div class="bg-amber-50 p-3 rounded-2xl text-amber-500"><i data-lucide="bar-chart-2" class="w-6 h-6"></i></div>
+          <div class="bg-amber-50 p-2.5 md:p-3 rounded-2xl text-amber-500"><i data-lucide="bar-chart-2" class="w-5 h-5 md:w-6 md:h-6"></i></div>
         </div>
       </section>
 
       <!-- Charts -->
-      <section class="grid grid-cols-3 gap-6">
-        <div class="col-span-2 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-          <h3 class="font-bold text-slate-800 mb-4">Expense Overview</h3>
-          <div class="h-64"><canvas id="overviewChart"></canvas></div>
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="md:col-span-2 bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm">
+          <h3 class="font-bold text-slate-800 text-sm md:text-base mb-4">Expense Overview</h3>
+          <div class="h-48 md:h-64"><canvas id="overviewChart"></canvas></div>
         </div>
-        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
-          <h3 class="font-bold text-slate-800 mb-2">Category Breakdown</h3>
-          <div class="relative flex justify-center items-center h-48"><canvas id="categoryChart"></canvas></div>
+        <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+          <h3 class="font-bold text-slate-800 text-sm md:text-base mb-2">Category Breakdown</h3>
+          <div class="relative flex justify-center items-center h-40 md:h-48"><canvas id="categoryChart"></canvas></div>
           <div id="category-legend" class="space-y-2 mt-4 text-xs font-medium"></div>
         </div>
       </section>
 
       <!-- Dashboard Transactions & Top Spending -->
-      <section class="grid grid-cols-3 gap-6">
-        <div class="col-span-2 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="md:col-span-2 bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm overflow-x-auto">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="font-bold text-slate-800">Recent Transactions</h3>
+            <h3 class="font-bold text-slate-800 text-sm md:text-base">Recent Transactions</h3>
             <button onclick="switchTab('transactions')" class="text-xs font-semibold text-indigo-600 hover:underline">View All</button>
           </div>
-          <table class="w-full text-left text-xs">
-            <thead>
-              <tr class="text-slate-400 border-b border-slate-100">
-                <th class="pb-3 font-medium">Date</th>
-                <th class="pb-3 font-medium">Description</th>
-                <th class="pb-3 font-medium">Category</th>
-                <th class="pb-3 font-medium">Amount</th>
-                <th class="pb-3 font-medium">Payment Method</th>
-              </tr>
-            </thead>
-            <tbody id="dashboard-recent-rows" class="divide-y divide-slate-50 font-medium"></tbody>
-          </table>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs min-w-[500px]">
+              <thead>
+                <tr class="text-slate-400 border-b border-slate-100">
+                  <th class="pb-3 font-medium">Date</th>
+                  <th class="pb-3 font-medium">Description</th>
+                  <th class="pb-3 font-medium">Category</th>
+                  <th class="pb-3 font-medium">Amount</th>
+                  <th class="pb-3 font-medium">Method</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-recent-rows" class="divide-y divide-slate-50 font-medium"></tbody>
+            </table>
+          </div>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+        <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-4">
-              <h3 class="font-bold text-slate-800">Top Spending</h3>
+              <h3 class="font-bold text-slate-800 text-sm md:text-base">Top Spending</h3>
               <button onclick="switchTab('categories')" class="text-xs font-semibold text-indigo-600 hover:underline">View All</button>
             </div>
             <div id="top-spending-container" class="space-y-4"></div>
@@ -208,49 +221,51 @@
 
     <!-- 2. TRANSACTIONS VIEW -->
     <div id="view-transactions" class="tab-view hidden">
-      <section class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-        <div class="flex justify-between items-center mb-6">
-          <h3 class="font-bold text-slate-800 text-lg">All Transactions History</h3>
-          <input type="text" id="search-input" onkeyup="filterTransactions()" placeholder="Search description or category..." class="border border-slate-200 rounded-xl px-4 py-2 text-xs w-64 bg-slate-50 focus:outline-indigo-600" />
+      <section class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm">
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-6">
+          <h3 class="font-bold text-slate-800 text-base md:text-lg">All Transactions History</h3>
+          <input type="text" id="search-input" onkeyup="filterTransactions()" placeholder="Search description..." class="border border-slate-200 rounded-xl px-4 py-2 text-xs w-full sm:w-64 bg-slate-50 focus:outline-indigo-600" />
         </div>
-        <table class="w-full text-left text-xs">
-          <thead>
-            <tr class="text-slate-400 border-b border-slate-100">
-              <th class="pb-3 font-medium">Date</th>
-              <th class="pb-3 font-medium">Description</th>
-              <th class="pb-3 font-medium">Category</th>
-              <th class="pb-3 font-medium">Amount</th>
-              <th class="pb-3 font-medium">Payment Method</th>
-              <th class="pb-3 font-medium text-right">Action</th>
-            </tr>
-          </thead>
-          <tbody id="full-transaction-rows" class="divide-y divide-slate-50 font-medium"></tbody>
-        </table>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs min-w-[550px]">
+            <thead>
+              <tr class="text-slate-400 border-b border-slate-100">
+                <th class="pb-3 font-medium">Date</th>
+                <th class="pb-3 font-medium">Description</th>
+                <th class="pb-3 font-medium">Category</th>
+                <th class="pb-3 font-medium">Amount</th>
+                <th class="pb-3 font-medium">Method</th>
+                <th class="pb-3 font-medium text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="full-transaction-rows" class="divide-y divide-slate-50 font-medium"></tbody>
+          </table>
+        </div>
       </section>
     </div>
 
     <!-- 3. CATEGORIES VIEW -->
     <div id="view-categories" class="tab-view hidden">
-      <section class="grid grid-cols-3 gap-6" id="categories-grid"></section>
+      <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6" id="categories-grid"></section>
     </div>
 
     <!-- 4. REPORTS VIEW -->
     <div id="view-reports" class="tab-view hidden space-y-6">
-      <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-        <h3 class="font-bold text-slate-800 text-lg mb-2">Financial Monthly Summary</h3>
+      <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm">
+        <h3 class="font-bold text-slate-800 text-base md:text-lg mb-1">Financial Monthly Summary</h3>
         <p class="text-xs text-slate-500 mb-6">Automated breakdown based on your entries</p>
-        <div class="grid grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
             <span class="text-xs text-slate-500 font-medium">Highest Expense Category</span>
-            <h4 id="report-highest-cat" class="text-lg font-bold text-slate-800 mt-1">-</h4>
+            <h4 id="report-highest-cat" class="text-base md:text-lg font-bold text-slate-800 mt-1">-</h4>
           </div>
           <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
             <span class="text-xs text-slate-500 font-medium">Total Transactions Count</span>
-            <h4 id="report-total-count" class="text-lg font-bold text-slate-800 mt-1">0</h4>
+            <h4 id="report-total-count" class="text-base md:text-lg font-bold text-slate-800 mt-1">0</h4>
           </div>
           <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
             <span class="text-xs text-slate-500 font-medium">Savings Ratio</span>
-            <h4 id="report-savings-rate" class="text-lg font-bold text-indigo-600 mt-1">0%</h4>
+            <h4 id="report-savings-rate" class="text-base md:text-lg font-bold text-indigo-600 mt-1">0%</h4>
           </div>
         </div>
       </div>
@@ -258,16 +273,16 @@
 
     <!-- 5. PROFILE VIEW -->
     <div id="view-profile" class="tab-view hidden">
-      <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm max-w-xl">
-        <h3 class="font-bold text-slate-800 text-lg mb-6">User Profile Settings</h3>
+      <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm max-w-xl">
+        <h3 class="font-bold text-slate-800 text-base md:text-lg mb-6">User Profile Settings</h3>
         
         <form id="profile-form" class="space-y-4">
           <div class="flex items-center gap-4 pb-4 border-b border-slate-100">
-            <div id="profile-avatar-large" class="w-16 h-16 rounded-full bg-indigo-600 text-white text-2xl font-bold flex items-center justify-center overflow-hidden">
+            <div id="profile-avatar-large" class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-indigo-600 text-white text-xl md:text-2xl font-bold flex items-center justify-center overflow-hidden shrink-0">
               A
             </div>
             <div>
-              <h4 id="profile-display-name" class="font-bold text-slate-800 text-base">User</h4>
+              <h4 id="profile-display-name" class="font-bold text-slate-800 text-sm md:text-base">User</h4>
               <p id="profile-display-email" class="text-xs text-slate-500">user@example.com</p>
             </div>
           </div>
@@ -287,49 +302,68 @@
             <input type="text" id="profile-currency-input" value="₹" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
           </div>
 
-          <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm">Save Profile Changes</button>
+          <button type="submit" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm">Save Profile Changes</button>
         </form>
       </div>
     </div>
 
     <!-- 6. SETTINGS VIEW -->
     <div id="view-settings" class="tab-view hidden">
-      <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm max-w-xl">
-        <h3 class="font-bold text-slate-800 text-lg mb-4">Settings & Management</h3>
+      <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm max-w-xl">
+        <h3 class="font-bold text-slate-800 text-base md:text-lg mb-4">Settings & Management</h3>
         <div class="space-y-6">
           <div class="flex items-center justify-between pb-4 border-b border-slate-100">
             <div>
               <h4 class="font-semibold text-sm text-slate-800">Clear Data</h4>
-              <p class="text-xs text-slate-500">Reset all expenses and local storage data</p>
+              <p class="text-[11px] text-slate-500">Reset all expenses and local storage data</p>
             </div>
-            <button onclick="clearAllData()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-4 py-2 rounded-xl text-xs font-semibold transition">Reset App Data</button>
+            <button onclick="clearAllData()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-3 py-2 rounded-xl text-xs font-semibold transition">Reset App</button>
           </div>
           <div class="flex items-center justify-between">
             <div>
               <h4 class="font-semibold text-sm text-slate-800">Export Transactions</h4>
-              <p class="text-xs text-slate-500">Download data as CSV for Excel</p>
+              <p class="text-[11px] text-slate-500">Download data as CSV for Excel</p>
             </div>
-            <button onclick="exportData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold transition">Export CSV</button>
+            <button onclick="exportData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-xl text-xs font-semibold transition">Export CSV</button>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Floating Action Button -->
-    <button onclick="openModal()" class="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-xl transition transform hover:scale-105 z-10">
+    <button onclick="openModal()" class="fixed bottom-20 md:bottom-8 right-5 md:right-8 bg-indigo-600 hover:bg-indigo-700 text-white p-3.5 md:p-4 rounded-full shadow-2xl transition transform hover:scale-105 z-30">
       <i data-lucide="plus" class="w-6 h-6"></i>
     </button>
   </main>
 
+  <!-- MOBILE BOTTOM NAVIGATION BAR -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-[#111625] border-t border-slate-800 flex justify-around items-center p-2 z-40 text-slate-400">
+    <button onclick="switchTab('dashboard')" id="m-nav-dashboard" class="flex flex-col items-center gap-1 p-1 text-[10px] text-indigo-400">
+      <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+    </button>
+    <button onclick="switchTab('transactions')" id="m-nav-transactions" class="flex flex-col items-center gap-1 p-1 text-[10px]">
+      <i data-lucide="list-todo" class="w-5 h-5"></i> Activity
+    </button>
+    <button onclick="switchTab('categories')" id="m-nav-categories" class="flex flex-col items-center gap-1 p-1 text-[10px]">
+      <i data-lucide="shapes" class="w-5 h-5"></i> Categories
+    </button>
+    <button onclick="switchTab('reports')" id="m-nav-reports" class="flex flex-col items-center gap-1 p-1 text-[10px]">
+      <i data-lucide="bar-chart-3" class="w-5 h-5"></i> Reports
+    </button>
+    <button onclick="switchTab('settings')" id="m-nav-settings" class="flex flex-col items-center gap-1 p-1 text-[10px]">
+      <i data-lucide="settings" class="w-5 h-5"></i> Settings
+    </button>
+  </nav>
+
   <!-- ADD TRANSACTION MODAL -->
-  <div id="modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+  <div id="modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 md:p-6 shadow-2xl">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="text-lg font-bold text-slate-900">Add New Expense / Income</h3>
+        <h3 class="text-base md:text-lg font-bold text-slate-900">Add New Transaction</h3>
         <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
 
-      <form id="transaction-form" class="space-y-4">
+      <form id="transaction-form" class="space-y-3.5">
         <div>
           <label class="block text-xs font-medium text-slate-600 mb-1">Type</label>
           <select id="type" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600">
@@ -383,20 +417,13 @@
   <script>
     lucide.createIcons();
 
-    // Default Seed Data
-    const defaultData = [
-      { id: 1, type: 'income', description: 'Monthly Allowance', amount: 45000, category: 'Income', method: 'UPI', date: '2026-07-01' },
-      { id: 2, type: 'expense', description: 'Swiggy - Dinner', amount: 450, category: 'Food & Dining', method: 'UPI', date: '2026-07-20' },
-      { id: 3, type: 'expense', description: 'Auto Rickshaw', amount: 120, category: 'Transport', method: 'Cash', date: '2026-07-21' },
-      { id: 4, type: 'expense', description: 'Grocery Store', amount: 1250, category: 'Shopping', method: 'UPI', date: '2026-07-21' },
-      { id: 5, type: 'expense', description: 'Electricity Bill', amount: 1800, category: 'Bills & Utilities', method: 'UPI', date: '2026-07-22' }
-    ];
+    // Default Seed Data (Set to empty array so users start completely clean)
+    const defaultData = [];
 
     let transactions = JSON.parse(localStorage.getItem('ledger_transactions')) || defaultData;
     let currentUser = JSON.parse(localStorage.getItem('ledger_user')) || null;
     let lineChart, doughnutChart;
 
-    // LOCAL AUTHENTICATION FUNCTIONS
     function checkAuth() {
       if (!currentUser) {
         document.getElementById('auth-overlay').classList.remove('hidden');
@@ -423,7 +450,7 @@
     });
 
     function logout() {
-      if (confirm('Switching profiles will clear local session. Continue?')) {
+      if (confirm('Switching profiles will reset session. Continue?')) {
         localStorage.removeItem('ledger_user');
         currentUser = null;
         checkAuth();
@@ -436,6 +463,7 @@
 
       document.getElementById('welcome-heading').innerText = `Hello, ${currentUser.name} 👋`;
       document.getElementById('header-avatar').innerText = firstInitial;
+      document.getElementById('mobile-header-avatar').innerText = firstInitial;
       document.getElementById('profile-avatar-large').innerText = firstInitial;
 
       document.getElementById('profile-display-name').innerText = currentUser.name;
@@ -458,13 +486,21 @@
       alert('Profile details updated!');
     });
 
-    // NAVIGATION TABS
+    // NAVIGATION TABS (Mobile + Desktop Sync)
     function switchTab(tab) {
       document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('nav-active'));
 
       document.getElementById(`view-${tab}`).classList.remove('hidden');
-      document.getElementById(`nav-${tab}`).classList.add('nav-active');
+      const activeNavBtn = document.getElementById(`nav-${tab}`);
+      if(activeNavBtn) activeNavBtn.classList.add('nav-active');
+
+      // Update mobile bottom nav highlights
+      document.querySelectorAll('nav.md\\:hidden button').forEach(btn => {
+        btn.classList.remove('text-indigo-400');
+      });
+      const mobileNavBtn = document.getElementById(`m-nav-${tab}`);
+      if(mobileNavBtn) mobileNavBtn.classList.add('text-indigo-400');
 
       const subtitles = {
         dashboard: "Here's your expense overview",
@@ -508,6 +544,11 @@
       tbody.innerHTML = '';
       const curr = currentUser ? currentUser.currency : '₹';
 
+      if (transactions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400">No transactions recorded yet.</td></tr>`;
+        return;
+      }
+
       transactions.slice().reverse().slice(0, 5).forEach(item => {
         const tr = document.createElement('tr');
         const isExpense = item.type === 'expense';
@@ -531,6 +572,11 @@
       const curr = currentUser ? currentUser.currency : '₹';
 
       const expenses = transactions.filter(t => t.type === 'expense');
+      if (expenses.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400">No expense entries yet.</p>`;
+        return;
+      }
+
       const totalExpenseSum = expenses.reduce((acc, t) => acc + t.amount, 0) || 1;
 
       const categoryMap = {};
@@ -564,6 +610,11 @@
       tbody.innerHTML = '';
       const curr = currentUser ? currentUser.currency : '₹';
 
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-400">No matching transactions found.</td></tr>`;
+        return;
+      }
+
       data.slice().reverse().forEach(item => {
         const tr = document.createElement('tr');
         const isExpense = item.type === 'expense';
@@ -577,7 +628,7 @@
           </td>
           <td class="py-3 text-slate-500">${item.method || 'UPI'}</td>
           <td class="py-3 text-right">
-            <button onclick="deleteTransaction(${item.id})" class="text-rose-400 hover:text-rose-600 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            <button onclick="deleteTransaction(${item.id})" class="text-rose-400 hover:text-rose-600 transition p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -600,15 +651,22 @@
       const curr = currentUser ? currentUser.currency : '₹';
 
       const categoryTotals = {};
-      transactions.filter(t => t.type === 'expense').forEach(t => {
+      const expenses = transactions.filter(t => t.type === 'expense');
+
+      if (expenses.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400 text-xs">No expense categories to display yet.</div>`;
+        return;
+      }
+
+      expenses.forEach(t => {
         categoryTotals[t.category] = (categoryTotals[t.category] || 0) + t.amount;
       });
 
       Object.entries(categoryTotals).forEach(([cat, amount]) => {
         grid.innerHTML += `
-          <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
-            <span class="bg-indigo-50 text-indigo-600 text-xs px-2.5 py-1 rounded-md font-semibold">${cat}</span>
-            <h3 class="text-2xl font-bold text-slate-800 mt-3">${curr}${amount.toLocaleString('en-IN', {minimumFractionDigits: 2})}</h3>
+          <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm">
+            <span class="bg-indigo-50 text-indigo-600 text-[10px] md:text-xs px-2.5 py-1 rounded-md font-semibold">${cat}</span>
+            <h3 class="text-xl md:text-2xl font-bold text-slate-800 mt-3">${curr}${amount.toLocaleString('en-IN', {minimumFractionDigits: 2})}</h3>
             <p class="text-xs text-slate-400 mt-1">Total Spent</p>
           </div>
         `;
@@ -622,7 +680,7 @@
 
       const catCounts = {};
       expenses.forEach(t => catCounts[t.category] = (catCounts[t.category] || 0) + t.amount);
-      const topCat = Object.keys(catCounts).reduce((a, b) => catCounts[a] > catCounts[b] ? a : b, '-');
+      const topCat = Object.keys(catCounts).length > 0 ? Object.keys(catCounts).reduce((a, b) => catCounts[a] > catCounts[b] ? a : b) : '-';
 
       const savingsRate = income > 0 ? (((income - totalExpense) / income) * 100).toFixed(1) : 0;
 
@@ -681,6 +739,11 @@
       const totalExpenseSum = amounts.reduce((a, b) => a + b, 0) || 1;
       legendContainer.innerHTML = '';
 
+      if (categories.length === 0) {
+        legendContainer.innerHTML = `<p class="text-slate-400 text-center text-[11px]">No data available</p>`;
+        return;
+      }
+
       categories.forEach((cat, index) => {
         const amt = categoryMap[cat];
         const pct = ((amt / totalExpenseSum) * 100).toFixed(1);
@@ -714,6 +777,7 @@
       saveAndRender();
       closeModal();
       e.target.reset();
+      document.getElementById('date').value = new Date().toISOString().split('T')[0];
     });
 
     // Settings & Export CSV
