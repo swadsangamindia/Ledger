@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ledger - Track. Manage. Save.</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .nav-active { background-color: #4f46e5; color: white !important; }
+  </style>
+</head>
+<body class="bg-[#F8FAFC] text-slate-800 flex h-screen overflow-hidden">
+
+  <!-- LOCAL AUTH / USER SETUP OVERLAY -->
+  <div id="auth-overlay" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl">
+      <div class="text-center mb-6">
+        <div class="bg-indigo-600 text-white p-3 rounded-2xl w-fit mx-auto mb-3">
+          <i data-lucide="book-open" class="w-8 h-8"></i>
+        </div>
+        <h2 id="auth-title" class="text-xl font-bold text-slate-900">Welcome to Ledger</h2>
+        <p id="auth-subtitle" class="text-xs text-slate-500 mt-1">Enter your details to access your local workspace</p>
+      </div>
+
+      <form id="auth-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Your Name</label>
+          <input type="text" id="auth-name" required placeholder="e.g., Aditya" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Email Address</label>
+          <input type="email" id="auth-email" required placeholder="aditya@example.com" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+        </div>
+
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition mt-2">Get Started</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-[#111625] text-slate-400 flex flex-col justify-between p-5 shrink-0">
+    <div>
+      <!-- Ledger Brand Logo -->
+      <div class="flex items-center gap-3 px-2 py-3 mb-6">
+        <div class="bg-indigo-600 p-2.5 rounded-xl text-white">
+          <i data-lucide="book-open" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h1 class="text-white font-bold text-lg leading-none">Ledger</h1>
+          <span class="text-xs text-slate-500">Track. Manage. Save.</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="space-y-1">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn nav-active w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition text-slate-400 hover:text-white hover:bg-slate-800/50">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+        </button>
+        <button onclick="openModal()" class="w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
+          <i data-lucide="plus-circle" class="w-5 h-5"></i> Add Expense
+        </button>
+        <button onclick="switchTab('transactions')" id="nav-transactions" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
+          <i data-lucide="list-todo" class="w-5 h-5"></i> Transactions
+        </button>
+        <button onclick="switchTab('categories')" id="nav-categories" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
+          <i data-lucide="shapes" class="w-5 h-5"></i> Categories
+        </button>
+        <button onclick="switchTab('reports')" id="nav-reports" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
+          <i data-lucide="bar-chart-3" class="w-5 h-5"></i> Reports
+        </button>
+        <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
+          <i data-lucide="user" class="w-5 h-5"></i> Profile
+        </button>
+        <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
+          <i data-lucide="settings" class="w-5 h-5"></i> Settings
+        </button>
+      </nav>
+    </div>
+
+    <div>
+      <div class="bg-gradient-to-br from-indigo-900/40 to-slate-800/40 border border-slate-800 p-4 rounded-2xl mb-4">
+        <div class="bg-indigo-600/30 p-2 rounded-lg w-fit text-indigo-400 mb-3">
+          <i data-lucide="wallet" class="w-5 h-5"></i>
+        </div>
+        <p class="text-xs text-slate-400">Total Balance</p>
+        <h3 id="card-total-balance" class="text-white text-xl font-bold">₹0.00</h3>
+        <p class="text-xs text-slate-500 mt-1">Net Balance</p>
+      </div>
+
+      <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-2.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition text-xs font-semibold mb-2">
+        <i data-lucide="log-out" class="w-4 h-4"></i> Switch Profile
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="flex-1 overflow-y-auto p-8 relative">
+    
+    <!-- Top Header -->
+    <header class="flex justify-between items-center mb-8">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-900" id="welcome-heading">Hello 👋</h1>
+        <p class="text-sm text-slate-500" id="header-subtitle">Here's your expense overview</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="exportData()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-sm transition">
+          <i data-lucide="download" class="w-4 h-4 text-slate-500"></i> Export
+        </button>
+        <button onclick="openModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 transition">
+          <i data-lucide="plus" class="w-4 h-4"></i> Add Expense
+        </button>
+        <div onclick="switchTab('profile')" class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center cursor-pointer font-bold border-2 border-white shadow-sm overflow-hidden" id="header-avatar">
+          A
+        </div>
+      </div>
+    </header>
+
+    <!-- 1. DASHBOARD VIEW -->
+    <div id="view-dashboard" class="tab-view space-y-8">
+      <!-- KPI Cards -->
+      <section class="grid grid-cols-4 gap-6">
+        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
+          <div>
+            <span class="text-xs font-medium text-slate-500">Total Income</span>
+            <h2 id="total-income" class="text-2xl font-bold text-emerald-600 mt-1">₹0.00</h2>
+          </div>
+          <div class="bg-emerald-50 p-3 rounded-2xl text-emerald-500"><i data-lucide="wallet" class="w-6 h-6"></i></div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
+          <div>
+            <span class="text-xs font-medium text-slate-500">Total Expense</span>
+            <h2 id="total-expense" class="text-2xl font-bold text-rose-500 mt-1">₹0.00</h2>
+          </div>
+          <div class="bg-rose-50 p-3 rounded-2xl text-rose-500"><i data-lucide="arrow-down-left" class="w-6 h-6"></i></div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
+          <div>
+            <span class="text-xs font-medium text-slate-500">Savings</span>
+            <h2 id="total-savings" class="text-2xl font-bold text-blue-600 mt-1">₹0.00</h2>
+          </div>
+          <div class="bg-blue-50 p-3 rounded-2xl text-blue-500"><i data-lucide="piggy-bank" class="w-6 h-6"></i></div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
+          <div>
+            <span class="text-xs font-medium text-slate-500">Daily Average</span>
+            <h2 id="daily-average" class="text-2xl font-bold text-amber-500 mt-1">₹0.00</h2>
+          </div>
+          <div class="bg-amber-50 p-3 rounded-2xl text-amber-500"><i data-lucide="bar-chart-2" class="w-6 h-6"></i></div>
+        </div>
+      </section>
+
+      <!-- Charts -->
+      <section class="grid grid-cols-3 gap-6">
+        <div class="col-span-2 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+          <h3 class="font-bold text-slate-800 mb-4">Expense Overview</h3>
+          <div class="h-64"><canvas id="overviewChart"></canvas></div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+          <h3 class="font-bold text-slate-800 mb-2">Category Breakdown</h3>
+          <div class="relative flex justify-center items-center h-48"><canvas id="categoryChart"></canvas></div>
+          <div id="category-legend" class="space-y-2 mt-4 text-xs font-medium"></div>
+        </div>
+      </section>
+
+      <!-- Dashboard Transactions & Top Spending -->
+      <section class="grid grid-cols-3 gap-6">
+        <div class="col-span-2 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-slate-800">Recent Transactions</h3>
+            <button onclick="switchTab('transactions')" class="text-xs font-semibold text-indigo-600 hover:underline">View All</button>
+          </div>
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="text-slate-400 border-b border-slate-100">
+                <th class="pb-3 font-medium">Date</th>
+                <th class="pb-3 font-medium">Description</th>
+                <th class="pb-3 font-medium">Category</th>
+                <th class="pb-3 font-medium">Amount</th>
+                <th class="pb-3 font-medium">Payment Method</th>
+              </tr>
+            </thead>
+            <tbody id="dashboard-recent-rows" class="divide-y divide-slate-50 font-medium"></tbody>
+          </table>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-bold text-slate-800">Top Spending</h3>
+              <button onclick="switchTab('categories')" class="text-xs font-semibold text-indigo-600 hover:underline">View All</button>
+            </div>
+            <div id="top-spending-container" class="space-y-4"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 2. TRANSACTIONS VIEW -->
+    <div id="view-transactions" class="tab-view hidden">
+      <section class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="font-bold text-slate-800 text-lg">All Transactions History</h3>
+          <input type="text" id="search-input" onkeyup="filterTransactions()" placeholder="Search description or category..." class="border border-slate-200 rounded-xl px-4 py-2 text-xs w-64 bg-slate-50 focus:outline-indigo-600" />
+        </div>
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="text-slate-400 border-b border-slate-100">
+              <th class="pb-3 font-medium">Date</th>
+              <th class="pb-3 font-medium">Description</th>
+              <th class="pb-3 font-medium">Category</th>
+              <th class="pb-3 font-medium">Amount</th>
+              <th class="pb-3 font-medium">Payment Method</th>
+              <th class="pb-3 font-medium text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody id="full-transaction-rows" class="divide-y divide-slate-50 font-medium"></tbody>
+        </table>
+      </section>
+    </div>
+
+    <!-- 3. CATEGORIES VIEW -->
+    <div id="view-categories" class="tab-view hidden">
+      <section class="grid grid-cols-3 gap-6" id="categories-grid"></section>
+    </div>
+
+    <!-- 4. REPORTS VIEW -->
+    <div id="view-reports" class="tab-view hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+        <h3 class="font-bold text-slate-800 text-lg mb-2">Financial Monthly Summary</h3>
+        <p class="text-xs text-slate-500 mb-6">Automated breakdown based on your entries</p>
+        <div class="grid grid-cols-3 gap-6">
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-xs text-slate-500 font-medium">Highest Expense Category</span>
+            <h4 id="report-highest-cat" class="text-lg font-bold text-slate-800 mt-1">-</h4>
+          </div>
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-xs text-slate-500 font-medium">Total Transactions Count</span>
+            <h4 id="report-total-count" class="text-lg font-bold text-slate-800 mt-1">0</h4>
+          </div>
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+            <span class="text-xs text-slate-500 font-medium">Savings Ratio</span>
+            <h4 id="report-savings-rate" class="text-lg font-bold text-indigo-600 mt-1">0%</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. PROFILE VIEW -->
+    <div id="view-profile" class="tab-view hidden">
+      <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm max-w-xl">
+        <h3 class="font-bold text-slate-800 text-lg mb-6">User Profile Settings</h3>
+        
+        <form id="profile-form" class="space-y-4">
+          <div class="flex items-center gap-4 pb-4 border-b border-slate-100">
+            <div id="profile-avatar-large" class="w-16 h-16 rounded-full bg-indigo-600 text-white text-2xl font-bold flex items-center justify-center overflow-hidden">
+              A
+            </div>
+            <div>
+              <h4 id="profile-display-name" class="font-bold text-slate-800 text-base">User</h4>
+              <p id="profile-display-email" class="text-xs text-slate-500">user@example.com</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Full Name</label>
+            <input type="text" id="profile-name-input" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Email</label>
+            <input type="email" id="profile-email-input" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Currency Symbol</label>
+            <input type="text" id="profile-currency-input" value="₹" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+          </div>
+
+          <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm">Save Profile Changes</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 6. SETTINGS VIEW -->
+    <div id="view-settings" class="tab-view hidden">
+      <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm max-w-xl">
+        <h3 class="font-bold text-slate-800 text-lg mb-4">Settings & Management</h3>
+        <div class="space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div>
+              <h4 class="font-semibold text-sm text-slate-800">Clear Data</h4>
+              <p class="text-xs text-slate-500">Reset all expenses and local storage data</p>
+            </div>
+            <button onclick="clearAllData()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-4 py-2 rounded-xl text-xs font-semibold transition">Reset App Data</button>
+          </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="font-semibold text-sm text-slate-800">Export Transactions</h4>
+              <p class="text-xs text-slate-500">Download data as CSV for Excel</p>
+            </div>
+            <button onclick="exportData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold transition">Export CSV</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button onclick="openModal()" class="fixed bottom-8 right-8 bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-full shadow-xl transition transform hover:scale-105 z-10">
+      <i data-lucide="plus" class="w-6 h-6"></i>
+    </button>
+  </main>
+
+  <!-- ADD TRANSACTION MODAL -->
+  <div id="modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold text-slate-900">Add New Expense / Income</h3>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+
+      <form id="transaction-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Type</label>
+          <select id="type" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600">
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Description</label>
+          <input type="text" id="description" required placeholder="e.g., Swiggy - Dinner" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Amount (₹)</label>
+          <input type="number" step="0.01" id="amount" required placeholder="450.00" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Category</label>
+          <select id="category" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600">
+            <option value="Food & Dining">Food & Dining</option>
+            <option value="Transport">Transport</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Bills & Utilities">Bills & Utilities</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Income">Income / Allowance</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Payment Method</label>
+          <select id="method" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600">
+            <option value="UPI">UPI</option>
+            <option value="Cash">Cash</option>
+            <option value="Card">Card</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Date</label>
+          <input type="date" id="date" required class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+        </div>
+
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition mt-2">Save Transaction</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- APPLICATION LOGIC -->
+  <script>
+    lucide.createIcons();
+
+    // Default Seed Data
+    const defaultData = [
+      { id: 1, type: 'income', description: 'Monthly Allowance', amount: 45000, category: 'Income', method: 'UPI', date: '2026-07-01' },
+      { id: 2, type: 'expense', description: 'Swiggy - Dinner', amount: 450, category: 'Food & Dining', method: 'UPI', date: '2026-07-20' },
+      { id: 3, type: 'expense', description: 'Auto Rickshaw', amount: 120, category: 'Transport', method: 'Cash', date: '2026-07-21' },
+      { id: 4, type: 'expense', description: 'Grocery Store', amount: 1250, category: 'Shopping', method: 'UPI', date: '2026-07-21' },
+      { id: 5, type: 'expense', description: 'Electricity Bill', amount: 1800, category: 'Bills & Utilities', method: 'UPI', date: '2026-07-22' }
+    ];
+
+    let transactions = JSON.parse(localStorage.getItem('ledger_transactions')) || defaultData;
+    let currentUser = JSON.parse(localStorage.getItem('ledger_user')) || null;
+    let lineChart, doughnutChart;
+
+    // LOCAL AUTHENTICATION FUNCTIONS
+    function checkAuth() {
+      if (!currentUser) {
+        document.getElementById('auth-overlay').classList.remove('hidden');
+      } else {
+        document.getElementById('auth-overlay').classList.add('hidden');
+        renderProfileInfo();
+      }
+    }
+
+    document.getElementById('auth-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('auth-name').value;
+      const email = document.getElementById('auth-email').value;
+
+      currentUser = {
+        name: name || 'User',
+        email: email,
+        currency: '₹'
+      };
+
+      localStorage.setItem('ledger_user', JSON.stringify(currentUser));
+      checkAuth();
+      saveAndRender();
+    });
+
+    function logout() {
+      if (confirm('Switching profiles will clear local session. Continue?')) {
+        localStorage.removeItem('ledger_user');
+        currentUser = null;
+        checkAuth();
+      }
+    }
+
+    function renderProfileInfo() {
+      if (!currentUser) return;
+      const firstInitial = currentUser.name.charAt(0).toUpperCase();
+
+      document.getElementById('welcome-heading').innerText = `Hello, ${currentUser.name} 👋`;
+      document.getElementById('header-avatar').innerText = firstInitial;
+      document.getElementById('profile-avatar-large').innerText = firstInitial;
+
+      document.getElementById('profile-display-name').innerText = currentUser.name;
+      document.getElementById('profile-display-email').innerText = currentUser.email;
+
+      document.getElementById('profile-name-input').value = currentUser.name;
+      document.getElementById('profile-email-input').value = currentUser.email;
+      document.getElementById('profile-currency-input').value = currentUser.currency || '₹';
+    }
+
+    document.getElementById('profile-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      currentUser.name = document.getElementById('profile-name-input').value;
+      currentUser.email = document.getElementById('profile-email-input').value;
+      currentUser.currency = document.getElementById('profile-currency-input').value;
+
+      localStorage.setItem('ledger_user', JSON.stringify(currentUser));
+      renderProfileInfo();
+      saveAndRender();
+      alert('Profile details updated!');
+    });
+
+    // NAVIGATION TABS
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('nav-active'));
+
+      document.getElementById(`view-${tab}`).classList.remove('hidden');
+      document.getElementById(`nav-${tab}`).classList.add('nav-active');
+
+      const subtitles = {
+        dashboard: "Here's your expense overview",
+        transactions: "Track and search all recorded transactions",
+        categories: "Breakdown of expenditure by categories",
+        reports: "Automated analysis of your spending habits",
+        profile: "Manage your profile details and preferences",
+        settings: "App configuration and data management"
+      };
+      document.getElementById('header-subtitle').innerText = subtitles[tab];
+
+      if(tab === 'categories') renderCategories();
+      if(tab === 'reports') renderReports();
+    }
+
+    function saveAndRender() {
+      localStorage.setItem('ledger_transactions', JSON.stringify(transactions));
+      renderKPIs();
+      renderDashboardRecent();
+      renderTopSpending();
+      renderFullTable();
+      updateCharts();
+    }
+
+    function renderKPIs() {
+      const curr = currentUser ? currentUser.currency : '₹';
+      const income = transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
+      const expense = transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
+      const savings = income - expense;
+      const dailyAvg = expense / 30;
+
+      document.getElementById('total-income').innerText = `${curr}${income.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+      document.getElementById('total-expense').innerText = `${curr}${expense.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+      document.getElementById('total-savings').innerText = `${curr}${savings.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+      document.getElementById('card-total-balance').innerText = `${curr}${savings.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+      document.getElementById('daily-average').innerText = `${curr}${dailyAvg.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+    }
+
+    function renderDashboardRecent() {
+      const tbody = document.getElementById('dashboard-recent-rows');
+      tbody.innerHTML = '';
+      const curr = currentUser ? currentUser.currency : '₹';
+
+      transactions.slice().reverse().slice(0, 5).forEach(item => {
+        const tr = document.createElement('tr');
+        const isExpense = item.type === 'expense';
+        
+        tr.innerHTML = `
+          <td class="py-3 text-slate-500">${item.date}</td>
+          <td class="py-3 font-semibold text-slate-800">${item.description}</td>
+          <td class="py-3"><span class="bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-md text-[10px]">${item.category}</span></td>
+          <td class="py-3 font-semibold ${isExpense ? 'text-rose-500' : 'text-emerald-600'}">
+            ${isExpense ? '' : '+'}${curr}${item.amount.toLocaleString('en-IN', {minimumFractionDigits: 2})}
+          </td>
+          <td class="py-3 text-slate-500">${item.method || 'UPI'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderTopSpending() {
+      const container = document.getElementById('top-spending-container');
+      container.innerHTML = '';
+      const curr = currentUser ? currentUser.currency : '₹';
+
+      const expenses = transactions.filter(t => t.type === 'expense');
+      const totalExpenseSum = expenses.reduce((acc, t) => acc + t.amount, 0) || 1;
+
+      const categoryMap = {};
+      expenses.forEach(t => categoryMap[t.category] = (categoryMap[t.category] || 0) + t.amount);
+
+      const colors = ['bg-indigo-600', 'bg-cyan-500', 'bg-emerald-400', 'bg-amber-400', 'bg-rose-500'];
+      
+      Object.entries(categoryMap)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .forEach(([cat, amount], index) => {
+          const pct = ((amount / totalExpenseSum) * 100).toFixed(1);
+          const barColor = colors[index % colors.length];
+
+          container.innerHTML += `
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-slate-700">${cat}</span>
+                <span>${curr}${amount.toLocaleString('en-IN')} <span class="text-slate-400 font-normal">${pct}%</span></span>
+              </div>
+              <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div class="${barColor} h-full rounded-full" style="width: ${pct}%"></div>
+              </div>
+            </div>
+          `;
+        });
+    }
+
+    function renderFullTable(data = transactions) {
+      const tbody = document.getElementById('full-transaction-rows');
+      tbody.innerHTML = '';
+      const curr = currentUser ? currentUser.currency : '₹';
+
+      data.slice().reverse().forEach(item => {
+        const tr = document.createElement('tr');
+        const isExpense = item.type === 'expense';
+        
+        tr.innerHTML = `
+          <td class="py-3 text-slate-500">${item.date}</td>
+          <td class="py-3 font-semibold text-slate-800">${item.description}</td>
+          <td class="py-3"><span class="bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-md text-[10px]">${item.category}</span></td>
+          <td class="py-3 font-semibold ${isExpense ? 'text-rose-500' : 'text-emerald-600'}">
+            ${isExpense ? '' : '+'}${curr}${item.amount.toLocaleString('en-IN', {minimumFractionDigits: 2})}
+          </td>
+          <td class="py-3 text-slate-500">${item.method || 'UPI'}</td>
+          <td class="py-3 text-right">
+            <button onclick="deleteTransaction(${item.id})" class="text-rose-400 hover:text-rose-600 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      lucide.createIcons();
+    }
+
+    function filterTransactions() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const filtered = transactions.filter(t => 
+        t.description.toLowerCase().includes(query) || 
+        t.category.toLowerCase().includes(query)
+      );
+      renderFullTable(filtered);
+    }
+
+    function renderCategories() {
+      const grid = document.getElementById('categories-grid');
+      grid.innerHTML = '';
+      const curr = currentUser ? currentUser.currency : '₹';
+
+      const categoryTotals = {};
+      transactions.filter(t => t.type === 'expense').forEach(t => {
+        categoryTotals[t.category] = (categoryTotals[t.category] || 0) + t.amount;
+      });
+
+      Object.entries(categoryTotals).forEach(([cat, amount]) => {
+        grid.innerHTML += `
+          <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+            <span class="bg-indigo-50 text-indigo-600 text-xs px-2.5 py-1 rounded-md font-semibold">${cat}</span>
+            <h3 class="text-2xl font-bold text-slate-800 mt-3">${curr}${amount.toLocaleString('en-IN', {minimumFractionDigits: 2})}</h3>
+            <p class="text-xs text-slate-400 mt-1">Total Spent</p>
+          </div>
+        `;
+      });
+    }
+
+    function renderReports() {
+      const expenses = transactions.filter(t => t.type === 'expense');
+      const income = transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
+      const totalExpense = expenses.reduce((acc, t) => acc + t.amount, 0);
+
+      const catCounts = {};
+      expenses.forEach(t => catCounts[t.category] = (catCounts[t.category] || 0) + t.amount);
+      const topCat = Object.keys(catCounts).reduce((a, b) => catCounts[a] > catCounts[b] ? a : b, '-');
+
+      const savingsRate = income > 0 ? (((income - totalExpense) / income) * 100).toFixed(1) : 0;
+
+      document.getElementById('report-highest-cat').innerText = topCat;
+      document.getElementById('report-total-count').innerText = transactions.length;
+      document.getElementById('report-savings-rate').innerText = `${savingsRate}%`;
+    }
+
+    function deleteTransaction(id) {
+      transactions = transactions.filter(t => t.id !== id);
+      saveAndRender();
+    }
+
+    function initCharts() {
+      const ctxLine = document.getElementById('overviewChart').getContext('2d');
+      const gradient = ctxLine.createLinearGradient(0, 0, 0, 200);
+      gradient.addColorStop(0, 'rgba(99, 102, 241, 0.3)');
+      gradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
+
+      lineChart = new Chart(ctxLine, {
+        type: 'line',
+        data: { labels: [], datasets: [{ data: [], borderColor: '#6366f1', borderWidth: 2, fill: true, backgroundColor: gradient, tension: 0.4 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { callback: v => (currentUser ? currentUser.currency : '₹') + v } } } }
+      });
+
+      const ctxDoughnut = document.getElementById('categoryChart').getContext('2d');
+      doughnutChart = new Chart(ctxDoughnut, {
+        type: 'doughnut',
+        data: { labels: [], datasets: [{ data: [], backgroundColor: ['#4f46e5', '#06b6d4', '#34d399', '#fbbf24', '#f43f5e'] }] },
+        options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { display: false } } }
+      });
+    }
+
+    function updateCharts() {
+      const curr = currentUser ? currentUser.currency : '₹';
+      const expensesOnly = transactions.filter(t => t.type === 'expense');
+      const groupedByDate = {};
+      
+      expensesOnly.forEach(t => groupedByDate[t.date] = (groupedByDate[t.date] || 0) + t.amount);
+
+      lineChart.data.labels = Object.keys(groupedByDate);
+      lineChart.data.datasets[0].data = Object.values(groupedByDate);
+      lineChart.update();
+
+      const categoryMap = {};
+      expensesOnly.forEach(t => categoryMap[t.category] = (categoryMap[t.category] || 0) + t.amount);
+
+      const categories = Object.keys(categoryMap);
+      const amounts = Object.values(categoryMap);
+
+      doughnutChart.data.labels = categories;
+      doughnutChart.data.datasets[0].data = amounts;
+      doughnutChart.update();
+
+      const legendContainer = document.getElementById('category-legend');
+      const totalExpenseSum = amounts.reduce((a, b) => a + b, 0) || 1;
+      legendContainer.innerHTML = '';
+
+      categories.forEach((cat, index) => {
+        const amt = categoryMap[cat];
+        const pct = ((amt / totalExpenseSum) * 100).toFixed(1);
+        const color = doughnutChart.data.datasets[0].backgroundColor[index % 5];
+
+        legendContainer.innerHTML += `
+          <div class="flex justify-between items-center">
+            <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full" style="background-color: ${color}"></span> ${cat}</span>
+            <span>${curr}${amt.toLocaleString()} (${pct}%)</span>
+          </div>
+        `;
+      });
+    }
+
+    // Modal controls
+    function openModal() { document.getElementById('modal').classList.remove('hidden'); }
+    function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+
+    // Form Submit
+    document.getElementById('transaction-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      transactions.push({
+        id: Date.now(),
+        type: document.getElementById('type').value,
+        description: document.getElementById('description').value,
+        amount: parseFloat(document.getElementById('amount').value),
+        category: document.getElementById('category').value,
+        method: document.getElementById('method').value,
+        date: document.getElementById('date').value
+      });
+      saveAndRender();
+      closeModal();
+      e.target.reset();
+    });
+
+    // Settings & Export CSV
+    function clearAllData() {
+      if(confirm("Are you sure you want to reset all tracker data?")) {
+        transactions = [];
+        saveAndRender();
+      }
+    }
+
+    function exportData() {
+      if (transactions.length === 0) {
+        alert("No transactions to export!");
+        return;
+      }
+
+      let csvContent = "Date,Description,Category,Amount,Type,Payment Method\n";
+
+      transactions.forEach(t => {
+        const desc = `"${t.description.replace(/"/g, '""')}"`;
+        const cat = `"${t.category.replace(/"/g, '""')}"`;
+        const method = `"${(t.method || 'UPI').replace(/"/g, '""')}"`;
+        csvContent += `${t.date},${desc},${cat},${t.amount},${t.type},${method}\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'ledger_report.csv';
+      a.click();
+    }
+
+    // Default today's date in add modal
+    document.getElementById('date').value = new Date().toISOString().split('T')[0];
+
+    // Initialize
+    checkAuth();
+    initCharts();
+    saveAndRender();
+  </script>
+</body>
+</html>
