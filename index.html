@@ -57,7 +57,7 @@
         </div>
         <div>
           <h1 class="text-white font-bold text-lg leading-none">Ledger</h1>
-          <span class="text-xs text-slate-500">Sales & Purchases</span>
+          <span class="text-xs text-slate-500">Sales, Purchases & Cash</span>
         </div>
       </div>
 
@@ -66,10 +66,10 @@
           <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
         </button>
         <button onclick="openModal()" class="w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
-          <i data-lucide="plus-circle" class="w-5 h-5"></i> Add Sale / Purchase
+          <i data-lucide="plus-circle" class="w-5 h-5"></i> Add Voucher
         </button>
         <button onclick="switchTab('transactions')" id="nav-transactions" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
-          <i data-lucide="list-todo" class="w-5 h-5"></i> All Transactions
+          <i data-lucide="list-todo" class="w-5 h-5"></i> All Register Entries
         </button>
         <button onclick="switchTab('categories')" id="nav-categories" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
           <i data-lucide="shapes" class="w-5 h-5"></i> Categories
@@ -93,7 +93,7 @@
         </div>
         <p class="text-xs text-slate-400">Total Net Balance</p>
         <h3 id="card-total-balance" class="text-white text-xl font-bold">₹0.00</h3>
-        <p class="text-xs text-slate-500 mt-1">Receipts minus Payments</p>
+        <p class="text-xs text-slate-500 mt-1">Inflow minus Outflow</p>
       </div>
 
       <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-2.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition text-xs font-semibold mb-2">
@@ -122,7 +122,7 @@
     <header class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6 md:mb-8">
       <div>
         <h1 class="text-xl md:text-2xl font-bold text-slate-900" id="welcome-heading">Hello 👋</h1>
-        <p class="text-xs md:text-sm text-slate-500" id="header-subtitle">Overview of Sales, Purchases & GST</p>
+        <p class="text-xs md:text-sm text-slate-500" id="header-subtitle">Sales, Purchases, Receipts & Payments Register</p>
       </div>
       <div class="flex items-center gap-2 sm:gap-3">
         <button onclick="exportData()" class="flex-1 sm:flex-none bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-3 py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center justify-center gap-2 shadow-sm transition">
@@ -143,38 +143,38 @@
       <section class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
         <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
           <div>
-            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total Sales (Receipts)</span>
+            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total Sales</span>
             <h2 id="total-income" class="text-lg md:text-2xl font-bold text-emerald-600 mt-1">₹0.00</h2>
           </div>
           <div class="bg-emerald-50 p-2.5 md:p-3 rounded-2xl text-emerald-500"><i data-lucide="trending-up" class="w-5 h-5 md:w-6 md:h-6"></i></div>
         </div>
         <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
           <div>
-            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total Purchases (Payments)</span>
+            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total Purchases</span>
             <h2 id="total-expense" class="text-lg md:text-2xl font-bold text-rose-500 mt-1">₹0.00</h2>
           </div>
           <div class="bg-rose-50 p-2.5 md:p-3 rounded-2xl text-rose-500"><i data-lucide="shopping-cart" class="w-5 h-5 md:w-6 md:h-6"></i></div>
         </div>
         <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
           <div>
-            <span class="text-[10px] md:text-xs font-medium text-slate-500">Net Profit / Balance</span>
-            <h2 id="total-savings" class="text-lg md:text-2xl font-bold text-blue-600 mt-1">₹0.00</h2>
+            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total Receipts</span>
+            <h2 id="total-receipts" class="text-lg md:text-2xl font-bold text-blue-600 mt-1">₹0.00</h2>
           </div>
-          <div class="bg-blue-50 p-2.5 md:p-3 rounded-2xl text-blue-500"><i data-lucide="piggy-bank" class="w-5 h-5 md:w-6 md:h-6"></i></div>
+          <div class="bg-blue-50 p-2.5 md:p-3 rounded-2xl text-blue-500"><i data-lucide="arrow-down-left" class="w-5 h-5 md:w-6 md:h-6"></i></div>
         </div>
         <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
           <div>
-            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total GST Liability</span>
-            <h2 id="total-gst" class="text-lg md:text-2xl font-bold text-amber-500 mt-1">₹0.00</h2>
+            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total Payments</span>
+            <h2 id="total-payments" class="text-lg md:text-2xl font-bold text-amber-500 mt-1">₹0.00</h2>
           </div>
-          <div class="bg-amber-50 p-2.5 md:p-3 rounded-2xl text-amber-500"><i data-lucide="file-text" class="w-5 h-5 md:w-6 md:h-6"></i></div>
+          <div class="bg-amber-50 p-2.5 md:p-3 rounded-2xl text-amber-500"><i data-lucide="arrow-up-right" class="w-5 h-5 md:w-6 md:h-6"></i></div>
         </div>
       </section>
 
       <!-- Charts -->
       <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="md:col-span-2 bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm">
-          <h3 class="font-bold text-slate-800 text-sm md:text-base mb-4">Purchases vs Sales Trend</h3>
+          <h3 class="font-bold text-slate-800 text-sm md:text-base mb-4">Financial Inflow vs Outflow Trend</h3>
           <div class="h-48 md:h-64"><canvas id="overviewChart"></canvas></div>
         </div>
         <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
@@ -194,12 +194,12 @@
           <table class="w-full text-left text-xs min-w-[700px]">
             <thead>
               <tr class="text-slate-400 border-b border-slate-100">
-                <th class="pb-3 font-medium">Date</th>
-                <th class="pb-3 font-medium">Type</th>
+                <th class="pb-3 font-medium">Date (DD-MM-YYYY)</th>
+                <th class="pb-3 font-medium">Voucher Type</th>
                 <th class="pb-3 font-medium">Party Name</th>
                 <th class="pb-3 font-medium">Item/Description</th>
                 <th class="pb-3 font-medium">Qty</th>
-                <th class="pb-3 font-medium">GST Amount</th>
+                <th class="pb-3 font-medium">GST</th>
                 <th class="pb-3 font-medium">Total Bill</th>
               </tr>
             </thead>
@@ -213,17 +213,17 @@
     <div id="view-transactions" class="tab-view hidden">
       <section class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm">
         <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-6">
-          <h3 class="font-bold text-slate-800 text-base md:text-lg">Full Sales & Purchase Register</h3>
-          <input type="text" id="search-input" onkeyup="filterTransactions()" placeholder="Search Party, Item or Category..." class="border border-slate-200 rounded-xl px-4 py-2 text-xs w-full sm:w-64 bg-slate-50 focus:outline-indigo-600" />
+          <h3 class="font-bold text-slate-800 text-base md:text-lg">All Business Entries Register</h3>
+          <input type="text" id="search-input" onkeyup="filterTransactions()" placeholder="Search Party, Description or Category..." class="border border-slate-200 rounded-xl px-4 py-2 text-xs w-full sm:w-64 bg-slate-50 focus:outline-indigo-600" />
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs min-w-[750px]">
             <thead>
               <tr class="text-slate-400 border-b border-slate-100">
-                <th class="pb-3 font-medium">Date</th>
+                <th class="pb-3 font-medium">Date (DD-MM-YYYY)</th>
                 <th class="pb-3 font-medium">Type</th>
                 <th class="pb-3 font-medium">Party Name</th>
-                <th class="pb-3 font-medium">Item / Desc</th>
+                <th class="pb-3 font-medium">Item / Description</th>
                 <th class="pb-3 font-medium">Qty x Rate</th>
                 <th class="pb-3 font-medium">GST (%)</th>
                 <th class="pb-3 font-medium">Total Amount</th>
@@ -256,7 +256,7 @@
             <h4 id="report-total-count" class="text-base md:text-lg font-bold text-slate-800 mt-1">0</h4>
           </div>
           <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
-            <span class="text-xs text-slate-500 font-medium">Collected GST</span>
+            <span class="text-xs text-slate-500 font-medium">Total GST Amount</span>
             <h4 id="report-savings-rate" class="text-base md:text-lg font-bold text-indigo-600 mt-1">₹0.00</h4>
           </div>
         </div>
@@ -307,14 +307,14 @@
           <div class="flex items-center justify-between pb-4 border-b border-slate-100">
             <div>
               <h4 class="font-semibold text-sm text-slate-800">Clear Data</h4>
-              <p class="text-[11px] text-slate-500">Reset all invoices, entries, and local data</p>
+              <p class="text-[11px] text-slate-500">Reset all vouchers and local data</p>
             </div>
             <button onclick="clearAllData()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-3 py-2 rounded-xl text-xs font-semibold transition">Reset App</button>
           </div>
           <div class="flex items-center justify-between">
             <div>
               <h4 class="font-semibold text-sm text-slate-800">Export Transactions</h4>
-              <p class="text-[11px] text-slate-500">Download full ledger as Excel-ready CSV</p>
+              <p class="text-[11px] text-slate-500">Download ledger with DD-MM-YYYY dates for Excel</p>
             </div>
             <button onclick="exportData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-xl text-xs font-semibold transition">Export CSV</button>
           </div>
@@ -347,11 +347,11 @@
     </button>
   </nav>
 
-  <!-- ADD PURCHASE / SALE MODAL -->
+  <!-- ADD VOUCHER MODAL -->
   <div id="modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl max-w-lg w-full p-5 md:p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="text-base md:text-lg font-bold text-slate-900">Add Sale / Purchase Voucher</h3>
+        <h3 class="text-base md:text-lg font-bold text-slate-900">Add Business Voucher</h3>
         <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
 
@@ -359,9 +359,11 @@
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-medium text-slate-600 mb-1">Voucher Type</label>
-            <select id="type" onchange="calculateAmounts()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600 font-semibold">
-              <option value="sale">Sale (Receipt / Credit)</option>
-              <option value="purchase">Purchase (Payment)</option>
+            <select id="type" onchange="toggleVoucherFields()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600 font-semibold">
+              <option value="sale">Sale (Invoice Generated)</option>
+              <option value="purchase">Purchase (Stock In)</option>
+              <option value="receipt">Receipt (Money Received)</option>
+              <option value="payment">Payment (Money Paid)</option>
             </select>
           </div>
           <div>
@@ -371,22 +373,23 @@
         </div>
 
         <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Party Name (Customer / Vendor)</label>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Party Name (Customer / Supplier)</label>
           <input type="text" id="party-name" required placeholder="e.g., Sharma Electronics / John Doe" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
         </div>
 
         <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Item / Description</label>
-          <input type="text" id="description" required placeholder="e.g., Wireless Mouse / Consulting Fee" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+          <label class="block text-xs font-medium text-slate-600 mb-1">Description / Particulars</label>
+          <input type="text" id="description" required placeholder="e.g., Wireless Mouse / Bill Clearance" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
         </div>
 
-        <div class="grid grid-cols-3 gap-3">
+        <!-- Dynamic Fields for Sale/Purchase vs Receipt/Payment -->
+        <div id="item-fields" class="grid grid-cols-3 gap-3">
           <div>
             <label class="block text-xs font-medium text-slate-600 mb-1">Quantity</label>
-            <input type="number" step="1" id="quantity" value="1" min="1" required oninput="calculateAmounts()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+            <input type="number" step="1" id="quantity" value="1" min="1" oninput="calculateAmounts()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
           </div>
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Rate per Unit (₹)</label>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Rate / Amount (₹)</label>
             <input type="number" step="0.01" id="rate" required placeholder="500.00" oninput="calculateAmounts()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
           </div>
           <div>
@@ -401,11 +404,11 @@
           </div>
         </div>
 
-        <!-- Calculated Summary Box -->
+        <!-- Summary Calculation Box -->
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs space-y-1 font-medium text-slate-600">
           <div class="flex justify-between"><span>Subtotal:</span><span id="summary-subtotal">₹0.00</span></div>
           <div class="flex justify-between"><span>GST Amount:</span><span id="summary-gst" class="text-indigo-600">+₹0.00</span></div>
-          <div class="flex justify-between font-bold text-slate-900 border-t border-slate-200 pt-1 text-sm"><span>Total Bill Amount:</span><span id="summary-total">₹0.00</span></div>
+          <div class="flex justify-between font-bold text-slate-900 border-t border-slate-200 pt-1 text-sm"><span>Total Voucher Amount:</span><span id="summary-total">₹0.00</span></div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
@@ -415,7 +418,7 @@
               <option value="Electronics">Electronics</option>
               <option value="Raw Materials">Raw Materials</option>
               <option value="Services">Services</option>
-              <option value="Office Supplies">Office Supplies</option>
+              <option value="Office Expenses">Office Expenses</option>
               <option value="General Trade">General Trade</option>
             </select>
           </div>
@@ -430,7 +433,7 @@
           </div>
         </div>
 
-        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition mt-2">Save Voucher</button>
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition mt-2">Save Voucher Entry</button>
       </form>
     </div>
   </div>
@@ -439,12 +442,18 @@
   <script>
     lucide.createIcons();
 
-    // Default Seed Data
     const defaultData = [];
-
     let transactions = JSON.parse(localStorage.getItem('ledger_transactions')) || defaultData;
     let currentUser = JSON.parse(localStorage.getItem('ledger_user')) || null;
     let lineChart, doughnutChart;
+
+    // Helper: Format YYYY-MM-DD to DD-MM-YYYY
+    function formatDateToDDMMYYYY(dateStr) {
+      if (!dateStr) return '-';
+      const parts = dateStr.split('-');
+      if (parts.length !== 3) return dateStr;
+      return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    }
 
     function checkAuth() {
       if (!currentUser) {
@@ -460,12 +469,7 @@
       const name = document.getElementById('auth-name').value;
       const email = document.getElementById('auth-email').value;
 
-      currentUser = {
-        name: name || 'Aditya Trading',
-        email: email,
-        currency: '₹'
-      };
-
+      currentUser = { name: name || 'Aditya Trading', email: email, currency: '₹' };
       localStorage.setItem('ledger_user', JSON.stringify(currentUser));
       checkAuth();
       saveAndRender();
@@ -508,8 +512,19 @@
       alert('Profile details updated!');
     });
 
+    function toggleVoucherFields() {
+      const type = document.getElementById('type').value;
+      const gstRateSelect = document.getElementById('gst-rate');
+      
+      if (type === 'receipt' || type === 'payment') {
+        gstRateSelect.value = "0";
+      }
+      calculateAmounts();
+    }
+
     function calculateAmounts() {
-      const qty = parseFloat(document.getElementById('quantity').value) || 0;
+      const type = document.getElementById('type').value;
+      const qty = (type === 'receipt' || type === 'payment') ? 1 : (parseFloat(document.getElementById('quantity').value) || 1);
       const rate = parseFloat(document.getElementById('rate').value) || 0;
       const gstPct = parseFloat(document.getElementById('gst-rate').value) || 0;
 
@@ -554,14 +569,26 @@
       
       const sales = transactions.filter(t => t.type === 'sale').reduce((acc, t) => acc + (t.totalAmount || t.amount), 0);
       const purchases = transactions.filter(t => t.type === 'purchase').reduce((acc, t) => acc + (t.totalAmount || t.amount), 0);
-      const totalGst = transactions.reduce((acc, t) => acc + (t.gstAmount || 0), 0);
-      const netProfit = sales - purchases;
+      const receipts = transactions.filter(t => t.type === 'receipt').reduce((acc, t) => acc + (t.totalAmount || t.amount), 0);
+      const payments = transactions.filter(t => t.type === 'payment').reduce((acc, t) => acc + (t.totalAmount || t.amount), 0);
+      
+      const netBalance = (sales + receipts) - (purchases + payments);
 
       document.getElementById('total-income').innerText = `${curr}${sales.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
       document.getElementById('total-expense').innerText = `${curr}${purchases.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('total-savings').innerText = `${curr}${netProfit.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('card-total-balance').innerText = `${curr}${netProfit.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('total-gst').innerText = `${curr}${totalGst.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+      document.getElementById('total-receipts').innerText = `${curr}${receipts.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+      document.getElementById('total-payments').innerText = `${curr}${payments.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+      document.getElementById('card-total-balance').innerText = `${curr}${netBalance.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+    }
+
+    function getBadgeClass(type) {
+      switch(type) {
+        case 'sale': return 'bg-emerald-50 text-emerald-600';
+        case 'purchase': return 'bg-rose-50 text-rose-600';
+        case 'receipt': return 'bg-blue-50 text-blue-600';
+        case 'payment': return 'bg-amber-50 text-amber-600';
+        default: return 'bg-slate-50 text-slate-600';
+      }
     }
 
     function renderDashboardRecent() {
@@ -570,23 +597,23 @@
       const curr = currentUser ? currentUser.currency : '₹';
 
       if (transactions.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400">No vouchers recorded yet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400">No entries recorded yet.</td></tr>`;
         return;
       }
 
       transactions.slice().reverse().slice(0, 5).forEach(item => {
         const tr = document.createElement('tr');
-        const isSale = item.type === 'sale';
+        const isPositive = item.type === 'sale' || item.type === 'receipt';
         
         tr.innerHTML = `
-          <td class="py-3 text-slate-500">${item.date}</td>
-          <td class="py-3"><span class="${isSale ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'} px-2 py-0.5 rounded text-[10px] font-bold uppercase">${item.type}</span></td>
+          <td class="py-3 text-slate-500 font-mono">${formatDateToDDMMYYYY(item.date)}</td>
+          <td class="py-3"><span class="${getBadgeClass(item.type)} px-2 py-0.5 rounded text-[10px] font-bold uppercase">${item.type}</span></td>
           <td class="py-3 font-semibold text-slate-800">${item.partyName || '-'}</td>
           <td class="py-3 text-slate-600">${item.description}</td>
           <td class="py-3 text-slate-500">${item.quantity || 1}</td>
           <td class="py-3 text-slate-500">${curr}${(item.gstAmount || 0).toLocaleString('en-IN')}</td>
-          <td class="py-3 font-bold ${isSale ? 'text-emerald-600' : 'text-rose-500'}">
-            ${isSale ? '+' : '-'}${curr}${(item.totalAmount || item.amount).toLocaleString('en-IN', {minimumFractionDigits: 2})}
+          <td class="py-3 font-bold ${isPositive ? 'text-emerald-600' : 'text-rose-500'}">
+            ${isPositive ? '+' : '-'}${curr}${(item.totalAmount || item.amount).toLocaleString('en-IN', {minimumFractionDigits: 2})}
           </td>
         `;
         tbody.appendChild(tr);
@@ -605,16 +632,16 @@
 
       data.slice().reverse().forEach(item => {
         const tr = document.createElement('tr');
-        const isSale = item.type === 'sale';
+        const isPositive = item.type === 'sale' || item.type === 'receipt';
         
         tr.innerHTML = `
-          <td class="py-3 text-slate-500">${item.date}</td>
-          <td class="py-3"><span class="${isSale ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'} px-2 py-0.5 rounded text-[10px] font-bold uppercase">${item.type}</span></td>
+          <td class="py-3 text-slate-500 font-mono">${formatDateToDDMMYYYY(item.date)}</td>
+          <td class="py-3"><span class="${getBadgeClass(item.type)} px-2 py-0.5 rounded text-[10px] font-bold uppercase">${item.type}</span></td>
           <td class="py-3 font-semibold text-slate-800">${item.partyName || '-'}</td>
           <td class="py-3 text-slate-600">${item.description}</td>
           <td class="py-3 text-slate-500">${item.quantity || 1} x ${curr}${item.rate || item.amount}</td>
           <td class="py-3 text-slate-500">${item.gstRate || 0}% (${curr}${(item.gstAmount || 0).toFixed(0)})</td>
-          <td class="py-3 font-bold ${isSale ? 'text-emerald-600' : 'text-rose-500'}">
+          <td class="py-3 font-bold ${isPositive ? 'text-emerald-600' : 'text-rose-500'}">
             ${curr}${(item.totalAmount || item.amount).toLocaleString('en-IN', {minimumFractionDigits: 2})}
           </td>
           <td class="py-3 text-right">
@@ -631,7 +658,8 @@
       const filtered = transactions.filter(t => 
         (t.partyName && t.partyName.toLowerCase().includes(query)) ||
         t.description.toLowerCase().includes(query) || 
-        t.category.toLowerCase().includes(query)
+        t.category.toLowerCase().includes(query) ||
+        t.type.toLowerCase().includes(query)
       );
       renderFullTable(filtered);
     }
@@ -701,7 +729,10 @@
       const curr = currentUser ? currentUser.currency : '₹';
       const groupedByDate = {};
       
-      transactions.forEach(t => groupedByDate[t.date] = (groupedByDate[t.date] || 0) + (t.totalAmount || t.amount));
+      transactions.forEach(t => {
+        const formattedDate = formatDateToDDMMYYYY(t.date);
+        groupedByDate[formattedDate] = (groupedByDate[formattedDate] || 0) + (t.totalAmount || t.amount);
+      });
 
       lineChart.data.labels = Object.keys(groupedByDate);
       lineChart.data.datasets[0].data = Object.values(groupedByDate);
@@ -740,15 +771,14 @@
       });
     }
 
-    // Modal controls
     function openModal() { document.getElementById('modal').classList.remove('hidden'); calculateAmounts(); }
     function closeModal() { document.getElementById('modal').classList.add('hidden'); }
 
-    // Form Submit
     document.getElementById('transaction-form').addEventListener('submit', (e) => {
       e.preventDefault();
       
-      const qty = parseFloat(document.getElementById('quantity').value) || 1;
+      const type = document.getElementById('type').value;
+      const qty = (type === 'receipt' || type === 'payment') ? 1 : (parseFloat(document.getElementById('quantity').value) || 1);
       const rate = parseFloat(document.getElementById('rate').value) || 0;
       const gstPct = parseFloat(document.getElementById('gst-rate').value) || 0;
       
@@ -758,7 +788,7 @@
 
       transactions.push({
         id: Date.now(),
-        type: document.getElementById('type').value,
+        type: type,
         partyName: document.getElementById('party-name').value,
         description: document.getElementById('description').value,
         quantity: qty,
@@ -778,7 +808,6 @@
       document.getElementById('date').value = new Date().toISOString().split('T')[0];
     });
 
-    // Settings & Export CSV
     function clearAllData() {
       if(confirm("Are you sure you want to reset all tracker data?")) {
         transactions = [];
@@ -786,29 +815,31 @@
       }
     }
 
+    // EXPORT EXCEL CSV WITH DD-MM-YYYY DATES
     function exportData() {
       if (transactions.length === 0) {
-        alert("No vouchers to export!");
+        alert("No entries to export!");
         return;
       }
 
-      let csvContent = "Date,Voucher Type,Party Name,Description,Quantity,Rate,Subtotal,GST Rate,GST Amount,Total Amount,Payment Mode\n";
+      let csvContent = "Date (DD-MM-YYYY),Voucher Type,Party Name,Description / Particulars,Quantity,Rate per Unit,Subtotal,GST Rate,GST Amount,Total Amount,Payment Mode\n";
 
       transactions.forEach(t => {
+        const formattedDate = formatDateToDDMMYYYY(t.date);
         const party = `"${(t.partyName || '').replace(/"/g, '""')}"`;
         const desc = `"${t.description.replace(/"/g, '""')}"`;
         const method = `"${(t.method || 'UPI').replace(/"/g, '""')}"`;
-        csvContent += `${t.date},${t.type},${party},${desc},${t.quantity || 1},${t.rate || t.amount},${t.subtotal || t.amount},${t.gstRate || 0}%,${t.gstAmount || 0},${t.totalAmount || t.amount},${method}\n`;
+        csvContent += `${formattedDate},${t.type.toUpperCase()},${party},${desc},${t.quantity || 1},${t.rate || t.amount},${t.subtotal || t.amount},${t.gstRate || 0}%,${t.gstAmount || 0},${t.totalAmount || t.amount},${method}\n`;
       });
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'ledger_sales_purchases.csv';
+      a.download = 'ledger_business_register.csv';
       a.click();
     }
 
-    // Default today's date
+    // Default today's date in YYYY-MM-DD format for HTML date input
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
     // Initialize
