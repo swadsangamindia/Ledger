@@ -380,8 +380,8 @@
             <select id="type" onchange="toggleVoucherFields()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600 font-semibold">
               <option value="receipt">Receipt (Money Received)</option>
               <option value="payment">Payment (Money Paid)</option>
-              <option value="sale" id="opt-sale">Sale (Invoice - Pro ⭐)</option>
-              <option value="purchase" id="opt-purchase">Purchase (Stock - Pro ⭐)</option>
+              <option value="sale" id="opt-sale">Sale (Invoice - Pro 🔒)</option>
+              <option value="purchase" id="opt-purchase">Purchase (Stock - Pro 🔒)</option>
             </select>
           </div>
           <div>
@@ -400,7 +400,7 @@
           <input type="number" step="0.01" id="rate" required placeholder="500.00" oninput="calculateAmounts()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
         </div>
 
-        <!-- PRO FEATURES CONTAINER (PRO ONLY) -->
+        <!-- PRO FEATURES CONTAINER (LOCKED UNTIL PRO ACTIVATED) -->
         <div id="pro-fields-container" class="space-y-3.5 border-t border-b border-amber-200 bg-amber-50/50 p-3 rounded-xl hidden">
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-amber-800 flex items-center gap-1">
@@ -464,7 +464,7 @@
     </div>
   </div>
 
-  <!-- UPGRADE TO PRO MODAL (₹99/Month or Secret Promo Code) -->
+  <!-- UPGRADE TO PRO MODAL (STRICT PAYMENT REQUIREMENT) -->
   <div id="upgrade-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative overflow-hidden">
       <div class="absolute -top-12 -right-12 bg-amber-400/20 w-32 h-32 rounded-full blur-2xl"></div>
@@ -493,18 +493,21 @@
         <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> CSV Export with DD-MM-YYYY dates</li>
       </ul>
 
-      <!-- PROMO CODE INPUT BOX -->
+      <!-- PROMO / ACCESS CODE BOX -->
       <div class="mb-4">
-        <label class="block text-xs font-medium text-slate-600 mb-1">Have a Promo Code?</label>
+        <label class="block text-xs font-medium text-slate-600 mb-1">Have an Access / Promo Code?</label>
         <div class="flex gap-2">
-          <input type="text" id="promo-code-input" placeholder="e.g. ADITYAMODEL" class="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-xs bg-slate-50 uppercase font-bold focus:outline-indigo-600" />
-          <button onclick="applyPromoCode()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Apply</button>
+          <input type="text" id="promo-code-input" placeholder="Enter Access Code" class="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-xs bg-slate-50 uppercase font-bold focus:outline-indigo-600" />
+          <button onclick="applyPromoCode()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Unlock</button>
         </div>
       </div>
 
-      <button onclick="activateProPlan('Payment')" class="w-full bg-gradient-to-r from-indigo-600 to-amber-600 hover:from-indigo-700 hover:to-amber-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition transform hover:scale-[1.02]">
-        Activate Pro Now (₹99/mo)
-      </button>
+      <!-- UPI PAYMENT INTENT BUTTON & QR VIEW -->
+      <div id="payment-box" class="space-y-3">
+        <button onclick="initiatePayment()" class="w-full bg-gradient-to-r from-indigo-600 to-amber-600 hover:from-indigo-700 hover:to-amber-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition transform hover:scale-[1.02] flex items-center justify-center gap-2">
+          <i data-lucide="credit-card" class="w-4 h-4"></i> Pay ₹99 via UPI (GPay / PhonePe)
+        </button>
+      </div>
     </div>
   </div>
 
@@ -607,7 +610,7 @@
     function toggleVoucherFields() {
       const type = document.getElementById('type').value;
       if ((type === 'sale' || type === 'purchase') && !isProUser) {
-        alert('Sale & Purchase Vouchers are Pro Features (₹99/mo). Upgrade or enter code ADITYAMODEL to unlock!');
+        alert('Sale & Purchase Vouchers require an active Pro Subscription (₹99/mo).');
         document.getElementById('type').value = 'receipt';
         openUpgradeModal();
         return;
@@ -876,10 +879,16 @@
     function applyPromoCode() {
       const inputCode = document.getElementById('promo-code-input').value.trim().toUpperCase();
       if (inputCode === 'ADITYAMODEL') {
-        activateProPlan('PROMO CODE: ADITYAMODEL');
+        activateProPlan('Access Code: ADITYAMODEL');
       } else {
-        alert('Invalid promo code. Please enter ADITYAMODEL to activate free Pro subscription.');
+        alert('Invalid access code! Please pay ₹99/mo to unlock Pro features.');
       }
+    }
+
+    function initiatePayment() {
+      const upiUrl = "upi://pay?pa=aditya@upi&pn=KhataBahi&am=99&cu=INR&tn=KhataBahi_Pro_Subscription";
+      window.location.href = upiUrl;
+      alert("Redirecting to UPI payment app... After completing payment, enter your payment receipt code or contact support.");
     }
 
     function activateProPlan(source = 'Payment') {
@@ -887,7 +896,7 @@
       localStorage.setItem('ledger_is_pro', JSON.stringify(true));
       updateProStatusUI();
       closeUpgradeModal();
-      alert(`🎉 Congratulations! Pro Subscription Activated via ${source}! All advanced features (GST, Parties, Sales/Purchases) are now unlocked for FREE!`);
+      alert(`🎉 Congratulations! Pro Subscription Activated via ${source}! All advanced features (GST, Parties, Sales/Purchases) are now unlocked!`);
     }
 
     document.getElementById('transaction-form').addEventListener('submit', (e) => {
