@@ -45,7 +45,7 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     }
     
-    /* Transparent Glass Sidebar & Bottom Bar */
+    /* Transparent Glass Sidebar */
     .glass-sidebar {
       background: rgba(15, 17, 30, 0.45) !important;
       backdrop-filter: blur(25px);
@@ -480,7 +480,7 @@
       </div>
     </div>
 
-    <!-- FLOATING ACTION BUTTON FOR MOBILE & DESKTOP -->
+    <!-- FLOATING ACTION BUTTON -->
     <button onclick="openModal()" class="fixed bottom-20 md:bottom-8 right-5 md:right-8 bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 text-white p-4 rounded-full shadow-2xl shadow-purple-500/40 transition transform hover:scale-110 active:scale-95 z-30 flex items-center justify-center border border-white">
       <i data-lucide="plus" class="w-7 h-7"></i>
     </button>
@@ -646,7 +646,7 @@
     </div>
   </div>
 
-  <!-- APPLICATION LOGIC WITH HISTORY PERSISTENCE & USER AUTH -->
+  <!-- APPLICATION LOGIC WITH HISTORY PERSISTENCE & CONVERSION FIX -->
   <script>
     lucide.createIcons();
 
@@ -1011,6 +1011,164 @@
       }
     }
 
+    /* ---------------- FIXED PDF & CONVERSION TOOLS ENGINE ---------------- */
+
+    // 1. Image to PDF Fix
+    function convertImageToPDF() {
+      const fileInput = document.getElementById('img-file-input');
+      if (!fileInput.files || !fileInput.files.length) {
+        return alert('Please select an image file first!');
+      }
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        try {
+          const imgData = e.target.result;
+          // Correct jsPDF instantiation syntax for UMD bundle
+          const jsPDF = window.jspdf.jsPDF;
+          const doc = new jsPDF({
+            orientation: 'p',
+            unit: 'mm',
+            format: 'a4'
+          });
+
+          const imgProps = doc.getImageProperties(imgData);
+          const pdfWidth = doc.internal.pageSize.getWidth();
+          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+          doc.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+          doc.save(`Image_Converted_${Date.now()}.pdf`);
+        } catch (err) {
+          alert('Error generating PDF: ' + err.message);
+        }
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    // 2. Excel to PDF
+    function convertExcelToPDF() {
+      const fileInput = document.getElementById('excel-file-input');
+      if (!fileInput.files || !fileInput.files.length) {
+        return alert('Please select an Excel file (.xlsx or .xls) first!');
+      }
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+          const htmlTable = XLSX.utils.sheet_to_html(firstSheet);
+
+          const tempContainer = document.createElement('div');
+          tempContainer.innerHTML = `
+            <div style="padding: 20px; font-family: sans-serif;">
+              <h2 style="color: #4f46e5; margin-bottom: 10px;">Khata Bahi - Excel Document Export</h2>
+              ${htmlTable}
+            </div>
+          `;
+
+          html2pdf().from(tempContainer).set({
+            margin: 10,
+            filename: `Excel_Export_${Date.now()}.pdf`,
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+          }).save();
+        } catch (err) {
+          alert('Error parsing Excel sheet: ' + err.message);
+        }
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
+
+    // 3. PDF to Excel
+    async function convertPdfToExcel() {
+      const fileInput = document.getElementById('pdf-to-excel-input');
+      if (!fileInput.files || !fileInput.files.length) {
+        return alert('Please select a PDF file first!');
+      }
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = async function() {
+        try {
+          const typedarray = new Uint8Array(this.result);
+          const pdf = await pdfjsLib.getDocument(typedarray).promise;
+          let extractedRows = [];
+
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            let pageText = textContent.items.map(item => item.str);
+            
+            let row = [];
+            pageText.forEach((text, index) => {
+              row.push(text);
+              if ((index + 1) % 4 === 0) {
+                extractedRows.push([...row]);
+                row = [];
+              }
+            });
+            if (row.length > 0) extractedRows.push(row);
+          }
+
+          const ws = XLSX.utils.aoa_to_sheet(extractedRows);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, "PDF_Export");
+          XLSX.writeFile(wb, `PDF_Converted_${Date.now()}.xlsx`);
+        } catch (err) {
+          alert('Error converting PDF to Excel: ' + err.message);
+        }
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
+
+    // 4. PDF to Image
+    async function convertPdfToImage() {
+      const fileInput = document.getElementById('pdf-to-img-input');
+      if (!fileInput.files || !fileInput.files.length) {
+        return alert('Please select a PDF file first!');
+      }
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = async function() {
+        try {
+          const typedarray = new Uint8Array(this.result);
+          const pdf = await pdfjsLib.getDocument(typedarray).promise;
+          const page = await pdf.getPage(1);
+
+          const viewport = page.getViewport({ scale: 1.5 });
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          await page.render({ canvasContext: context, viewport: viewport }).promise;
+
+          const imageURL = canvas.toDataURL("image/png");
+          const a = document.createElement('a');
+          a.href = imageURL;
+          a.download = `PDF_Page1_${Date.now()}.png`;
+          a.click();
+        } catch (err) {
+          alert('Error rendering PDF to Image: ' + err.message);
+        }
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
+
+    /* ---------------- MODALS & SUBSCRIPTION ---------------- */
     function openModal() { document.getElementById('modal').classList.remove('hidden'); calculateAmounts(); }
     function closeModal() { document.getElementById('modal').classList.add('hidden'); }
 
