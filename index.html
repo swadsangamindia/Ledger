@@ -480,7 +480,7 @@
       </div>
     </div>
 
-    <!-- FLOATING ACTION BUTTON -->
+    <!-- FLOATING ACTION BUTTON FOR MOBILE & DESKTOP -->
     <button onclick="openModal()" class="fixed bottom-20 md:bottom-8 right-5 md:right-8 bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 text-white p-4 rounded-full shadow-2xl shadow-purple-500/40 transition transform hover:scale-110 active:scale-95 z-30 flex items-center justify-center border border-white">
       <i data-lucide="plus" class="w-7 h-7"></i>
     </button>
@@ -646,7 +646,7 @@
     </div>
   </div>
 
-  <!-- APPLICATION LOGIC WITH HISTORY PERSISTENCE & CONVERSION FIX -->
+  <!-- APPLICATION LOGIC -->
   <script>
     lucide.createIcons();
 
@@ -657,8 +657,20 @@
     // Persistent Local Storage Initialization
     let transactions = JSON.parse(localStorage.getItem('ledger_transactions')) || [];
     let currentUser = JSON.parse(localStorage.getItem('ledger_user')) || null;
-    let isProUser = JSON.parse(localStorage.getItem('ledger_is_pro')) || false;
-    let proExpiry = JSON.parse(localStorage.getItem('ledger_pro_expiry')) || null;
+
+    // PRO SUBSCRIPTION INITIALIZATION WITH AUTO 30-DAY DEFAULT
+    let isProUser = JSON.parse(localStorage.getItem('ledger_is_pro'));
+    if (isProUser === null) {
+      isProUser = true; // Pro enabled by default on fresh start
+      localStorage.setItem('ledger_is_pro', JSON.stringify(true));
+    }
+
+    let proExpiry = JSON.parse(localStorage.getItem('ledger_pro_expiry'));
+    if (!proExpiry && isProUser) {
+      proExpiry = Date.now() + (30 * 24 * 60 * 60 * 1000); // 30 days from now
+      localStorage.setItem('ledger_pro_expiry', JSON.stringify(proExpiry));
+    }
+
     let lineChart, doughnutChart;
 
     function formatDateToDDMMYYYY(dateStr) {
@@ -681,8 +693,9 @@
     function getProDaysRemaining() {
       if (!isProUser || !proExpiry) return 0;
       const diffMs = proExpiry - Date.now();
+      if (diffMs <= 0) return 0;
       const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-      return days > 0 ? days : 0;
+      return days;
     }
 
     function checkAuth() {
@@ -707,7 +720,7 @@
 
       const remainingDays = getProDaysRemaining();
 
-      if (isProUser) {
+      if (isProUser && remainingDays > 0) {
         if (mobileUpgradeBtn) mobileUpgradeBtn.classList.add('hidden');
         if (settingsUpgradeBtn) settingsUpgradeBtn.classList.add('hidden');
 
@@ -1011,9 +1024,9 @@
       }
     }
 
-    /* ---------------- FIXED PDF & CONVERSION TOOLS ENGINE ---------------- */
+    /* ---------------- CONVERSION UTILITIES ENGINE ---------------- */
 
-    // 1. Image to PDF Fix
+    // 1. Image to PDF
     function convertImageToPDF() {
       const fileInput = document.getElementById('img-file-input');
       if (!fileInput.files || !fileInput.files.length) {
@@ -1026,7 +1039,6 @@
       reader.onload = function(e) {
         try {
           const imgData = e.target.result;
-          // Correct jsPDF instantiation syntax for UMD bundle
           const jsPDF = window.jspdf.jsPDF;
           const doc = new jsPDF({
             orientation: 'p',
