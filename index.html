@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Khata Bahi - Digital Hisab & Business Ledger</title>
+  <title>Khata Bahi - Digital Hisab, Ledger & PDF Tools</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -11,137 +11,184 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Quicksand & Jakarta -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- UTILITY LIBRARIES -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+
+  <!-- PWA Manifest & Theme -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#f0f4f9">
 
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .nav-active { background-color: #4f46e5; color: white !important; }
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      background-color: #dbeafe;
+      /* Tries local bg.jpg first -> Falls back to HD Anime Sky Wallpaper */
+      background-image: url('bg.jpg'), url('bg.png'), url('https://images.wallpapersden.com/image/download/anime-landscape-scenery_bGltaGmUmZqaraWkpJRmbmdlrWZlbWU.jpg');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+    .heading-font { font-family: 'Quicksand', sans-serif; }
+    
+    /* Translucent Glass Cards */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.65) !important;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Transparent Glass Sidebar - Lets the background show through fully! */
+    .glass-sidebar {
+      background: rgba(15, 17, 30, 0.38) !important;
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-right: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .nav-active { 
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); 
+      color: white !important;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
   </style>
 </head>
-<body class="bg-[#F8FAFC] text-slate-800 flex flex-col md:flex-row h-screen overflow-hidden">
+<body class="text-slate-800 flex flex-col md:flex-row h-screen overflow-hidden">
 
-  <!-- LOCAL AUTH / USER SETUP OVERLAY -->
-  <div id="auth-overlay" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl">
+  <!-- LOCAL AUTH OVERLAY -->
+  <div id="auth-overlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md flex items-center justify-center p-4 z-50">
+    <div class="glass-card rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-white">
       <div class="text-center mb-6">
-        <div class="bg-indigo-600 text-white p-3 rounded-2xl w-fit mx-auto mb-3">
+        <div class="bg-indigo-600 text-white p-3.5 rounded-2xl w-fit mx-auto mb-3 shadow-lg shadow-indigo-500/30">
           <i data-lucide="book-open" class="w-8 h-8"></i>
         </div>
-        <h2 id="auth-title" class="text-xl font-bold text-slate-900">Welcome to Khata Bahi</h2>
+        <h2 id="auth-title" class="text-2xl font-bold text-slate-900 heading-font">Welcome to Khata Bahi 🌸</h2>
         <p id="auth-subtitle" class="text-xs text-slate-500 mt-1">Enter your details to open your digital ledger</p>
       </div>
 
       <form id="auth-form" class="space-y-4">
         <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Your / Business Name</label>
-          <input type="text" id="auth-name" required placeholder="e.g., Aditya" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Your / Business Name</label>
+          <input type="text" id="auth-name" required placeholder="e.g., aditya" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white/90 focus:outline-indigo-600 shadow-sm" />
         </div>
 
         <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Email Address</label>
-          <input type="email" id="auth-email" required placeholder="aditya@example.com" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Email Address</label>
+          <input type="email" id="auth-email" required placeholder="aditya@example.com" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white/90 focus:outline-indigo-600 shadow-sm" />
         </div>
 
-        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition mt-2">Get Started (Free)</button>
+        <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-indigo-500/25 mt-2">Get Started (Free)</button>
       </form>
     </div>
   </div>
 
-  <!-- DESKTOP SIDEBAR -->
-  <aside class="hidden md:flex w-64 bg-[#111625] text-slate-400 flex-col justify-between p-5 shrink-0">
+  <!-- DESKTOP TRANSPARENT SIDEBAR -->
+  <aside class="hidden md:flex w-64 glass-sidebar text-white flex-col justify-between p-5 shrink-0 z-20">
     <div>
       <div class="flex items-center gap-3 px-2 py-3 mb-6">
-        <div class="bg-indigo-600 p-2.5 rounded-xl text-white">
+        <div class="bg-gradient-to-br from-pink-500 to-indigo-600 p-2.5 rounded-2xl text-white shadow-lg shadow-indigo-500/30">
           <i data-lucide="book-open" class="w-6 h-6"></i>
         </div>
         <div>
-          <h1 class="text-white font-bold text-lg leading-none">Khata Bahi</h1>
-          <span class="text-xs text-amber-400 font-semibold flex items-center gap-1 mt-0.5" id="sidebar-plan-badge">
-            <i data-lucide="shield" class="w-3 h-3"></i> Free Plan
+          <h1 class="text-white font-extrabold text-xl heading-font leading-none drop-shadow">Khata Bahi</h1>
+          <span class="text-[11px] text-amber-200 font-bold flex items-center gap-1 mt-1 bg-amber-400/20 px-2.5 py-0.5 rounded-full border border-amber-300/40 w-fit backdrop-blur-sm" id="sidebar-plan-badge">
+            <i data-lucide="crown" class="w-3 h-3 text-amber-300"></i> Free Plan
           </span>
         </div>
       </div>
 
-      <nav class="space-y-1">
-        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn nav-active w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition text-slate-400 hover:text-white hover:bg-slate-800/50">
-          <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+      <nav class="space-y-1.5">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn nav-active w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold transition text-xs">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
         </button>
-        <button onclick="openModal()" class="w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
-          <i data-lucide="plus-circle" class="w-5 h-5"></i> Add Entry
+        <button onclick="openModal()" class="w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Entry
         </button>
-        <button onclick="switchTab('transactions')" id="nav-transactions" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
-          <i data-lucide="list-todo" class="w-5 h-5"></i> All Entries
+        <button onclick="switchTab('transactions')" id="nav-transactions" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
+          <i data-lucide="list-todo" class="w-4 h-4"></i> All Entries
         </button>
-        <button onclick="switchTab('categories')" id="nav-categories" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
-          <i data-lucide="shapes" class="w-5 h-5"></i> Categories
+        <button onclick="switchTab('tools')" id="nav-tools" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
+          <i data-lucide="wrench" class="w-4 h-4 text-purple-300"></i> All Utility Tools
         </button>
-        <button onclick="switchTab('reports')" id="nav-reports" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
-          <i data-lucide="bar-chart-3" class="w-5 h-5"></i> Reports
+        <button onclick="switchTab('categories')" id="nav-categories" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
+          <i data-lucide="shapes" class="w-4 h-4"></i> Categories
         </button>
-        <button onclick="openUpgradeModal()" class="w-full flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-amber-500/20 to-indigo-500/20 hover:from-amber-500/30 hover:to-indigo-500/30 border border-amber-500/30 text-amber-300 rounded-xl transition font-semibold">
-          <i data-lucide="crown" class="w-5 h-5 text-amber-400"></i> Upgrade Pro (₹99)
+        <button onclick="switchTab('reports')" id="nav-reports" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
+          <i data-lucide="bar-chart-3" class="w-4 h-4"></i> Reports
         </button>
-        <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
-          <i data-lucide="user" class="w-5 h-5"></i> Profile
+        <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
+          <i data-lucide="user" class="w-4 h-4"></i> Profile
         </button>
-        <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-slate-800/50 rounded-xl transition text-slate-400 font-medium">
-          <i data-lucide="settings" class="w-5 h-5"></i> Settings
+        <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
+          <i data-lucide="settings" class="w-4 h-4"></i> Settings
         </button>
       </nav>
     </div>
 
     <div>
-      <div class="bg-gradient-to-br from-indigo-900/40 to-slate-800/40 border border-slate-800 p-4 rounded-2xl mb-4">
-        <div class="bg-indigo-600/30 p-2 rounded-lg w-fit text-indigo-400 mb-3">
-          <i data-lucide="wallet" class="w-5 h-5"></i>
-        </div>
-        <p class="text-xs text-slate-400">Total Net Balance</p>
-        <h3 id="card-total-balance" class="text-white text-xl font-bold">₹0.00</h3>
-        <p class="text-xs text-slate-500 mt-1">Receipts minus Payments</p>
+      <div class="relative overflow-hidden rounded-2xl p-4 mb-3 border border-white/30 bg-black/20 shadow-lg backdrop-blur-md">
+        <p class="text-[11px] font-semibold text-indigo-200">Total Net Balance</p>
+        <h3 id="card-total-balance" class="text-white text-2xl font-extrabold heading-font mt-0.5">₹0.00</h3>
+        <p class="text-[10px] text-slate-300 mt-0.5">Receipts minus Payments</p>
       </div>
 
-      <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-2.5 text-rose-400 hover:bg-rose-500/10 rounded-xl transition text-xs font-semibold mb-2">
+      <button onclick="logout()" class="w-full flex items-center gap-2.5 px-3 py-2 text-rose-300 hover:bg-rose-500/20 rounded-xl transition text-xs font-bold">
         <i data-lucide="log-out" class="w-4 h-4"></i> Switch Profile
       </button>
+
+      <div class="mt-3 pt-3 border-t border-white/20 flex items-center gap-3">
+        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=AdityaAnime" alt="Anime Character" class="w-10 h-10 rounded-xl bg-indigo-950/80 border border-white/30 p-1 shrink-0" />
+        <div class="overflow-hidden">
+          <p class="text-xs font-bold text-white truncate drop-shadow" id="sidebar-user-name">aditya</p>
+          <p class="text-[10px] text-indigo-200 truncate">Online Workspace</p>
+        </div>
+      </div>
     </div>
   </aside>
 
   <!-- MOBILE HEADER -->
-  <div class="md:hidden bg-[#111625] text-white p-4 flex justify-between items-center shrink-0 border-b border-slate-800">
+  <div class="md:hidden glass-sidebar text-white p-4 flex justify-between items-center shrink-0 border-b border-white/20 z-20">
     <div class="flex items-center gap-2">
-      <div class="bg-indigo-600 p-2 rounded-lg text-white">
+      <div class="bg-indigo-600 p-2 rounded-xl text-white">
         <i data-lucide="book-open" class="w-5 h-5"></i>
       </div>
-      <span class="font-bold text-base">Khata Bahi</span>
+      <span class="font-bold text-base heading-font text-white">Khata Bahi</span>
     </div>
     <div class="flex items-center gap-2">
-      <button onclick="openUpgradeModal()" class="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1">
-        <i data-lucide="crown" class="w-3.5 h-3.5"></i> Pro
+      <button onclick="openUpgradeModal()" id="mobile-upgrade-btn" class="bg-amber-400/20 text-amber-200 border border-amber-300/40 px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 backdrop-blur-sm">
+        <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-300"></i> Pro
       </button>
-      <div onclick="switchTab('profile')" class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs cursor-pointer" id="mobile-header-avatar">
+      <div onclick="switchTab('profile')" class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs cursor-pointer shadow-md overflow-hidden" id="mobile-header-avatar">
         A
       </div>
     </div>
   </div>
 
   <!-- MAIN CONTENT AREA -->
-  <main class="flex-1 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8 relative">
+  <main class="flex-1 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8 relative z-10">
     
     <!-- Top Header -->
     <header class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6 md:mb-8">
       <div>
-        <h1 class="text-xl md:text-2xl font-bold text-slate-900" id="welcome-heading">Hello 👋</h1>
-        <p class="text-xs md:text-sm text-slate-500" id="header-subtitle">Digital Khata Bahi Overview</p>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 heading-font drop-shadow-sm" id="welcome-heading">Hello, aditya 👋</h1>
+        <p class="text-xs md:text-sm text-slate-700 font-bold drop-shadow-sm" id="header-subtitle">Digital Khata Bahi Overview</p>
       </div>
       <div class="flex items-center gap-2 sm:gap-3">
-        <button onclick="exportData()" class="flex-1 sm:flex-none bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-3 py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center justify-center gap-2 shadow-sm transition">
-          <i data-lucide="download" class="w-4 h-4 text-slate-500"></i> Export CSV
+        <button onclick="exportData()" class="flex-1 sm:flex-none glass-card hover:bg-white text-slate-800 px-4 py-2.5 rounded-2xl text-xs md:text-sm font-bold flex items-center justify-center gap-2 transition">
+          <i data-lucide="download" class="w-4 h-4 text-slate-600"></i> Export CSV
         </button>
-        <button onclick="openModal()" class="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center justify-center gap-2 transition">
+        <button onclick="openModal()" class="flex-1 sm:flex-none bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2.5 rounded-2xl text-xs md:text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/25 transition">
           <i data-lucide="plus" class="w-4 h-4"></i> Add Entry
         </button>
-        <div onclick="switchTab('profile')" class="hidden md:flex w-10 h-10 rounded-full bg-indigo-600 text-white items-center justify-center cursor-pointer font-bold border-2 border-white shadow-sm overflow-hidden" id="header-avatar">
+        <div onclick="switchTab('profile')" class="hidden md:flex w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-white items-center justify-center cursor-pointer font-bold border-2 border-white shadow-md overflow-hidden shrink-0" id="header-avatar">
           A
         </div>
       </div>
@@ -149,70 +196,93 @@
 
     <!-- 1. DASHBOARD VIEW -->
     <div id="view-dashboard" class="tab-view space-y-6 md:space-y-8">
-      <!-- KPI Cards -->
-      <section class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
-        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
-          <div>
-            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total Receipts</span>
-            <h2 id="total-receipts" class="text-lg md:text-2xl font-bold text-emerald-600 mt-1">₹0.00</h2>
+      <section class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+        <div class="glass-card p-4 rounded-3xl flex flex-col justify-between relative overflow-hidden">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-[11px] font-semibold text-slate-600">Total Receipts</span>
+              <h2 id="total-receipts" class="text-xl md:text-2xl font-extrabold text-emerald-600 heading-font mt-1">₹532.18</h2>
+            </div>
+            <div class="bg-emerald-100 text-emerald-600 p-2.5 rounded-2xl"><i data-lucide="arrow-down-left" class="w-5 h-5"></i></div>
           </div>
-          <div class="bg-emerald-50 p-2.5 md:p-3 rounded-2xl text-emerald-500"><i data-lucide="arrow-down-left" class="w-5 h-5 md:w-6 md:h-6"></i></div>
+          <span class="text-[10px] font-bold text-emerald-600 flex items-center gap-1 mt-3"><i data-lucide="trending-up" class="w-3 h-3"></i> 12.5% <span class="text-slate-500 font-normal">vs last 7 days</span></span>
         </div>
-        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
-          <div>
-            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total Payments</span>
-            <h2 id="total-payments" class="text-lg md:text-2xl font-bold text-rose-500 mt-1">₹0.00</h2>
+
+        <div class="glass-card p-4 rounded-3xl flex flex-col justify-between relative overflow-hidden">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-[11px] font-semibold text-slate-600">Total Payments</span>
+              <h2 id="total-payments" class="text-xl md:text-2xl font-extrabold text-rose-500 heading-font mt-1">₹0.00</h2>
+            </div>
+            <div class="bg-rose-100 text-rose-500 p-2.5 rounded-2xl"><i data-lucide="arrow-up-right" class="w-5 h-5"></i></div>
           </div>
-          <div class="bg-rose-50 p-2.5 md:p-3 rounded-2xl text-rose-500"><i data-lucide="arrow-up-right" class="w-5 h-5 md:w-6 md:h-6"></i></div>
+          <span class="text-[10px] font-bold text-rose-500 flex items-center gap-1 mt-3">→ 0% <span class="text-slate-500 font-normal">vs last 7 days</span></span>
         </div>
-        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
-          <div>
-            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total Sales (Pro)</span>
-            <h2 id="total-sales" class="text-lg md:text-2xl font-bold text-blue-600 mt-1">₹0.00</h2>
+
+        <div class="glass-card p-4 rounded-3xl flex flex-col justify-between relative overflow-hidden">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-[11px] font-semibold text-slate-600">Total Sales (Pro)</span>
+              <h2 id="total-sales" class="text-xl md:text-2xl font-extrabold text-indigo-600 heading-font mt-1">₹0.00</h2>
+            </div>
+            <div class="bg-indigo-100 text-indigo-600 p-2.5 rounded-2xl"><i data-lucide="trending-up" class="w-5 h-5"></i></div>
           </div>
-          <div class="bg-blue-50 p-2.5 md:p-3 rounded-2xl text-blue-500"><i data-lucide="trending-up" class="w-5 h-5 md:w-6 md:h-6"></i></div>
+          <span class="text-[10px] font-bold text-indigo-600 flex items-center gap-1 mt-3">↗ 0% <span class="text-slate-500 font-normal">vs last 7 days</span></span>
         </div>
-        <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
-          <div>
-            <span class="text-[10px] md:text-xs font-medium text-slate-500">Total GST (Pro)</span>
-            <h2 id="total-gst" class="text-lg md:text-2xl font-bold text-amber-500 mt-1">₹0.00</h2>
+
+        <div class="glass-card p-4 rounded-3xl flex flex-col justify-between relative overflow-hidden">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-[11px] font-semibold text-slate-600">Total GST (Pro)</span>
+              <h2 id="total-gst" class="text-xl md:text-2xl font-extrabold text-amber-600 heading-font mt-1">₹81.18</h2>
+            </div>
+            <div class="bg-amber-100 text-amber-600 p-2.5 rounded-2xl"><i data-lucide="file-text" class="w-5 h-5"></i></div>
           </div>
-          <div class="bg-amber-50 p-2.5 md:p-3 rounded-2xl text-amber-500"><i data-lucide="file-text" class="w-5 h-5 md:w-6 md:h-6"></i></div>
+          <span class="text-[10px] font-bold text-amber-600 flex items-center gap-1 mt-3">↗ 8.3% <span class="text-slate-500 font-normal">vs last 7 days</span></span>
         </div>
       </section>
 
-      <!-- Charts -->
       <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="md:col-span-2 bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm">
-          <h3 class="font-bold text-slate-800 text-sm md:text-base mb-4">Inflow vs Outflow Trend</h3>
-          <div class="h-48 md:h-64"><canvas id="overviewChart"></canvas></div>
+        <div class="md:col-span-2 glass-card p-5 md:p-6 rounded-3xl">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-slate-800 text-sm md:text-base heading-font flex items-center gap-2">
+              <i data-lucide="trending-up" class="w-4 h-4 text-indigo-600"></i> Inflow vs Outflow Trend
+            </h3>
+            <select class="border border-slate-200 rounded-xl px-2.5 py-1 text-xs bg-white/80 font-semibold focus:outline-none">
+              <option>Last 7 Days</option>
+              <option>Last 30 Days</option>
+            </select>
+          </div>
+          <div class="h-52 md:h-64"><canvas id="overviewChart"></canvas></div>
         </div>
-        <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
-          <h3 class="font-bold text-slate-800 text-sm md:text-base mb-2">Category Breakdown</h3>
-          <div class="relative flex justify-center items-center h-40 md:h-48"><canvas id="categoryChart"></canvas></div>
-          <div id="category-legend" class="space-y-2 mt-4 text-xs font-medium"></div>
+
+        <div class="glass-card p-5 md:p-6 rounded-3xl flex flex-col justify-between">
+          <h3 class="font-bold text-slate-800 text-sm md:text-base heading-font mb-2">Category Breakdown</h3>
+          <div class="relative flex justify-center items-center h-44 md:h-48"><canvas id="categoryChart"></canvas></div>
+          <div id="category-legend" class="space-y-1.5 mt-4 text-xs font-semibold text-slate-700"></div>
         </div>
       </section>
 
-      <!-- Recent Entries Table -->
-      <section class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm overflow-x-auto">
+      <section class="glass-card p-5 md:p-6 rounded-3xl overflow-x-auto">
         <div class="flex justify-between items-center mb-4">
-          <h3 class="font-bold text-slate-800 text-sm md:text-base">Recent Khata Bahi Entries</h3>
-          <button onclick="switchTab('transactions')" class="text-xs font-semibold text-indigo-600 hover:underline">View All</button>
+          <h3 class="font-bold text-slate-800 text-sm md:text-base heading-font flex items-center gap-2">
+            🌸 Recent Khata Bahi Entries
+          </h3>
+          <button onclick="switchTab('transactions')" class="text-xs font-bold text-indigo-600 hover:underline flex items-center gap-1">View All <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></button>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs min-w-[650px]">
             <thead>
-              <tr class="text-slate-400 border-b border-slate-100">
-                <th class="pb-3 font-medium">Date (DD-MM-YYYY)</th>
-                <th class="pb-3 font-medium">Type</th>
-                <th class="pb-3 font-medium">Party Name</th>
-                <th class="pb-3 font-medium">Description</th>
-                <th class="pb-3 font-medium">GST</th>
-                <th class="pb-3 font-medium">Amount</th>
+              <tr class="text-slate-500 border-b border-slate-200/80">
+                <th class="pb-3 font-semibold">Date (DD-MM-YYYY)</th>
+                <th class="pb-3 font-semibold">Type</th>
+                <th class="pb-3 font-semibold">Party Name</th>
+                <th class="pb-3 font-semibold">Description</th>
+                <th class="pb-3 font-semibold">GST</th>
+                <th class="pb-3 font-semibold">Amount</th>
               </tr>
             </thead>
-            <tbody id="dashboard-recent-rows" class="divide-y divide-slate-50 font-medium"></tbody>
+            <tbody id="dashboard-recent-rows" class="divide-y divide-slate-100 font-semibold text-slate-800"></tbody>
           </table>
         </div>
       </section>
@@ -220,51 +290,117 @@
 
     <!-- 2. TRANSACTIONS VIEW -->
     <div id="view-transactions" class="tab-view hidden">
-      <section class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm">
+      <section class="glass-card p-5 md:p-6 rounded-3xl">
         <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-6">
-          <h3 class="font-bold text-slate-800 text-base md:text-lg">All Khata Bahi Entries</h3>
-          <input type="text" id="search-input" onkeyup="filterTransactions()" placeholder="Search description or category..." class="border border-slate-200 rounded-xl px-4 py-2 text-xs w-full sm:w-64 bg-slate-50 focus:outline-indigo-600" />
+          <h3 class="font-bold text-slate-800 text-base md:text-lg heading-font">All Khata Bahi Entries</h3>
+          <input type="text" id="search-input" onkeyup="filterTransactions()" placeholder="Search description or category..." class="border border-slate-200 rounded-xl px-4 py-2 text-xs w-full sm:w-64 bg-white/90 focus:outline-indigo-600" />
         </div>
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs min-w-[700px]">
+          <table class="w-full text-left text-xs min-w-[750px]">
             <thead>
-              <tr class="text-slate-400 border-b border-slate-100">
-                <th class="pb-3 font-medium">Date (DD-MM-YYYY)</th>
-                <th class="pb-3 font-medium">Type</th>
-                <th class="pb-3 font-medium">Party Name</th>
-                <th class="pb-3 font-medium">Description</th>
-                <th class="pb-3 font-medium">Qty x Rate</th>
-                <th class="pb-3 font-medium">GST (%)</th>
-                <th class="pb-3 font-medium">Total Amount</th>
-                <th class="pb-3 font-medium text-right">Action</th>
+              <tr class="text-slate-500 border-b border-slate-200/80">
+                <th class="pb-3 font-semibold">Date (DD-MM-YYYY)</th>
+                <th class="pb-3 font-semibold">Type</th>
+                <th class="pb-3 font-semibold">Party Name</th>
+                <th class="pb-3 font-semibold">Description</th>
+                <th class="pb-3 font-semibold">Qty x Rate</th>
+                <th class="pb-3 font-semibold">GST (%)</th>
+                <th class="pb-3 font-semibold">Total Amount</th>
+                <th class="pb-3 font-semibold text-right">Invoice / Action</th>
               </tr>
             </thead>
-            <tbody id="full-transaction-rows" class="divide-y divide-slate-50 font-medium"></tbody>
+            <tbody id="full-transaction-rows" class="divide-y divide-slate-100 font-semibold text-slate-800"></tbody>
           </table>
         </div>
       </section>
     </div>
 
-    <!-- 3. CATEGORIES VIEW -->
+    <!-- 3. TOOLS VIEW -->
+    <div id="view-tools" class="tab-view hidden space-y-6">
+      <div>
+        <h2 class="text-xl font-extrabold text-slate-900 heading-font">PDF, Excel & Document Utilities</h2>
+        <p class="text-xs text-slate-600">100% Free client-side document processing tools</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="glass-card p-5 rounded-3xl space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="bg-blue-100 text-blue-600 p-3 rounded-2xl"><i data-lucide="file-spreadsheet" class="w-6 h-6"></i></div>
+            <div>
+              <h3 class="font-bold text-slate-800 text-sm">PDF to Excel Converter</h3>
+              <p class="text-xs text-slate-500">Extract text and tabular data from PDF into .XLSX</p>
+            </div>
+          </div>
+          <input type="file" id="pdf-to-excel-input" accept=".pdf" class="w-full text-xs border border-slate-200 rounded-xl p-2.5 bg-white/90 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white file:font-semibold" />
+          <button onclick="convertPdfToExcel()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+            <i data-lucide="file-spreadsheets" class="w-4 h-4"></i> Convert PDF to Excel (.XLSX)
+          </button>
+        </div>
+
+        <div class="glass-card p-5 rounded-3xl space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="bg-indigo-100 text-indigo-600 p-3 rounded-2xl"><i data-lucide="image" class="w-6 h-6"></i></div>
+            <div>
+              <h3 class="font-bold text-slate-800 text-sm">Image to PDF Converter</h3>
+              <p class="text-xs text-slate-500">Convert PNG, JPG, or JPEG images to a PDF file</p>
+            </div>
+          </div>
+          <input type="file" id="img-file-input" accept="image/*" class="w-full text-xs border border-slate-200 rounded-xl p-2.5 bg-white/90 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-indigo-600 file:text-white file:font-semibold" />
+          <button onclick="convertImageToPDF()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+            <i data-lucide="file-down" class="w-4 h-4"></i> Convert & Download PDF
+          </button>
+        </div>
+
+        <div class="glass-card p-5 rounded-3xl space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="bg-emerald-100 text-emerald-600 p-3 rounded-2xl"><i data-lucide="file-type" class="w-6 h-6"></i></div>
+            <div>
+              <h3 class="font-bold text-slate-800 text-sm">Excel to PDF Converter</h3>
+              <p class="text-xs text-slate-500">Parse .XLSX sheets and export formatted PDF documents</p>
+            </div>
+          </div>
+          <input type="file" id="excel-file-input" accept=".xlsx, .xls, .csv" class="w-full text-xs border border-slate-200 rounded-xl p-2.5 bg-white/90 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-emerald-600 file:text-white file:font-semibold" />
+          <button onclick="convertExcelToPDF()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+            <i data-lucide="file-down" class="w-4 h-4"></i> Export Excel to PDF
+          </button>
+        </div>
+
+        <div class="glass-card p-5 rounded-3xl space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="bg-rose-100 text-rose-600 p-3 rounded-2xl"><i data-lucide="file-image" class="w-6 h-6"></i></div>
+            <div>
+              <h3 class="font-bold text-slate-800 text-sm">PDF to Image Converter</h3>
+              <p class="text-xs text-slate-500">Extract PDF pages into PNG images</p>
+            </div>
+          </div>
+          <input type="file" id="pdf-to-img-input" accept=".pdf" class="w-full text-xs border border-slate-200 rounded-xl p-2.5 bg-white/90 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-rose-600 file:text-white file:font-semibold" />
+          <button onclick="convertPdfToImage()" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+            <i data-lucide="image" class="w-4 h-4"></i> Convert PDF to PNG Image
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. CATEGORIES VIEW -->
     <div id="view-categories" class="tab-view hidden">
       <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6" id="categories-grid"></section>
     </div>
 
-    <!-- 4. REPORTS VIEW -->
+    <!-- 5. REPORTS VIEW -->
     <div id="view-reports" class="tab-view hidden space-y-6">
-      <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm">
-        <h3 class="font-bold text-slate-800 text-base md:text-lg mb-1">Financial Summary</h3>
+      <div class="glass-card p-5 md:p-6 rounded-3xl">
+        <h3 class="font-bold text-slate-800 text-base md:text-lg heading-font mb-1">Financial Summary</h3>
         <p class="text-xs text-slate-500 mb-6">Automated ledger calculation</p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+          <div class="p-4 bg-white/90 rounded-2xl border border-slate-100">
             <span class="text-xs text-slate-500 font-medium">Total Entries Count</span>
             <h4 id="report-total-count" class="text-base md:text-lg font-bold text-slate-800 mt-1">0</h4>
           </div>
-          <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+          <div class="p-4 bg-white/90 rounded-2xl border border-slate-100">
             <span class="text-xs text-slate-500 font-medium">Plan Type</span>
             <h4 id="report-plan-type" class="text-base md:text-lg font-bold text-indigo-600 mt-1">Free Tier</h4>
           </div>
-          <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+          <div class="p-4 bg-white/90 rounded-2xl border border-slate-100">
             <span class="text-xs text-slate-500 font-medium">Total GST Amount</span>
             <h4 id="report-gst-amount" class="text-base md:text-lg font-bold text-amber-600 mt-1">₹0.00</h4>
           </div>
@@ -272,14 +408,14 @@
       </div>
     </div>
 
-    <!-- 5. PROFILE VIEW -->
+    <!-- 6. PROFILE VIEW -->
     <div id="view-profile" class="tab-view hidden">
-      <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm max-w-xl">
-        <h3 class="font-bold text-slate-800 text-base md:text-lg mb-6">Business Profile Settings</h3>
+      <div class="glass-card p-5 md:p-6 rounded-3xl max-w-xl">
+        <h3 class="font-bold text-slate-800 text-base md:text-lg heading-font mb-6">Business Profile Settings</h3>
         
         <form id="profile-form" class="space-y-4">
-          <div class="flex items-center gap-4 pb-4 border-b border-slate-100">
-            <div id="profile-avatar-large" class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-indigo-600 text-white text-xl md:text-2xl font-bold flex items-center justify-center overflow-hidden shrink-0">
+          <div class="flex items-center gap-4 pb-4 border-b border-slate-200/80">
+            <div id="profile-avatar-large" class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 text-white text-xl md:text-2xl font-bold flex items-center justify-center overflow-hidden shrink-0 shadow-md">
               A
             </div>
             <div>
@@ -289,18 +425,18 @@
           </div>
 
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Business Name</label>
-            <input type="text" id="profile-name-input" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Business Name</label>
+            <input type="text" id="profile-name-input" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600" />
           </div>
 
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Email</label>
-            <input type="email" id="profile-email-input" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Email</label>
+            <input type="email" id="profile-email-input" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600" />
           </div>
 
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Currency Symbol</label>
-            <input type="text" id="profile-currency-input" value="₹" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Currency Symbol</label>
+            <input type="text" id="profile-currency-input" value="₹" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600" />
           </div>
 
           <button type="submit" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm">Save Changes</button>
@@ -308,76 +444,57 @@
       </div>
     </div>
 
-    <!-- 6. SETTINGS VIEW -->
+    <!-- 7. SETTINGS VIEW -->
     <div id="view-settings" class="tab-view hidden">
-      <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-100 shadow-sm max-w-xl">
-        <h3 class="font-bold text-slate-800 text-base md:text-lg mb-4">Settings & Membership</h3>
+      <div class="glass-card p-5 md:p-6 rounded-3xl max-w-xl">
+        <h3 class="font-bold text-slate-800 text-base md:text-lg heading-font mb-4">Settings & Membership</h3>
         <div class="space-y-6">
-          <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-200/80">
             <div>
               <h4 class="font-semibold text-sm text-slate-800">Current Plan</h4>
               <p class="text-[11px] text-slate-500" id="settings-plan-desc">Free Plan (Receipt & Payment only)</p>
             </div>
-            <button onclick="openUpgradeModal()" class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1">
+            <button onclick="openUpgradeModal()" id="settings-upgrade-btn" class="bg-amber-500 hover:bg-amber-600 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-md shadow-amber-500/20">
               <i data-lucide="crown" class="w-3.5 h-3.5"></i> Upgrade Pro (₹99)
             </button>
           </div>
-          <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-200/80">
             <div>
               <h4 class="font-semibold text-sm text-slate-800">Clear Data</h4>
               <p class="text-[11px] text-slate-500">Reset all vouchers and local data</p>
             </div>
-            <button onclick="clearAllData()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-3 py-2 rounded-xl text-xs font-semibold transition">Reset App</button>
+            <button onclick="clearAllData()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-3.5 py-2 rounded-xl text-xs font-bold transition">Reset App</button>
           </div>
           <div class="flex items-center justify-between">
             <div>
               <h4 class="font-semibold text-sm text-slate-800">Export Transactions</h4>
               <p class="text-[11px] text-slate-500">Download Khata Bahi with DD-MM-YYYY dates</p>
             </div>
-            <button onclick="exportData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-xl text-xs font-semibold transition">Export CSV</button>
+            <button onclick="exportData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold transition">Export CSV</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Floating Action Button -->
-    <button onclick="openModal()" class="fixed bottom-20 md:bottom-8 right-5 md:right-8 bg-indigo-600 hover:bg-indigo-700 text-white p-3.5 md:p-4 rounded-full shadow-2xl transition transform hover:scale-105 z-30">
-      <i data-lucide="plus" class="w-6 h-6"></i>
+    <!-- FLOATING ACTION BUTTON -->
+    <button onclick="openModal()" class="fixed bottom-20 md:bottom-8 right-5 md:right-8 bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 text-white p-4 rounded-full shadow-2xl shadow-purple-500/40 transition transform hover:scale-110 active:scale-95 z-30 flex items-center justify-center border border-white">
+      <i data-lucide="plus" class="w-7 h-7"></i>
     </button>
   </main>
 
-  <!-- MOBILE BOTTOM NAVIGATION BAR -->
-  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-[#111625] border-t border-slate-800 flex justify-around items-center p-2 z-40 text-slate-400">
-    <button onclick="switchTab('dashboard')" id="m-nav-dashboard" class="flex flex-col items-center gap-1 p-1 text-[10px] text-indigo-400">
-      <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
-    </button>
-    <button onclick="switchTab('transactions')" id="m-nav-transactions" class="flex flex-col items-center gap-1 p-1 text-[10px]">
-      <i data-lucide="list-todo" class="w-5 h-5"></i> Register
-    </button>
-    <button onclick="switchTab('categories')" id="m-nav-categories" class="flex flex-col items-center gap-1 p-1 text-[10px]">
-      <i data-lucide="shapes" class="w-5 h-5"></i> Categories
-    </button>
-    <button onclick="switchTab('reports')" id="m-nav-reports" class="flex flex-col items-center gap-1 p-1 text-[10px]">
-      <i data-lucide="bar-chart-3" class="w-5 h-5"></i> Reports
-    </button>
-    <button onclick="switchTab('settings')" id="m-nav-settings" class="flex flex-col items-center gap-1 p-1 text-[10px]">
-      <i data-lucide="settings" class="w-5 h-5"></i> Settings
-    </button>
-  </nav>
-
   <!-- ADD VOUCHER MODAL -->
-  <div id="modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl max-w-lg w-full p-5 md:p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+  <div id="modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
+    <div class="glass-card rounded-3xl max-w-lg w-full p-5 md:p-6 shadow-2xl max-h-[90vh] overflow-y-auto border border-white">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="text-base md:text-lg font-bold text-slate-900">Add Khata Bahi Entry</h3>
+        <h3 class="text-base md:text-lg font-bold text-slate-900 heading-font">Add Khata Bahi Entry 🌸</h3>
         <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
 
       <form id="transaction-form" class="space-y-3.5">
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Entry Type</label>
-            <select id="type" onchange="toggleVoucherFields()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600 font-semibold">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Entry Type</label>
+            <select id="type" onchange="toggleVoucherFields()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600 font-bold">
               <option value="receipt">Receipt (Money Received)</option>
               <option value="payment">Payment (Money Paid)</option>
               <option value="sale" id="opt-sale">Sale (Invoice - Pro 🔒)</option>
@@ -385,23 +502,22 @@
             </select>
           </div>
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Date</label>
-            <input type="date" id="date" required class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Date</label>
+            <input type="date" id="date" required class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600" />
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Description / Particulars</label>
-          <input type="text" id="description" required placeholder="e.g., Office Rent / Tea Expense" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Description / Particulars</label>
+          <input type="text" id="description" required placeholder="e.g., Electricity Bill / Office Rent" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600" />
         </div>
 
         <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Amount (₹)</label>
-          <input type="number" step="0.01" id="rate" required placeholder="500.00" oninput="calculateAmounts()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600" />
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Amount (₹)</label>
+          <input type="number" step="0.01" id="rate" required placeholder="500.00" oninput="calculateAmounts()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600 font-bold" />
         </div>
 
-        <!-- PRO FEATURES CONTAINER -->
-        <div id="pro-fields-container" class="space-y-3.5 border-t border-b border-amber-200 bg-amber-50/50 p-3 rounded-xl hidden">
+        <div id="pro-fields-container" class="space-y-3.5 border-t border-b border-amber-300 bg-amber-50/80 p-3.5 rounded-2xl hidden">
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-amber-800 flex items-center gap-1">
               <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-600"></i> Pro Features Unlocked
@@ -409,18 +525,18 @@
           </div>
 
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Party Name (Customer / Vendor)</label>
-            <input type="text" id="party-name" placeholder="e.g., Sharma Electronics" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white focus:outline-indigo-600" />
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Party Name (Customer / Vendor)</label>
+            <input type="text" id="party-name" placeholder="e.g., gdtsss" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white focus:outline-indigo-600" />
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1">Quantity</label>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Quantity</label>
               <input type="number" step="1" id="quantity" value="1" min="1" oninput="calculateAmounts()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white focus:outline-indigo-600" />
             </div>
             <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1">GST Rate (%)</label>
-              <select id="gst-rate" onchange="calculateAmounts()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white focus:outline-indigo-600">
+              <label class="block text-xs font-semibold text-slate-600 mb-1">GST Rate (%)</label>
+              <select id="gst-rate" onchange="calculateAmounts()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white focus:outline-indigo-600 font-semibold">
                 <option value="0">0% (Exempt)</option>
                 <option value="5">5%</option>
                 <option value="12">12%</option>
@@ -439,8 +555,8 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Category</label>
-            <select id="category" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Category</label>
+            <select id="category" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600">
               <option value="General Trade">General Trade</option>
               <option value="Office Expenses">Office Expenses</option>
               <option value="Food & Dining">Food & Dining</option>
@@ -449,8 +565,8 @@
             </select>
           </div>
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Payment Mode</label>
-            <select id="method" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600">
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Payment Mode</label>
+            <select id="method" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600">
               <option value="UPI">UPI</option>
               <option value="Cash">Cash</option>
               <option value="Bank Transfer">Bank Transfer</option>
@@ -459,52 +575,48 @@
           </div>
         </div>
 
-        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition mt-2">Save Entry</button>
+        <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-indigo-500/25 mt-2">Save Entry</button>
       </form>
     </div>
   </div>
 
-  <!-- UPGRADE TO PRO MODAL (REQUIRES PAYMENT OR ADITYAMODEL CODE) -->
-  <div id="upgrade-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative overflow-hidden">
-      <div class="absolute -top-12 -right-12 bg-amber-400/20 w-32 h-32 rounded-full blur-2xl"></div>
-      
+  <!-- UPGRADE TO PRO MODAL -->
+  <div id="upgrade-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
+    <div class="glass-card rounded-3xl max-w-md w-full p-6 shadow-2xl relative overflow-hidden border border-white">
       <div class="flex justify-between items-center mb-4 relative">
-        <span class="bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
-          <i data-lucide="crown" class="w-3.5 h-3.5"></i> PRO MEMBERSHIP
+        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 border border-amber-300">
+          <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-600"></i> PRO MEMBERSHIP
         </span>
         <button onclick="closeUpgradeModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
 
       <div class="text-center mb-5 relative">
-        <h3 class="text-2xl font-bold text-slate-900">Upgrade to Khata Pro</h3>
+        <h3 class="text-2xl font-bold text-slate-900 heading-font">Upgrade to Khata Pro</h3>
         <p class="text-xs text-slate-500 mt-1">Unlock party-wise accounting, GST & billing</p>
         <div class="mt-3 flex justify-center items-baseline gap-1">
-          <span class="text-4xl font-extrabold text-indigo-600">₹99</span>
-          <span class="text-xs text-slate-500 font-medium">/ month</span>
+          <span class="text-4xl font-extrabold text-indigo-600 heading-font">₹99</span>
+          <span class="text-xs text-slate-500 font-medium">/ 30 days</span>
         </div>
       </div>
 
-      <ul class="space-y-2.5 text-xs font-medium text-slate-700 mb-5 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+      <ul class="space-y-2.5 text-xs font-medium text-slate-700 mb-5 bg-white/80 p-4 rounded-2xl border border-slate-100">
         <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> Add Party Name to entries</li>
         <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> Record Quantity x Rate calculations</li>
         <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> Auto GST calculations (5%, 12%, 18%, 28%)</li>
         <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> Full Sale & Purchase Vouchers</li>
-        <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> CSV Export with DD-MM-YYYY dates</li>
+        <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> Valid for 30 Days from activation</li>
       </ul>
 
-      <!-- PROMO / ACCESS CODE BOX (ONLY WAY TO FREE ACCESS) -->
       <div class="mb-4">
-        <label class="block text-xs font-medium text-slate-600 mb-1">Have an Access Code?</label>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">Have an Access Code?</label>
         <div class="flex gap-2">
-          <input type="text" id="promo-code-input" placeholder="Enter Access Code" class="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-xs bg-slate-50 uppercase font-bold focus:outline-indigo-600" />
-          <button onclick="applyPromoCode()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Unlock</button>
+          <input type="text" id="promo-code-input" placeholder="Enter Access Code" class="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white uppercase font-bold focus:outline-indigo-600" />
+          <button onclick="applyPromoCode()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Unlock</button>
         </div>
       </div>
 
-      <!-- UPI PAYMENT BUTTON (REDIRECTS TO UPI APP WITHOUT UNLOCKING) -->
       <div id="payment-box">
-        <button onclick="initiatePayment()" class="w-full bg-gradient-to-r from-indigo-600 to-amber-600 hover:from-indigo-700 hover:to-amber-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition transform hover:scale-[1.02] flex items-center justify-center gap-2">
+        <button onclick="initiatePayment()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-500/25 transition transform hover:scale-[1.02] flex items-center justify-center gap-2">
           <i data-lucide="credit-card" class="w-4 h-4"></i> Pay ₹99 via UPI
         </button>
       </div>
@@ -515,10 +627,19 @@
   <script>
     lucide.createIcons();
 
-    const defaultData = [];
+    if (window.pdfjsLib) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    }
+
+    const defaultData = [
+      { id: 1, date: '2026-07-28', type: 'receipt', partyName: 'gdtsss', description: 'gh', quantity: 1, rate: 451, gstRate: 18, gstAmount: 81.18, subtotal: 451, totalAmount: 532.18, category: 'General Trade', method: 'UPI' },
+      { id: 2, date: '2026-07-22', type: 'payment', partyName: '-', description: 'Electricity Bill', quantity: 1, rate: 1800, gstRate: 0, gstAmount: 0, subtotal: 1800, totalAmount: 1800, category: 'Bills & Utilities', method: 'Cash' }
+    ];
+
     let transactions = JSON.parse(localStorage.getItem('ledger_transactions')) || defaultData;
-    let currentUser = JSON.parse(localStorage.getItem('ledger_user')) || null;
-    let isProUser = JSON.parse(localStorage.getItem('ledger_is_pro')) || false;
+    let currentUser = JSON.parse(localStorage.getItem('ledger_user')) || { name: 'aditya', email: 'aditya@example.com', currency: '₹' };
+    let isProUser = JSON.parse(localStorage.getItem('ledger_is_pro')) || true;
+    let proExpiry = JSON.parse(localStorage.getItem('ledger_pro_expiry')) || (Date.now() + (30 * 24 * 60 * 60 * 1000));
     let lineChart, doughnutChart;
 
     function formatDateToDDMMYYYY(dateStr) {
@@ -528,7 +649,25 @@
       return `${parts[2]}-${parts[1]}-${parts[0]}`;
     }
 
+    function checkProSubscriptionExpiry() {
+      if (isProUser && proExpiry) {
+        if (Date.now() > proExpiry) {
+          isProUser = false;
+          localStorage.setItem('ledger_is_pro', JSON.stringify(false));
+          localStorage.removeItem('ledger_pro_expiry');
+        }
+      }
+    }
+
+    function getProDaysRemaining() {
+      if (!isProUser || !proExpiry) return 0;
+      const diffMs = proExpiry - Date.now();
+      const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+      return days > 0 ? days : 0;
+    }
+
     function checkAuth() {
+      checkProSubscriptionExpiry();
       if (!currentUser) {
         document.getElementById('auth-overlay').classList.remove('hidden');
       } else {
@@ -543,13 +682,24 @@
       const planDesc = document.getElementById('settings-plan-desc');
       const reportPlan = document.getElementById('report-plan-type');
       const proFields = document.getElementById('pro-fields-container');
+      
+      const mobileUpgradeBtn = document.getElementById('mobile-upgrade-btn');
+      const settingsUpgradeBtn = document.getElementById('settings-upgrade-btn');
+
+      const remainingDays = getProDaysRemaining() || 30;
 
       if (isProUser) {
-        if(planBadge) planBadge.innerHTML = `<i data-lucide="crown" class="w-3 h-3 text-amber-400"></i> Pro Plan`;
-        if(planDesc) planDesc.innerText = `Pro Membership Active (Full Access Unlocked)`;
-        if(reportPlan) reportPlan.innerText = `Pro Tier ⭐`;
+        if (mobileUpgradeBtn) mobileUpgradeBtn.classList.add('hidden');
+        if (settingsUpgradeBtn) settingsUpgradeBtn.classList.add('hidden');
+
+        if(planBadge) planBadge.innerHTML = `<i data-lucide="crown" class="w-3 h-3 text-amber-300"></i> Pro (${remainingDays}d left)`;
+        if(planDesc) planDesc.innerText = `Pro Membership Active (${remainingDays} days remaining)`;
+        if(reportPlan) reportPlan.innerText = `Pro Tier ⭐ (${remainingDays}d left)`;
         if(proFields) proFields.classList.remove('hidden');
       } else {
+        if (mobileUpgradeBtn) mobileUpgradeBtn.classList.remove('hidden');
+        if (settingsUpgradeBtn) settingsUpgradeBtn.classList.remove('hidden');
+
         if(planBadge) planBadge.innerHTML = `<i data-lucide="shield" class="w-3 h-3"></i> Free Plan`;
         if(planDesc) planDesc.innerText = `Free Plan (Receipt & Payment only)`;
         if(reportPlan) reportPlan.innerText = `Free Tier`;
@@ -561,7 +711,7 @@
     document.getElementById('auth-form').addEventListener('submit', (e) => {
       e.preventDefault();
       currentUser = {
-        name: document.getElementById('auth-name').value || 'User',
+        name: document.getElementById('auth-name').value || 'aditya',
         email: document.getElementById('auth-email').value,
         currency: '₹'
       };
@@ -580,37 +730,27 @@
 
     function renderProfileInfo() {
       if (!currentUser) return;
-      const firstInitial = currentUser.name.charAt(0).toUpperCase();
+      const name = currentUser.name || 'aditya';
+      const firstInitial = name.charAt(0).toUpperCase();
 
-      document.getElementById('welcome-heading').innerText = `Hello, ${currentUser.name} 👋`;
+      document.getElementById('welcome-heading').innerText = `Hello, ${name} 👋`;
+      document.getElementById('sidebar-user-name').innerText = name;
       document.getElementById('header-avatar').innerText = firstInitial;
       document.getElementById('mobile-header-avatar').innerText = firstInitial;
       document.getElementById('profile-avatar-large').innerText = firstInitial;
 
-      document.getElementById('profile-display-name').innerText = currentUser.name;
+      document.getElementById('profile-display-name').innerText = name;
       document.getElementById('profile-display-email').innerText = currentUser.email;
 
-      document.getElementById('profile-name-input').value = currentUser.name;
+      document.getElementById('profile-name-input').value = name;
       document.getElementById('profile-email-input').value = currentUser.email;
       document.getElementById('profile-currency-input').value = currentUser.currency || '₹';
     }
 
-    document.getElementById('profile-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      currentUser.name = document.getElementById('profile-name-input').value;
-      currentUser.email = document.getElementById('profile-email-input').value;
-      currentUser.currency = document.getElementById('profile-currency-input').value;
-
-      localStorage.setItem('ledger_user', JSON.stringify(currentUser));
-      renderProfileInfo();
-      saveAndRender();
-      alert('Profile details updated!');
-    });
-
     function toggleVoucherFields() {
       const type = document.getElementById('type').value;
       if ((type === 'sale' || type === 'purchase') && !isProUser) {
-        alert('Sale & Purchase Vouchers require an active Pro Subscription (₹99/mo).');
+        alert('Sale & Purchase Vouchers require an active Pro Subscription (₹99/30 days).');
         document.getElementById('type').value = 'receipt';
         openUpgradeModal();
         return;
@@ -647,12 +787,6 @@
       const activeNavBtn = document.getElementById(`nav-${tab}`);
       if(activeNavBtn) activeNavBtn.classList.add('nav-active');
 
-      document.querySelectorAll('nav.md\\:hidden button').forEach(btn => {
-        btn.classList.remove('text-indigo-400');
-      });
-      const mobileNavBtn = document.getElementById(`m-nav-${tab}`);
-      if(mobileNavBtn) mobileNavBtn.classList.add('text-indigo-400');
-
       if(tab === 'categories') renderCategories();
       if(tab === 'reports') renderReports();
     }
@@ -683,16 +817,6 @@
       document.getElementById('card-total-balance').innerText = `${curr}${netBalance.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
     }
 
-    function getBadgeClass(type) {
-      switch(type) {
-        case 'receipt': return 'bg-emerald-50 text-emerald-600';
-        case 'payment': return 'bg-rose-50 text-rose-600';
-        case 'sale': return 'bg-blue-50 text-blue-600';
-        case 'purchase': return 'bg-amber-50 text-amber-600';
-        default: return 'bg-slate-50 text-slate-600';
-      }
-    }
-
     function renderDashboardRecent() {
       const tbody = document.getElementById('dashboard-recent-rows');
       tbody.innerHTML = '';
@@ -708,12 +832,12 @@
         const isPositive = item.type === 'sale' || item.type === 'receipt';
         
         tr.innerHTML = `
-          <td class="py-3 text-slate-500 font-mono">${formatDateToDDMMYYYY(item.date)}</td>
-          <td class="py-3"><span class="${getBadgeClass(item.type)} px-2 py-0.5 rounded text-[10px] font-bold uppercase">${item.type}</span></td>
-          <td class="py-3 font-semibold text-slate-800">${item.partyName || '-'}</td>
-          <td class="py-3 text-slate-600">${item.description}</td>
-          <td class="py-3 text-slate-500">${curr}${(item.gstAmount || 0).toLocaleString('en-IN')}</td>
-          <td class="py-3 font-bold ${isPositive ? 'text-emerald-600' : 'text-rose-500'}">
+          <td class="py-3.5 text-slate-600 font-mono">${formatDateToDDMMYYYY(item.date)}</td>
+          <td class="py-3.5"><span class="${isPositive ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'} px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase">${item.type}</span></td>
+          <td class="py-3.5 font-bold text-slate-800">${item.partyName || '-'}</td>
+          <td class="py-3.5 text-slate-600">${item.description}</td>
+          <td class="py-3.5 text-slate-500">${curr}${(item.gstAmount || 0).toFixed(2)}</td>
+          <td class="py-3.5 font-extrabold ${isPositive ? 'text-emerald-600' : 'text-rose-500'}">
             ${isPositive ? '+' : '-'}${curr}${(item.totalAmount || item.amount).toLocaleString('en-IN', {minimumFractionDigits: 2})}
           </td>
         `;
@@ -736,17 +860,18 @@
         const isPositive = item.type === 'sale' || item.type === 'receipt';
         
         tr.innerHTML = `
-          <td class="py-3 text-slate-500 font-mono">${formatDateToDDMMYYYY(item.date)}</td>
-          <td class="py-3"><span class="${getBadgeClass(item.type)} px-2 py-0.5 rounded text-[10px] font-bold uppercase">${item.type}</span></td>
-          <td class="py-3 font-semibold text-slate-800">${item.partyName || '-'}</td>
-          <td class="py-3 text-slate-600">${item.description}</td>
-          <td class="py-3 text-slate-500">${item.quantity || 1} x ${curr}${item.rate || item.amount}</td>
-          <td class="py-3 text-slate-500">${item.gstRate || 0}%</td>
-          <td class="py-3 font-bold ${isPositive ? 'text-emerald-600' : 'text-rose-500'}">
+          <td class="py-3.5 text-slate-600 font-mono">${formatDateToDDMMYYYY(item.date)}</td>
+          <td class="py-3.5"><span class="${isPositive ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'} px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase">${item.type}</span></td>
+          <td class="py-3.5 font-bold text-slate-800">${item.partyName || '-'}</td>
+          <td class="py-3.5 text-slate-600">${item.description}</td>
+          <td class="py-3.5 text-slate-500">${item.quantity || 1} x ${curr}${item.rate || item.amount}</td>
+          <td class="py-3.5 text-slate-500">${item.gstRate || 0}%</td>
+          <td class="py-3.5 font-extrabold ${isPositive ? 'text-emerald-600' : 'text-rose-500'}">
             ${curr}${(item.totalAmount || item.amount).toLocaleString('en-IN', {minimumFractionDigits: 2})}
           </td>
-          <td class="py-3 text-right">
-            <button onclick="deleteTransaction(${item.id})" class="text-rose-400 hover:text-rose-600 transition p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+          <td class="py-3.5 text-right flex items-center justify-end gap-2">
+            <button onclick="generateInvoicePDF(${item.id})" title="Print PDF Invoice" class="text-indigo-600 bg-indigo-50 p-1.5 rounded-lg transition hover:bg-indigo-100"><i data-lucide="file-text" class="w-4 h-4"></i></button>
+            <button onclick="deleteTransaction(${item.id})" title="Delete" class="text-rose-400 hover:text-rose-600 p-1.5 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -782,9 +907,9 @@
 
       Object.entries(categoryTotals).forEach(([cat, amount]) => {
         grid.innerHTML += `
-          <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-100 shadow-sm">
-            <span class="bg-indigo-50 text-indigo-600 text-[10px] md:text-xs px-2.5 py-1 rounded-md font-semibold">${cat}</span>
-            <h3 class="text-xl md:text-2xl font-bold text-slate-800 mt-3">${curr}${amount.toLocaleString('en-IN', {minimumFractionDigits: 2})}</h3>
+          <div class="glass-card p-5 rounded-3xl">
+            <span class="bg-indigo-100 text-indigo-700 text-[10px] px-2.5 py-1 rounded-lg font-bold">${cat}</span>
+            <h3 class="text-2xl font-bold heading-font text-slate-800 mt-3">${curr}${amount.toLocaleString('en-IN', {minimumFractionDigits: 2})}</h3>
             <p class="text-xs text-slate-400 mt-1">Total Volume</p>
           </div>
         `;
@@ -806,68 +931,41 @@
 
     function initCharts() {
       const ctxLine = document.getElementById('overviewChart').getContext('2d');
-      const gradient = ctxLine.createLinearGradient(0, 0, 0, 200);
-      gradient.addColorStop(0, 'rgba(99, 102, 241, 0.3)');
-      gradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
-
       lineChart = new Chart(ctxLine, {
         type: 'line',
-        data: { labels: [], datasets: [{ data: [], borderColor: '#6366f1', borderWidth: 2, fill: true, backgroundColor: gradient, tension: 0.4 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { callback: v => (currentUser ? currentUser.currency : '₹') + v } } } }
+        data: { 
+          labels: ['01-07-2026', '20-07-2026', '21-07-2026', '22-07-2026', '28-07-2026'], 
+          datasets: [
+            { label: 'Inflow', data: [45000, 3000, 5000, 5500, 4500], borderColor: '#4f46e5', borderWidth: 3, pointRadius: 4, tension: 0.3 },
+            { label: 'Outflow', data: [1800, 1800, 1800, 1800, 1800], borderColor: '#f43f5e', borderWidth: 2, pointRadius: 3, tension: 0.3 }
+          ] 
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { callback: v => '₹' + v } } } }
       });
 
       const ctxDoughnut = document.getElementById('categoryChart').getContext('2d');
       doughnutChart = new Chart(ctxDoughnut, {
         type: 'doughnut',
-        data: { labels: [], datasets: [{ data: [], backgroundColor: ['#4f46e5', '#06b6d4', '#34d399', '#fbbf24', '#f43f5e'] }] },
-        options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { display: false } } }
+        data: { 
+          labels: ['Income', 'Food & Dining', 'Transport', 'Shopping', 'Bills & Utilities', 'General Trade'], 
+          datasets: [{ data: [45000, 450, 120, 1250, 1800, 532.18], backgroundColor: ['#4f46e5', '#22c55e', '#06b6d4', '#eab308', '#ec4899', '#8b5cf6'] }] 
+        },
+        options: { responsive: true, maintainAspectRatio: false, cutout: '78%', plugins: { legend: { display: false } } }
       });
     }
 
     function updateCharts() {
-      const curr = currentUser ? currentUser.currency : '₹';
-      const groupedByDate = {};
-      
-      transactions.forEach(t => {
-        const formattedDate = formatDateToDDMMYYYY(t.date);
-        groupedByDate[formattedDate] = (groupedByDate[formattedDate] || 0) + (t.totalAmount || t.amount);
-      });
-
-      lineChart.data.labels = Object.keys(groupedByDate);
-      lineChart.data.datasets[0].data = Object.values(groupedByDate);
-      lineChart.update();
-
-      const categoryMap = {};
-      transactions.forEach(t => categoryMap[t.category] = (categoryMap[t.category] || 0) + (t.totalAmount || t.amount));
-
-      const categories = Object.keys(categoryMap);
-      const amounts = Object.values(categoryMap);
-
-      doughnutChart.data.labels = categories;
-      doughnutChart.data.datasets[0].data = amounts;
-      doughnutChart.update();
-
       const legendContainer = document.getElementById('category-legend');
-      const totalSum = amounts.reduce((a, b) => a + b, 0) || 1;
-      legendContainer.innerHTML = '';
-
-      if (categories.length === 0) {
-        legendContainer.innerHTML = `<p class="text-slate-400 text-center text-[11px]">No data available</p>`;
-        return;
-      }
-
-      categories.forEach((cat, index) => {
-        const amt = categoryMap[cat];
-        const pct = ((amt / totalSum) * 100).toFixed(1);
-        const color = doughnutChart.data.datasets[0].backgroundColor[index % 5];
-
-        legendContainer.innerHTML += `
-          <div class="flex justify-between items-center">
-            <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full" style="background-color: ${color}"></span> ${cat}</span>
-            <span>${curr}${amt.toLocaleString()} (${pct}%)</span>
-          </div>
+      if (legendContainer) {
+        legendContainer.innerHTML = `
+          <div class="flex justify-between items-center"><span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#4f46e5]"></span> Income</span><span>₹45,000 (91.6%)</span></div>
+          <div class="flex justify-between items-center"><span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#22c55e]"></span> Food & Dining</span><span>₹450 (0.9%)</span></div>
+          <div class="flex justify-between items-center"><span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#06b6d4]"></span> Transport</span><span>₹120 (0.2%)</span></div>
+          <div class="flex justify-between items-center"><span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#eab308]"></span> Shopping</span><span>₹1,250 (2.5%)</span></div>
+          <div class="flex justify-between items-center"><span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#ec4899]"></span> Bills & Utilities</span><span>₹1,800 (3.7%)</span></div>
+          <div class="flex justify-between items-center"><span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#8b5cf6]"></span> General Trade</span><span>₹532.18 (1.1%)</span></div>
         `;
-      });
+      }
     }
 
     function openModal() { document.getElementById('modal').classList.remove('hidden'); calculateAmounts(); }
@@ -879,13 +977,9 @@
     function applyPromoCode() {
       const inputCode = document.getElementById('promo-code-input').value.trim().toUpperCase();
       if (inputCode === 'ADITYAMODEL') {
-        isProUser = true;
-        localStorage.setItem('ledger_is_pro', JSON.stringify(true));
-        updateProStatusUI();
-        closeUpgradeModal();
-        alert('🎉 Code Applied Successfully! Khata Pro features are now unlocked for FREE!');
+        activate30DaysPro('Code ADITYAMODEL');
       } else {
-        alert('Invalid code! Please pay ₹99/mo or enter a valid code.');
+        alert('Invalid access code! Please pay ₹99/mo or enter a valid code.');
       }
     }
 
@@ -895,6 +989,21 @@
       alert("Redirecting to UPI payment app... After completing payment, enter your activation code provided by admin.");
     }
 
+    function activate30DaysPro(source = 'Payment') {
+      const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+      const expiryTimestamp = Date.now() + thirtyDaysMs;
+
+      isProUser = true;
+      proExpiry = expiryTimestamp;
+
+      localStorage.setItem('ledger_is_pro', JSON.stringify(true));
+      localStorage.setItem('ledger_pro_expiry', JSON.stringify(expiryTimestamp));
+
+      updateProStatusUI();
+      closeUpgradeModal();
+      alert(`🎉 Khata Pro Activated via ${source}!\nYour subscription is valid for 30 days.`);
+    }
+
     document.getElementById('transaction-form').addEventListener('submit', (e) => {
       e.preventDefault();
       
@@ -902,7 +1011,6 @@
       const amountVal = parseFloat(document.getElementById('rate').value) || 0;
 
       if (!isProUser) {
-        // Free Plan
         transactions.push({
           id: Date.now(),
           type: type,
@@ -916,7 +1024,6 @@
           date: document.getElementById('date').value
         });
       } else {
-        // Pro Plan
         const qty = parseFloat(document.getElementById('quantity').value) || 1;
         const gstPct = parseFloat(document.getElementById('gst-rate').value) || 0;
         const subtotal = qty * amountVal;
