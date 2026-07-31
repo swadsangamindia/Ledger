@@ -2,1305 +2,338 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Khata Bahi - Digital Hisab, Ledger & PDF Tools</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Khata Bahi - Digital Hisab & Ledger Book</title>
+
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- HTML2PDF Library (Required for PDF Invoice Generation) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- ⬇️ GOOGLE ADSENSE CODE ⬇️ -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8403484408535539"
      crossorigin="anonymous"></script>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Google Fonts: Quicksand & Jakarta -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- UTILITY LIBRARIES -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-
-  <!-- PWA Manifest & Theme -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#f0f4f9">
+  <!-- ⬆️ REPLACE WITH YOUR ADSENSE PUBLISHER ID ⬆️ -->
 
   <style>
-    body { 
-      font-family: 'Plus Jakarta Sans', sans-serif; 
-      background-color: #dbeafe;
-      background-image: url('bg.jpg'), url('bg.png'), url('https://images.wallpapersden.com/image/download/anime-landscape-scenery_bGltaGmUmZqaraWkpJRmbmdlrWZlbWU.jpg');
-      background-repeat: no-repeat;
-      background-position: center center;
-      background-size: cover;
-      background-attachment: fixed;
-    }
-    .heading-font { font-family: 'Quicksand', sans-serif; }
-    
-    /* Translucent Glass Cards */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.65) !important;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    }
-    
-    /* Transparent Glass Sidebar */
-    .glass-sidebar {
-      background: rgba(15, 17, 30, 0.45) !important;
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border-right: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .glass-nav-mobile {
-      background: rgba(15, 17, 30, 0.75) !important;
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .nav-active { 
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); 
-      color: white !important;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
   </style>
 </head>
-<body class="text-slate-800 flex flex-col md:flex-row h-screen overflow-hidden">
+<body class="bg-slate-100 min-h-screen text-slate-800 pb-12">
 
-  <!-- AUTH / LOGIN OVERLAY -->
-  <div id="auth-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 z-50">
-    <div class="glass-card rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-white">
-      <div class="text-center mb-6">
-        <div class="bg-indigo-600 text-white p-3.5 rounded-2xl w-fit mx-auto mb-3 shadow-lg shadow-indigo-500/30">
-          <i data-lucide="book-open" class="w-8 h-8"></i>
-        </div>
-        <h2 id="auth-title" class="text-2xl font-bold text-slate-900 heading-font">Welcome to Khata Bahi 🌸</h2>
-        <p id="auth-subtitle" class="text-xs text-slate-600 mt-1 font-medium">Log in or enter details to save your ledger history</p>
-      </div>
-
-      <form id="auth-form" class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Your / Business Name</label>
-          <input type="text" id="auth-name" required placeholder="e.g., aditya" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white/90 focus:outline-indigo-600 shadow-sm" />
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Email Address</label>
-          <input type="email" id="auth-email" required placeholder="aditya@example.com" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white/90 focus:outline-indigo-600 shadow-sm" />
-        </div>
-
-        <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-indigo-500/25 mt-2">Open My Khata Bahi</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- DESKTOP SIDEBAR -->
-  <aside class="hidden md:flex w-64 glass-sidebar text-white flex-col justify-between p-5 shrink-0 z-20">
-    <div>
-      <div class="flex items-center gap-3 px-2 py-3 mb-6">
-        <div class="bg-gradient-to-br from-pink-500 to-indigo-600 p-2.5 rounded-2xl text-white shadow-lg shadow-indigo-500/30">
-          <i data-lucide="book-open" class="w-6 h-6"></i>
+  <!-- TOP HEADER -->
+  <header class="bg-slate-900 text-white p-4 shadow-lg sticky top-0 z-40">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <div class="bg-indigo-600 p-2 rounded-xl">
+          <i data-lucide="book-open" class="w-6 h-6 text-white"></i>
         </div>
         <div>
-          <h1 class="text-white font-extrabold text-xl heading-font leading-none drop-shadow">Khata Bahi</h1>
-          <span class="text-[11px] text-amber-200 font-bold flex items-center gap-1 mt-1 bg-amber-400/20 px-2.5 py-0.5 rounded-full border border-amber-300/40 w-fit backdrop-blur-sm" id="sidebar-plan-badge">
-            <i data-lucide="crown" class="w-3 h-3 text-amber-300"></i> Free Plan
-          </span>
+          <h1 class="text-lg font-bold leading-tight">Khata Bahi</h1>
+          <p class="text-xs text-slate-400">Digital Ledger & Invoicing</p>
         </div>
       </div>
 
-      <nav class="space-y-1.5">
-        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn nav-active w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold transition text-xs">
-          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+      <!-- PRO STATUS BUTTON -->
+      <div id="pro-badge-container">
+        <button onclick="openUpgradeModal()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 transition">
+          <i data-lucide="crown" class="w-4 h-4"></i> Upgrade to Pro
         </button>
-        <button onclick="openModal()" class="w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
-          <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Entry
-        </button>
-        <button onclick="switchTab('transactions')" id="nav-transactions" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
-          <i data-lucide="list-todo" class="w-4 h-4"></i> All Entries
-        </button>
-        <button onclick="switchTab('tools')" id="nav-tools" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
-          <i data-lucide="wrench" class="w-4 h-4 text-purple-300"></i> All Utility Tools
-        </button>
-        <button onclick="switchTab('categories')" id="nav-categories" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
-          <i data-lucide="shapes" class="w-4 h-4"></i> Categories
-        </button>
-        <button onclick="switchTab('reports')" id="nav-reports" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
-          <i data-lucide="bar-chart-3" class="w-4 h-4"></i> Reports
-        </button>
-        <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
-          <i data-lucide="user" class="w-4 h-4"></i> Profile
-        </button>
-        <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
-          <i data-lucide="settings" class="w-4 h-4"></i> Settings
-        </button>
-      </nav>
-    </div>
-
-    <div>
-      <div class="relative overflow-hidden rounded-2xl p-4 mb-3 border border-white/30 bg-black/20 shadow-lg backdrop-blur-md">
-        <p class="text-[11px] font-semibold text-indigo-200">Total Net Balance</p>
-        <h3 id="card-total-balance" class="text-white text-2xl font-extrabold heading-font mt-0.5">₹0.00</h3>
-        <p class="text-[10px] text-slate-300 mt-0.5">Receipts minus Payments</p>
-      </div>
-
-      <button onclick="logout()" class="w-full flex items-center gap-2.5 px-3 py-2 text-rose-300 hover:bg-rose-500/20 rounded-xl transition text-xs font-bold">
-        <i data-lucide="log-out" class="w-4 h-4"></i> Switch Profile
-      </button>
-
-      <div class="mt-3 pt-3 border-t border-white/20 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-indigo-950/80 border border-white/30 flex items-center justify-center font-bold text-white text-sm shrink-0" id="sidebar-initial-avatar">
-          A
-        </div>
-        <div class="overflow-hidden">
-          <p class="text-xs font-bold text-white truncate drop-shadow" id="sidebar-user-name">aditya</p>
-          <p class="text-[10px] text-indigo-200 truncate" id="sidebar-user-email">aditya@example.com</p>
-        </div>
       </div>
     </div>
-  </aside>
+  </header>
 
-  <!-- MOBILE HEADER -->
-  <div class="md:hidden glass-sidebar text-white p-4 flex justify-between items-center shrink-0 border-b border-white/20 z-20">
-    <div class="flex items-center gap-2">
-      <div class="bg-indigo-600 p-2 rounded-xl text-white">
-        <i data-lucide="book-open" class="w-5 h-5"></i>
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-4xl mx-auto p-4 space-y-6">
+
+    <!-- DASHBOARD STATS -->
+    <div class="grid grid-cols-2 gap-4">
+      <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl">
+        <p class="text-xs text-emerald-600 font-medium">Total Income (Jama)</p>
+        <p class="text-2xl font-bold text-emerald-700 mt-1" id="total-jama">₹0</p>
       </div>
-      <span class="font-bold text-base heading-font text-white">Khata Bahi</span>
-    </div>
-    <div class="flex items-center gap-2">
-      <button onclick="openUpgradeModal()" id="mobile-upgrade-btn" class="bg-amber-400/20 text-amber-200 border border-amber-300/40 px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 backdrop-blur-sm">
-        <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-300"></i> Pro
-      </button>
-      <div onclick="switchTab('profile')" class="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white flex items-center justify-center font-bold text-xs cursor-pointer shadow-md border border-white/40 overflow-hidden" id="mobile-header-avatar">
-        A
-      </div>
-    </div>
-  </div>
-
-  <!-- MAIN CONTENT AREA -->
-  <main class="flex-1 overflow-y-auto p-4 md:p-8 pb-28 md:pb-8 relative z-10">
-    
-    <!-- Top Header -->
-    <header class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6 md:mb-8">
-      <div>
-        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 heading-font drop-shadow-sm" id="welcome-heading">Hello, aditya 👋</h1>
-        <p class="text-xs md:text-sm text-slate-700 font-bold drop-shadow-sm" id="header-subtitle">Digital Khata Bahi Overview</p>
-      </div>
-      <div class="flex items-center gap-2 sm:gap-3">
-        <button onclick="exportData()" class="flex-1 sm:flex-none glass-card hover:bg-white text-slate-800 px-4 py-2.5 rounded-2xl text-xs md:text-sm font-bold flex items-center justify-center gap-2 transition">
-          <i data-lucide="download" class="w-4 h-4 text-slate-600"></i> Export CSV
-        </button>
-        <button onclick="openModal()" class="flex-1 sm:flex-none bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2.5 rounded-2xl text-xs md:text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/25 transition">
-          <i data-lucide="plus" class="w-4 h-4"></i> Add Entry
-        </button>
-        <div onclick="switchTab('profile')" class="hidden md:flex w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-white items-center justify-center cursor-pointer font-bold border-2 border-white shadow-md overflow-hidden shrink-0" id="header-avatar">
-          A
-        </div>
-      </div>
-    </header>
-
-    <!-- 1. DASHBOARD VIEW -->
-    <div id="view-dashboard" class="tab-view space-y-6 md:space-y-8">
-      <section class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
-        <div class="glass-card p-4 rounded-3xl flex flex-col justify-between relative overflow-hidden">
-          <div class="flex justify-between items-start">
-            <div>
-              <span class="text-[11px] font-semibold text-slate-600">Total Receipts</span>
-              <h2 id="total-receipts" class="text-xl md:text-2xl font-extrabold text-emerald-600 heading-font mt-1">₹0.00</h2>
-            </div>
-            <div class="bg-emerald-100 text-emerald-600 p-2.5 rounded-2xl"><i data-lucide="arrow-down-left" class="w-5 h-5"></i></div>
-          </div>
-          <span class="text-[10px] font-bold text-emerald-600 flex items-center gap-1 mt-3"><i data-lucide="trending-up" class="w-3 h-3"></i> Active <span class="text-slate-500 font-normal">History Saved</span></span>
-        </div>
-
-        <div class="glass-card p-4 rounded-3xl flex flex-col justify-between relative overflow-hidden">
-          <div class="flex justify-between items-start">
-            <div>
-              <span class="text-[11px] font-semibold text-slate-600">Total Payments</span>
-              <h2 id="total-payments" class="text-xl md:text-2xl font-extrabold text-rose-500 heading-font mt-1">₹0.00</h2>
-            </div>
-            <div class="bg-rose-100 text-rose-500 p-2.5 rounded-2xl"><i data-lucide="arrow-up-right" class="w-5 h-5"></i></div>
-          </div>
-          <span class="text-[10px] font-bold text-rose-500 flex items-center gap-1 mt-3">Active <span class="text-slate-500 font-normal">History Saved</span></span>
-        </div>
-
-        <div class="glass-card p-4 rounded-3xl flex flex-col justify-between relative overflow-hidden">
-          <div class="flex justify-between items-start">
-            <div>
-              <span class="text-[11px] font-semibold text-slate-600">Total Sales (Pro)</span>
-              <h2 id="total-sales" class="text-xl md:text-2xl font-extrabold text-indigo-600 heading-font mt-1">₹0.00</h2>
-            </div>
-            <div class="bg-indigo-100 text-indigo-600 p-2.5 rounded-2xl"><i data-lucide="trending-up" class="w-5 h-5"></i></div>
-          </div>
-          <span class="text-[10px] font-bold text-indigo-600 flex items-center gap-1 mt-3">↗ Pro <span class="text-slate-500 font-normal">Feature</span></span>
-        </div>
-
-        <div class="glass-card p-4 rounded-3xl flex flex-col justify-between relative overflow-hidden">
-          <div class="flex justify-between items-start">
-            <div>
-              <span class="text-[11px] font-semibold text-slate-600">Total GST (Pro)</span>
-              <h2 id="total-gst" class="text-xl md:text-2xl font-extrabold text-amber-600 heading-font mt-1">₹0.00</h2>
-            </div>
-            <div class="bg-amber-100 text-amber-600 p-2.5 rounded-2xl"><i data-lucide="file-text" class="w-5 h-5"></i></div>
-          </div>
-          <span class="text-[10px] font-bold text-amber-600 flex items-center gap-1 mt-3">↗ Tax <span class="text-slate-500 font-normal">Calculated</span></span>
-        </div>
-      </section>
-
-      <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="md:col-span-2 glass-card p-5 md:p-6 rounded-3xl">
-          <div class="flex justify-between items-center mb-4">
-            <h3 class="font-bold text-slate-800 text-sm md:text-base heading-font flex items-center gap-2">
-              <i data-lucide="trending-up" class="w-4 h-4 text-indigo-600"></i> Inflow vs Outflow Trend
-            </h3>
-          </div>
-          <div class="h-52 md:h-64"><canvas id="overviewChart"></canvas></div>
-        </div>
-
-        <div class="glass-card p-5 md:p-6 rounded-3xl flex flex-col justify-between">
-          <h3 class="font-bold text-slate-800 text-sm md:text-base heading-font mb-2">Category Breakdown</h3>
-          <div class="relative flex justify-center items-center h-44 md:h-48"><canvas id="categoryChart"></canvas></div>
-          <div id="category-legend" class="space-y-1.5 mt-4 text-xs font-semibold text-slate-700"></div>
-        </div>
-      </section>
-
-      <section class="glass-card p-5 md:p-6 rounded-3xl overflow-x-auto">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="font-bold text-slate-800 text-sm md:text-base heading-font flex items-center gap-2">
-            🌸 Recent Khata Bahi Entries
-          </h3>
-          <button onclick="switchTab('transactions')" class="text-xs font-bold text-indigo-600 hover:underline flex items-center gap-1">View All <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></button>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs min-w-[650px]">
-            <thead>
-              <tr class="text-slate-500 border-b border-slate-200/80">
-                <th class="pb-3 font-semibold">Date (DD-MM-YYYY)</th>
-                <th class="pb-3 font-semibold">Type</th>
-                <th class="pb-3 font-semibold">Party Name</th>
-                <th class="pb-3 font-semibold">Description</th>
-                <th class="pb-3 font-semibold">GST</th>
-                <th class="pb-3 font-semibold">Amount</th>
-              </tr>
-            </thead>
-            <tbody id="dashboard-recent-rows" class="divide-y divide-slate-100 font-semibold text-slate-800"></tbody>
-          </table>
-        </div>
-      </section>
-    </div>
-
-    <!-- 2. TRANSACTIONS VIEW -->
-    <div id="view-transactions" class="tab-view hidden">
-      <section class="glass-card p-5 md:p-6 rounded-3xl">
-        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-6">
-          <h3 class="font-bold text-slate-800 text-base md:text-lg heading-font">All Khata Bahi Entries</h3>
-          <input type="text" id="search-input" onkeyup="filterTransactions()" placeholder="Search description or category..." class="border border-slate-200 rounded-xl px-4 py-2 text-xs w-full sm:w-64 bg-white/90 focus:outline-indigo-600" />
-        </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs min-w-[750px]">
-            <thead>
-              <tr class="text-slate-500 border-b border-slate-200/80">
-                <th class="pb-3 font-semibold">Date (DD-MM-YYYY)</th>
-                <th class="pb-3 font-semibold">Type</th>
-                <th class="pb-3 font-semibold">Party Name</th>
-                <th class="pb-3 font-semibold">Description</th>
-                <th class="pb-3 font-semibold">Qty x Rate</th>
-                <th class="pb-3 font-semibold">GST (%)</th>
-                <th class="pb-3 font-semibold">Total Amount</th>
-                <th class="pb-3 font-semibold text-right">Invoice / Action</th>
-              </tr>
-            </thead>
-            <tbody id="full-transaction-rows" class="divide-y divide-slate-100 font-semibold text-slate-800"></tbody>
-          </table>
-        </div>
-      </section>
-    </div>
-
-    <!-- 3. TOOLS VIEW -->
-    <div id="view-tools" class="tab-view hidden space-y-6">
-      <div>
-        <h2 class="text-xl font-extrabold text-slate-900 heading-font">PDF, Excel & Document Utilities</h2>
-        <p class="text-xs text-slate-600">100% Free client-side document processing tools</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="glass-card p-5 rounded-3xl space-y-4">
-          <div class="flex items-center gap-3">
-            <div class="bg-blue-100 text-blue-600 p-3 rounded-2xl"><i data-lucide="file-spreadsheet" class="w-6 h-6"></i></div>
-            <div>
-              <h3 class="font-bold text-slate-800 text-sm">PDF to Excel Converter</h3>
-              <p class="text-xs text-slate-500">Extract text and tabular data from PDF into .XLSX</p>
-            </div>
-          </div>
-          <input type="file" id="pdf-to-excel-input" accept=".pdf" class="w-full text-xs border border-slate-200 rounded-xl p-2.5 bg-white/90 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white file:font-semibold" />
-          <button onclick="convertPdfToExcel()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
-            <i data-lucide="file-spreadsheets" class="w-4 h-4"></i> Convert PDF to Excel (.XLSX)
-          </button>
-        </div>
-
-        <div class="glass-card p-5 rounded-3xl space-y-4">
-          <div class="flex items-center gap-3">
-            <div class="bg-indigo-100 text-indigo-600 p-3 rounded-2xl"><i data-lucide="image" class="w-6 h-6"></i></div>
-            <div>
-              <h3 class="font-bold text-slate-800 text-sm">Image to PDF Converter</h3>
-              <p class="text-xs text-slate-500">Convert PNG, JPG, or JPEG images to a PDF file</p>
-            </div>
-          </div>
-          <input type="file" id="img-file-input" accept="image/*" class="w-full text-xs border border-slate-200 rounded-xl p-2.5 bg-white/90 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-indigo-600 file:text-white file:font-semibold" />
-          <button onclick="convertImageToPDF()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
-            <i data-lucide="file-down" class="w-4 h-4"></i> Convert & Download PDF
-          </button>
-        </div>
-
-        <div class="glass-card p-5 rounded-3xl space-y-4">
-          <div class="flex items-center gap-3">
-            <div class="bg-emerald-100 text-emerald-600 p-3 rounded-2xl"><i data-lucide="file-type" class="w-6 h-6"></i></div>
-            <div>
-              <h3 class="font-bold text-slate-800 text-sm">Excel to PDF Converter</h3>
-              <p class="text-xs text-slate-500">Parse .XLSX sheets and export formatted PDF documents</p>
-            </div>
-          </div>
-          <input type="file" id="excel-file-input" accept=".xlsx, .xls, .csv" class="w-full text-xs border border-slate-200 rounded-xl p-2.5 bg-white/90 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-emerald-600 file:text-white file:font-semibold" />
-          <button onclick="convertExcelToPDF()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
-            <i data-lucide="file-down" class="w-4 h-4"></i> Export Excel to PDF
-          </button>
-        </div>
-
-        <div class="glass-card p-5 rounded-3xl space-y-4">
-          <div class="flex items-center gap-3">
-            <div class="bg-rose-100 text-rose-600 p-3 rounded-2xl"><i data-lucide="file-image" class="w-6 h-6"></i></div>
-            <div>
-              <h3 class="font-bold text-slate-800 text-sm">PDF to Image Converter</h3>
-              <p class="text-xs text-slate-500">Extract PDF pages into PNG images</p>
-            </div>
-          </div>
-          <input type="file" id="pdf-to-img-input" accept=".pdf" class="w-full text-xs border border-slate-200 rounded-xl p-2.5 bg-white/90 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-rose-600 file:text-white file:font-semibold" />
-          <button onclick="convertPdfToImage()" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
-            <i data-lucide="image" class="w-4 h-4"></i> Convert PDF to PNG Image
-          </button>
-        </div>
+      <div class="bg-rose-50 border border-rose-200 p-4 rounded-2xl">
+        <p class="text-xs text-rose-600 font-medium">Total Expense (Nikasi)</p>
+        <p class="text-2xl font-bold text-rose-700 mt-1" id="total-nikasi">₹0</p>
       </div>
     </div>
 
-    <!-- 4. CATEGORIES VIEW -->
-    <div id="view-categories" class="tab-view hidden">
-      <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6" id="categories-grid"></section>
-    </div>
+    <!-- ENTRY FORM -->
+    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+      <h2 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
+        <i data-lucide="plus-circle" class="w-4 h-4 text-indigo-600"></i> Add New Transaction
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <input type="text" id="party-name" placeholder="Party Name (Optional for Free)" class="border border-slate-200 p-2.5 rounded-xl text-xs focus:outline-indigo-600" />
+        <input type="text" id="desc-input" placeholder="Description / Particulars" class="border border-slate-200 p-2.5 rounded-xl text-xs focus:outline-indigo-600" />
+        <input type="number" id="amount-input" placeholder="Amount (₹)" class="border border-slate-200 p-2.5 rounded-xl text-xs focus:outline-indigo-600" />
+      </div>
 
-    <!-- 5. REPORTS VIEW -->
-    <div id="view-reports" class="tab-view hidden space-y-6">
-      <div class="glass-card p-5 md:p-6 rounded-3xl">
-        <h3 class="font-bold text-slate-800 text-base md:text-lg heading-font mb-1">Financial Summary</h3>
-        <p class="text-xs text-slate-500 mb-6">Automated ledger calculation</p>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          <div class="p-4 bg-white/90 rounded-2xl border border-slate-100">
-            <span class="text-xs text-slate-500 font-medium">Total Entries Count</span>
-            <h4 id="report-total-count" class="text-base md:text-lg font-bold text-slate-800 mt-1">0</h4>
-          </div>
-          <div class="p-4 bg-white/90 rounded-2xl border border-slate-100">
-            <span class="text-xs text-slate-500 font-medium">Plan Type</span>
-            <h4 id="report-plan-type" class="text-base md:text-lg font-bold text-indigo-600 mt-1">Free Tier</h4>
-          </div>
-          <div class="p-4 bg-white/90 rounded-2xl border border-slate-100">
-            <span class="text-xs text-slate-500 font-medium">Total GST Amount</span>
-            <h4 id="report-gst-amount" class="text-base md:text-lg font-bold text-amber-600 mt-1">₹0.00</h4>
-          </div>
-        </div>
+      <div class="flex gap-3 mt-4">
+        <button onclick="addEntry('jama')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1">
+          <i data-lucide="arrow-down-left" class="w-4 h-4"></i> Cash In (Jama)
+        </button>
+        <button onclick="addEntry('nikasi')" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1">
+          <i data-lucide="arrow-up-right" class="w-4 h-4"></i> Cash Out (Nikasi)
+        </button>
       </div>
     </div>
 
-    <!-- 6. PROFILE VIEW -->
-    <div id="view-profile" class="tab-view hidden">
-      <div class="glass-card p-5 md:p-6 rounded-3xl max-w-xl">
-        <h3 class="font-bold text-slate-800 text-base md:text-lg heading-font mb-6">Business Profile Settings</h3>
-        
-        <form id="profile-form" class="space-y-4">
-          <div class="flex items-center gap-4 pb-4 border-b border-slate-200/80">
-            <div id="profile-avatar-large" class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 text-white text-xl md:text-2xl font-bold flex items-center justify-center overflow-hidden shrink-0 shadow-md">
-              A
-            </div>
-            <div>
-              <h4 id="profile-display-name" class="font-bold text-slate-800 text-sm md:text-base">aditya</h4>
-              <p id="profile-display-email" class="text-xs text-slate-500">aditya@example.com</p>
-            </div>
-          </div>
+    <!-- INVOICE PREVIEW SECTION -->
+    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-sm font-bold text-slate-700 flex items-center gap-2">
+          <i data-lucide="file-text" class="w-4 h-4 text-indigo-600"></i> Invoice Generator
+        </h2>
+        <button onclick="generateInvoicePDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+          <i data-lucide="download" class="w-4 h-4"></i> Download PDF
+        </button>
+      </div>
 
+      <!-- PDF TARGET ELEMENT -->
+      <div id="invoice-template" class="p-6 border border-slate-200 rounded-xl bg-white space-y-4">
+        <div class="flex justify-between items-start border-b border-slate-100 pb-4">
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Business Name</label>
-            <input type="text" id="profile-name-input" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600" />
+            <h3 class="text-xl font-bold text-indigo-600">TAX INVOICE</h3>
+            <p class="text-xs text-slate-400 mt-0.5">Khata Bahi Digital Services</p>
           </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Email</label>
-            <input type="email" id="profile-email-input" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600" />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Currency Symbol</label>
-            <input type="text" id="profile-currency-input" value="₹" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600" />
-          </div>
-
-          <button type="submit" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl transition text-sm">Save Changes</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- 7. SETTINGS VIEW -->
-    <div id="view-settings" class="tab-view hidden">
-      <div class="glass-card p-5 md:p-6 rounded-3xl max-w-xl">
-        <h3 class="font-bold text-slate-800 text-base md:text-lg heading-font mb-4">Settings & Membership</h3>
-        <div class="space-y-6">
-          <div class="flex items-center justify-between pb-4 border-b border-slate-200/80">
-            <div>
-              <h4 class="font-semibold text-sm text-slate-800">Current Plan</h4>
-              <p class="text-[11px] text-slate-500" id="settings-plan-desc">Free Plan (Receipt & Payment only)</p>
-            </div>
-            <button onclick="openUpgradeModal()" id="settings-upgrade-btn" class="bg-amber-500 hover:bg-amber-600 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-md shadow-amber-500/20">
-              <i data-lucide="crown" class="w-3.5 h-3.5"></i> Upgrade Pro (₹99)
-            </button>
-          </div>
-          <div class="flex items-center justify-between pb-4 border-b border-slate-200/80">
-            <div>
-              <h4 class="font-semibold text-sm text-slate-800">Clear Data</h4>
-              <p class="text-[11px] text-slate-500">Reset all vouchers and local data</p>
-            </div>
-            <button onclick="clearAllData()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-3.5 py-2 rounded-xl text-xs font-bold transition">Reset App</button>
-          </div>
-          <div class="flex items-center justify-between">
-            <div>
-              <h4 class="font-semibold text-sm text-slate-800">Export Transactions</h4>
-              <p class="text-[11px] text-slate-500">Download Khata Bahi with DD-MM-YYYY dates</p>
-            </div>
-            <button onclick="exportData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold transition">Export CSV</button>
+          <div class="text-right text-xs text-slate-500">
+            <p>Date: <span id="inv-date">--</span></p>
+            <p>Invoice #: KB-<span id="inv-num">1001</span></p>
           </div>
         </div>
+
+        <!-- TRANSACTIONS LIST -->
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-200">
+              <th class="p-2 text-slate-600">Party / Details</th>
+              <th class="p-2 text-slate-600">Type</th>
+              <th class="p-2 text-right text-slate-600">Amount</th>
+            </tr>
+          </thead>
+          <tbody id="invoice-items">
+            <tr>
+              <td colspan="3" class="p-4 text-center text-slate-400">No transactions recorded yet.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-
-    <!-- FLOATING ACTION BUTTON FOR MOBILE & DESKTOP -->
-    <button onclick="openModal()" class="fixed bottom-20 md:bottom-8 right-5 md:right-8 bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 text-white p-4 rounded-full shadow-2xl shadow-purple-500/40 transition transform hover:scale-110 active:scale-95 z-30 flex items-center justify-center border border-white">
-      <i data-lucide="plus" class="w-7 h-7"></i>
-    </button>
   </main>
 
-  <!-- MOBILE BOTTOM NAVIGATION BAR -->
-  <nav class="md:hidden fixed bottom-0 left-0 right-0 glass-nav-mobile text-white flex justify-around items-center p-2 z-40">
-    <button onclick="switchTab('dashboard')" id="m-nav-dashboard" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-indigo-300 font-bold">
-      <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
-    </button>
-    <button onclick="switchTab('transactions')" id="m-nav-transactions" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
-      <i data-lucide="list-todo" class="w-5 h-5"></i> Entries
-    </button>
-    <button onclick="switchTab('tools')" id="m-nav-tools" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
-      <i data-lucide="wrench" class="w-5 h-5 text-purple-300"></i> Tools
-    </button>
-    <button onclick="switchTab('categories')" id="m-nav-categories" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
-      <i data-lucide="shapes" class="w-5 h-5"></i> Categories
-    </button>
-    <button onclick="switchTab('settings')" id="m-nav-settings" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
-      <i data-lucide="settings" class="w-5 h-5"></i> Settings
-    </button>
-  </nav>
-
-  <!-- ADD VOUCHER MODAL -->
-  <div id="modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
-    <div class="glass-card rounded-3xl max-w-lg w-full p-5 md:p-6 shadow-2xl max-h-[90vh] overflow-y-auto border border-white">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-base md:text-lg font-bold text-slate-900 heading-font">Add Khata Bahi Entry 🌸</h3>
-        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-
-      <form id="transaction-form" class="space-y-3.5">
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Entry Type</label>
-            <select id="type" onchange="toggleVoucherFields()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600 font-bold">
-              <option value="receipt">Receipt (Money Received)</option>
-              <option value="payment">Payment (Money Paid)</option>
-              <option value="sale" id="opt-sale">Sale (Invoice - Pro 🔒)</option>
-              <option value="purchase" id="opt-purchase">Purchase (Stock - Pro 🔒)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Date</label>
-            <input type="date" id="date" required class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600" />
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Description / Particulars</label>
-          <input type="text" id="description" required placeholder="e.g., Electricity Bill / Office Rent" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600" />
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Amount (₹)</label>
-          <input type="number" step="0.01" id="rate" required placeholder="500.00" oninput="calculateAmounts()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600 font-bold" />
-        </div>
-
-        <div id="pro-fields-container" class="space-y-3.5 border-t border-b border-amber-300 bg-amber-50/80 p-3.5 rounded-2xl hidden">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-amber-800 flex items-center gap-1">
-              <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-600"></i> Pro Features Unlocked
-            </span>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Party Name (Customer / Vendor)</label>
-            <input type="text" id="party-name" placeholder="e.g., gdtsss" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white focus:outline-indigo-600" />
-          </div>
-
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Quantity</label>
-              <input type="number" step="1" id="quantity" value="1" min="1" oninput="calculateAmounts()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white focus:outline-indigo-600" />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">GST Rate (%)</label>
-              <select id="gst-rate" onchange="calculateAmounts()" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white focus:outline-indigo-600 font-semibold">
-                <option value="0">0% (Exempt)</option>
-                <option value="5">5%</option>
-                <option value="12">12%</option>
-                <option value="18" selected>18%</option>
-                <option value="28">28%</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="bg-white border border-slate-200 rounded-xl p-3 text-xs space-y-1 font-medium text-slate-600">
-            <div class="flex justify-between"><span>Subtotal:</span><span id="summary-subtotal">₹0.00</span></div>
-            <div class="flex justify-between"><span>GST Amount:</span><span id="summary-gst" class="text-indigo-600">+₹0.00</span></div>
-            <div class="flex justify-between font-bold text-slate-900 border-t border-slate-200 pt-1 text-sm"><span>Total Bill Amount:</span><span id="summary-total">₹0.00</span></div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Category</label>
-            <select id="category" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600">
-              <option value="General Trade">General Trade</option>
-              <option value="Office Expenses">Office Expenses</option>
-              <option value="Food & Dining">Food & Dining</option>
-              <option value="Services">Services</option>
-              <option value="Electronics">Electronics</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Payment Mode</label>
-            <select id="method" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white/90 focus:outline-indigo-600">
-              <option value="UPI">UPI</option>
-              <option value="Cash">Cash</option>
-              <option value="Bank Transfer">Bank Transfer</option>
-              <option value="Credit / Outstanding">Credit / Outstanding</option>
-            </select>
-          </div>
-        </div>
-
-        <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-indigo-500/25 mt-2">Save Entry</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- UPGRADE TO PRO MODAL -->
-  <div id="upgrade-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
-    <div class="glass-card rounded-3xl max-w-md w-full p-6 shadow-2xl relative overflow-hidden border border-white">
-      <div class="flex justify-between items-center mb-4 relative">
+  <!-- UPGRADE TO PRO MODAL (DIRECT UPI PAYMENT) -->
+  <div id="upgrade-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div class="glass-card rounded-3xl max-w-md w-full p-6 shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-3">
         <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 border border-amber-300">
           <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-600"></i> PRO MEMBERSHIP
         </span>
-        <button onclick="closeUpgradeModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <button onclick="closeUpgradeModal()" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
       </div>
 
-      <div class="text-center mb-5 relative">
-        <h3 class="text-2xl font-bold text-slate-900 heading-font">Upgrade to Khata Pro</h3>
-        <p class="text-xs text-slate-500 mt-1">Unlock party-wise accounting, GST & billing</p>
-        <div class="mt-3 flex justify-center items-baseline gap-1">
-          <span class="text-4xl font-extrabold text-indigo-600 heading-font">₹99</span>
-          <span class="text-xs text-slate-500 font-medium">/ 30 days</span>
+      <div class="text-center mb-4">
+        <h3 class="text-xl font-bold text-slate-900">Upgrade to Khata Pro</h3>
+        <div class="mt-2 flex justify-center items-baseline gap-1">
+          <span class="text-3xl font-extrabold text-indigo-600">₹99</span>
+          <span class="text-xs text-slate-500 font-medium">/ month</span>
         </div>
       </div>
 
-      <ul class="space-y-2.5 text-xs font-medium text-slate-700 mb-5 bg-white/80 p-4 rounded-2xl border border-slate-100">
-        <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> Add Party Name to entries</li>
-        <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> Record Quantity x Rate calculations</li>
-        <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> Auto GST calculations (5%, 12%, 18%, 28%)</li>
-        <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> Full Sale & Purchase Vouchers</li>
-        <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> Valid for 30 Days from activation</li>
-      </ul>
+      <!-- DYNAMIC UPI QR & DIRECT BUTTON -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center mb-4 space-y-3">
+        <p class="text-xs font-bold text-slate-700">Scan or Tap to Pay via UPI</p>
+        
+        <!-- Generated UPI QR Code Image -->
+        <div class="flex justify-center">
+          <img id="upi-qr-code" src="" alt="UPI QR Code" class="w-36 h-36 rounded-xl border border-slate-200 shadow-sm bg-white p-1" />
+        </div>
 
-      <div class="mb-4">
+        <!-- Direct UPI Link Button (Opens GPay, PhonePe, Paytm on Mobile) -->
+        <a id="upi-pay-link" href="#" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2">
+          <i data-lucide="smartphone" class="w-4 h-4"></i> Pay ₹99 via Any UPI App
+        </a>
+      </div>
+
+      <!-- VERIFY TRANSACTION ID -->
+      <div class="space-y-2 pt-2 border-t border-slate-200">
+        <label class="block text-xs font-semibold text-slate-700">Submit UPI Ref / UTR Number after Payment:</label>
+        <div class="flex gap-2">
+          <input type="text" id="upi-utr-input" placeholder="e.g. 4201XXXXXXXX" class="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white font-mono focus:outline-indigo-600" />
+          <button onclick="verifyUpiPayment()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Submit</button>
+        </div>
+      </div>
+
+      <!-- ACCESS CODE PROMO -->
+      <div class="mt-4 pt-3 border-t border-slate-200">
         <label class="block text-xs font-semibold text-slate-600 mb-1">Have an Access Code?</label>
         <div class="flex gap-2">
           <input type="text" id="promo-code-input" placeholder="Enter Access Code" class="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white uppercase font-bold focus:outline-indigo-600" />
           <button onclick="applyPromoCode()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Unlock</button>
         </div>
       </div>
-
-      <div id="payment-box">
-        <button onclick="initiatePayment()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-500/25 transition transform hover:scale-[1.02] flex items-center justify-center gap-2">
-          <i data-lucide="credit-card" class="w-4 h-4"></i> Pay ₹99 via UPI
-        </button>
-      </div>
     </div>
   </div>
 
-  <!-- APPLICATION LOGIC -->
+  <!-- JAVASCRIPT LOGIC -->
   <script>
-    lucide.createIcons();
+    // ⚙️ CONFIGURATION: Set your UPI ID (VPA) and Receiver Name here
+    const UPI_ID = "swadsangamindia@upi"; // 👈 REPLACE WITH YOUR REAL UPI ID
+    const RECEIVER_NAME = "Swad Sangam Khata Bahi";
+    const PRO_PRICE = 99;
 
-    if (window.pdfjsLib) {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
-    }
+    let transactions = [];
+    let isProUser = false;
 
-    // Persistent Local Storage Initialization
-    let transactions = JSON.parse(localStorage.getItem('ledger_transactions')) || [];
-    let currentUser = JSON.parse(localStorage.getItem('ledger_user')) || null;
-
-    // HARDENED PRO SUBSCRIPTION LOGIC (PERMANENTLY GUARANTEES 30 DAYS ON ACTIVATION)
-    let isProUser = JSON.parse(localStorage.getItem('ledger_is_pro'));
-    let proExpiry = JSON.parse(localStorage.getItem('ledger_pro_expiry'));
-
-    // Automatically initialize/repair Pro status if missing or zeroed out
-    if (isProUser === null || !proExpiry || Date.now() >= proExpiry) {
-      isProUser = true;
-      proExpiry = Date.now() + (30 * 24 * 60 * 60 * 1000); // 30 Full Days
-      localStorage.setItem('ledger_is_pro', JSON.stringify(true));
-      localStorage.setItem('ledger_pro_expiry', JSON.stringify(proExpiry));
-    }
-
-    let lineChart, doughnutChart;
-
-    function formatDateToDDMMYYYY(dateStr) {
-      if (!dateStr) return '-';
-      const parts = dateStr.split('-');
-      if (parts.length !== 3) return dateStr;
-      return `${parts[2]}-${parts[1]}-${parts[0]}`;
-    }
-
-    function checkProSubscriptionExpiry() {
-      if (isProUser && proExpiry) {
-        if (Date.now() > proExpiry) {
-          isProUser = false;
-          localStorage.setItem('ledger_is_pro', JSON.stringify(false));
-          localStorage.removeItem('ledger_pro_expiry');
-        }
-      }
-    }
-
-    function getProDaysRemaining() {
-      if (!isProUser || !proExpiry) return 0;
-      const diffMs = proExpiry - Date.now();
-      if (diffMs <= 0) return 0;
-      return Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
-    }
-
-    function checkAuth() {
-      checkProSubscriptionExpiry();
-      if (!currentUser) {
-        document.getElementById('auth-overlay').classList.remove('hidden');
-      } else {
-        document.getElementById('auth-overlay').classList.add('hidden');
-        renderProfileInfo();
-      }
-      updateProStatusUI();
-    }
-
-    function updateProStatusUI() {
-      const planBadge = document.getElementById('sidebar-plan-badge');
-      const planDesc = document.getElementById('settings-plan-desc');
-      const reportPlan = document.getElementById('report-plan-type');
-      const proFields = document.getElementById('pro-fields-container');
-      
-      const mobileUpgradeBtn = document.getElementById('mobile-upgrade-btn');
-      const settingsUpgradeBtn = document.getElementById('settings-upgrade-btn');
-
-      const remainingDays = getProDaysRemaining();
-
-      if (isProUser && remainingDays > 0) {
-        if (mobileUpgradeBtn) mobileUpgradeBtn.classList.add('hidden');
-        if (settingsUpgradeBtn) settingsUpgradeBtn.classList.add('hidden');
-
-        if(planBadge) planBadge.innerHTML = `<i data-lucide="crown" class="w-3 h-3 text-amber-300"></i> Pro (${remainingDays}d left)`;
-        if(planDesc) planDesc.innerText = `Pro Membership Active (${remainingDays} days remaining)`;
-        if(reportPlan) reportPlan.innerText = `Pro Tier ⭐ (${remainingDays}d left)`;
-        if(proFields) proFields.classList.remove('hidden');
-      } else {
-        if (mobileUpgradeBtn) mobileUpgradeBtn.classList.remove('hidden');
-        if (settingsUpgradeBtn) settingsUpgradeBtn.classList.remove('hidden');
-
-        if(planBadge) planBadge.innerHTML = `<i data-lucide="shield" class="w-3 h-3"></i> Free Plan`;
-        if(planDesc) planDesc.innerText = `Free Plan (Receipt & Payment only)`;
-        if(reportPlan) reportPlan.innerText = `Free Tier`;
-        if(proFields) proFields.classList.add('hidden');
-      }
+    // Initialize App
+    document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
-    }
-
-    document.getElementById('auth-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      currentUser = {
-        name: document.getElementById('auth-name').value || 'aditya',
-        email: document.getElementById('auth-email').value || 'aditya@example.com',
-        currency: '₹'
-      };
-      localStorage.setItem('ledger_user', JSON.stringify(currentUser));
-      checkAuth();
-      saveAndRender();
+      document.getElementById('inv-date').innerText = new Date().toLocaleDateString('en-IN');
+      setupUpiPaymentLinks();
+      checkProStatus();
     });
 
-    function logout() {
-      if (confirm('Switching profiles will clear local user login session. Continue?')) {
-        localStorage.removeItem('ledger_user');
-        currentUser = null;
-        checkAuth();
+    // Generate Dynamic UPI QR & Deep Links
+    function setupUpiPaymentLinks() {
+      const upiUrl = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(RECEIVER_NAME)}&am=${PRO_PRICE}&cu=INR&tn=KhataPro30Days`;
+      
+      // Set Direct Pay Button Link
+      document.getElementById('upi-pay-link').href = upiUrl;
+
+      // Generate Dynamic QR Code using QR Server API
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUrl)}`;
+      document.getElementById('upi-qr-code').src = qrApiUrl;
+    }
+
+    // Check Pro Status on Load
+    function checkProStatus() {
+      const proExpiry = localStorage.getItem('khata_pro_expiry');
+      if (proExpiry && new Date().getTime() < parseInt(proExpiry)) {
+        isProUser = true;
+        document.getElementById('pro-badge-container').innerHTML = `
+          <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1">
+            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i> PRO ACTIVE
+          </span>
+        `;
+        lucide.createIcons();
       }
     }
 
-    function renderProfileInfo() {
-      if (!currentUser) return;
-      const name = currentUser.name || 'aditya';
-      const firstInitial = name.charAt(0).toUpperCase();
-
-      document.getElementById('welcome-heading').innerText = `Hello, ${name} 👋`;
-      document.getElementById('sidebar-user-name').innerText = name;
-      document.getElementById('sidebar-user-email').innerText = currentUser.email;
-      document.getElementById('sidebar-initial-avatar').innerText = firstInitial;
-      document.getElementById('header-avatar').innerText = firstInitial;
-      document.getElementById('mobile-header-avatar').innerText = firstInitial;
-      document.getElementById('profile-avatar-large').innerText = firstInitial;
-
-      document.getElementById('profile-display-name').innerText = name;
-      document.getElementById('profile-display-email').innerText = currentUser.email;
-
-      document.getElementById('profile-name-input').value = name;
-      document.getElementById('profile-email-input').value = currentUser.email;
-      document.getElementById('profile-currency-input').value = currentUser.currency || '₹';
+    // Modal Handlers
+    function openUpgradeModal() {
+      document.getElementById('upgrade-modal').classList.remove('hidden');
     }
 
-    function toggleVoucherFields() {
-      const type = document.getElementById('type').value;
-      if ((type === 'sale' || type === 'purchase') && !isProUser) {
-        alert('Sale & Purchase Vouchers require an active Pro Subscription (₹99/30 days).');
-        document.getElementById('type').value = 'receipt';
-        openUpgradeModal();
-        return;
-      }
+    function closeUpgradeModal() {
+      document.getElementById('upgrade-modal').classList.add('hidden');
+    }
 
-      if (isProUser && (type === 'sale' || type === 'purchase')) {
-        document.getElementById('pro-fields-container').classList.remove('hidden');
+    // Manual UPI UTR Verification
+    function verifyUpiPayment() {
+      const utr = document.getElementById('upi-utr-input').value.trim();
+      if (utr.length >= 8) {
+        activate30DaysPro(`UPI Ref: ${utr}`);
       } else {
-        document.getElementById('pro-fields-container').classList.add('hidden');
-      }
-      calculateAmounts();
-    }
-
-    function calculateAmounts() {
-      const qty = parseFloat(document.getElementById('quantity').value) || 1;
-      const rate = parseFloat(document.getElementById('rate').value) || 0;
-      const gstPct = isProUser ? (parseFloat(document.getElementById('gst-rate').value) || 0) : 0;
-
-      const subtotal = qty * rate;
-      const gstAmount = subtotal * (gstPct / 100);
-      const total = subtotal + gstAmount;
-
-      const curr = currentUser ? currentUser.currency : '₹';
-      document.getElementById('summary-subtotal').innerText = `${curr}${subtotal.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('summary-gst').innerText = `+${curr}${gstAmount.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('summary-total').innerText = `${curr}${total.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-    }
-
-    function switchTab(tab) {
-      document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('nav-active'));
-
-      document.getElementById(`view-${tab}`).classList.remove('hidden');
-      const activeNavBtn = document.getElementById(`nav-${tab}`);
-      if(activeNavBtn) activeNavBtn.classList.add('nav-active');
-
-      document.querySelectorAll('nav.md\\:hidden button').forEach(btn => {
-        btn.classList.remove('text-indigo-300');
-        btn.classList.add('text-slate-300');
-      });
-      const mobileNavBtn = document.getElementById(`m-nav-${tab}`);
-      if(mobileNavBtn) {
-        mobileNavBtn.classList.remove('text-slate-300');
-        mobileNavBtn.classList.add('text-indigo-300');
-      }
-
-      if(tab === 'categories') renderCategories();
-      if(tab === 'reports') renderReports();
-    }
-
-    function saveAndRender() {
-      localStorage.setItem('ledger_transactions', JSON.stringify(transactions));
-      renderKPIs();
-      renderDashboardRecent();
-      renderFullTable();
-      updateCharts();
-    }
-
-    function renderKPIs() {
-      const curr = currentUser ? currentUser.currency : '₹';
-      
-      const sales = transactions.filter(t => t.type === 'sale').reduce((acc, t) => acc + (t.totalAmount || t.amount), 0);
-      const purchases = transactions.filter(t => t.type === 'purchase').reduce((acc, t) => acc + (t.totalAmount || t.amount), 0);
-      const receipts = transactions.filter(t => t.type === 'receipt').reduce((acc, t) => acc + (t.totalAmount || t.amount), 0);
-      const payments = transactions.filter(t => t.type === 'payment').reduce((acc, t) => acc + (t.totalAmount || t.amount), 0);
-      const totalGst = transactions.reduce((acc, t) => acc + (t.gstAmount || 0), 0);
-      
-      const netBalance = (sales + receipts) - (purchases + payments);
-
-      document.getElementById('total-receipts').innerText = `${curr}${receipts.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('total-payments').innerText = `${curr}${payments.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('total-sales').innerText = `${curr}${sales.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('total-gst').innerText = `${curr}${totalGst.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('card-total-balance').innerText = `${curr}${netBalance.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-    }
-
-    function renderDashboardRecent() {
-      const tbody = document.getElementById('dashboard-recent-rows');
-      tbody.innerHTML = '';
-      const curr = currentUser ? currentUser.currency : '₹';
-
-      if (transactions.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-500 font-semibold">No entries recorded yet. Tap "+ Add Entry" to begin!</td></tr>`;
-        return;
-      }
-
-      transactions.slice().reverse().slice(0, 5).forEach(item => {
-        const tr = document.createElement('tr');
-        const isPositive = item.type === 'sale' || item.type === 'receipt';
-        
-        tr.innerHTML = `
-          <td class="py-3.5 text-slate-600 font-mono">${formatDateToDDMMYYYY(item.date)}</td>
-          <td class="py-3.5"><span class="${isPositive ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'} px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase">${item.type}</span></td>
-          <td class="py-3.5 font-bold text-slate-800">${item.partyName || '-'}</td>
-          <td class="py-3.5 text-slate-600">${item.description}</td>
-          <td class="py-3.5 text-slate-500">${curr}${(item.gstAmount || 0).toFixed(2)}</td>
-          <td class="py-3.5 font-extrabold ${isPositive ? 'text-emerald-600' : 'text-rose-500'}">
-            ${isPositive ? '+' : '-'}${curr}${(item.totalAmount || item.amount).toLocaleString('en-IN', {minimumFractionDigits: 2})}
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderFullTable(data = transactions) {
-      const tbody = document.getElementById('full-transaction-rows');
-      tbody.innerHTML = '';
-      const curr = currentUser ? currentUser.currency : '₹';
-
-      if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-slate-500 font-semibold">No matching records found.</td></tr>`;
-        return;
-      }
-
-      data.slice().reverse().forEach(item => {
-        const tr = document.createElement('tr');
-        const isPositive = item.type === 'sale' || item.type === 'receipt';
-        
-        tr.innerHTML = `
-          <td class="py-3.5 text-slate-600 font-mono">${formatDateToDDMMYYYY(item.date)}</td>
-          <td class="py-3.5"><span class="${isPositive ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'} px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase">${item.type}</span></td>
-          <td class="py-3.5 font-bold text-slate-800">${item.partyName || '-'}</td>
-          <td class="py-3.5 text-slate-600">${item.description}</td>
-          <td class="py-3.5 text-slate-500">${item.quantity || 1} x ${curr}${item.rate || item.amount}</td>
-          <td class="py-3.5 text-slate-500">${item.gstRate || 0}%</td>
-          <td class="py-3.5 font-extrabold ${isPositive ? 'text-emerald-600' : 'text-rose-500'}">
-            ${curr}${(item.totalAmount || item.amount).toLocaleString('en-IN', {minimumFractionDigits: 2})}
-          </td>
-          <td class="py-3.5 text-right flex items-center justify-end gap-2">
-            <button onclick="generateInvoicePDF(${item.id})" title="Print PDF Invoice" class="text-indigo-600 bg-indigo-50 p-1.5 rounded-lg transition hover:bg-indigo-100"><i data-lucide="file-text" class="w-4 h-4"></i></button>
-            <button onclick="deleteTransaction(${item.id})" title="Delete" class="text-rose-400 hover:text-rose-600 p-1.5 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-      lucide.createIcons();
-    }
-
-    function filterTransactions() {
-      const query = document.getElementById('search-input').value.toLowerCase();
-      const filtered = transactions.filter(t => 
-        (t.partyName && t.partyName.toLowerCase().includes(query)) ||
-        t.description.toLowerCase().includes(query) || 
-        t.category.toLowerCase().includes(query) ||
-        t.type.toLowerCase().includes(query)
-      );
-      renderFullTable(filtered);
-    }
-
-    function renderCategories() {
-      const grid = document.getElementById('categories-grid');
-      grid.innerHTML = '';
-      const curr = currentUser ? currentUser.currency : '₹';
-
-      const categoryTotals = {};
-      transactions.forEach(t => {
-        categoryTotals[t.category] = (categoryTotals[t.category] || 0) + (t.totalAmount || t.amount);
-      });
-
-      if (Object.keys(categoryTotals).length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-8 text-slate-500 text-xs font-semibold">No entries to display yet.</div>`;
-        return;
-      }
-
-      Object.entries(categoryTotals).forEach(([cat, amount]) => {
-        grid.innerHTML += `
-          <div class="glass-card p-5 rounded-3xl">
-            <span class="bg-indigo-100 text-indigo-700 text-[10px] px-2.5 py-1 rounded-lg font-bold">${cat}</span>
-            <h3 class="text-2xl font-bold heading-font text-slate-800 mt-3">${curr}${amount.toLocaleString('en-IN', {minimumFractionDigits: 2})}</h3>
-            <p class="text-xs text-slate-400 mt-1">Total Volume</p>
-          </div>
-        `;
-      });
-    }
-
-    function renderReports() {
-      const curr = currentUser ? currentUser.currency : '₹';
-      const totalGst = transactions.reduce((acc, t) => acc + (t.gstAmount || 0), 0);
-
-      document.getElementById('report-total-count').innerText = transactions.length;
-      document.getElementById('report-gst-amount').innerText = `${curr}${totalGst.toLocaleString('en-IN')}`;
-    }
-
-    function deleteTransaction(id) {
-      if(confirm('Delete this entry from your history?')) {
-        transactions = transactions.filter(t => t.id !== id);
-        saveAndRender();
+        alert("Please enter a valid 12-digit UPI UTR / Transaction ID from your payment receipt.");
       }
     }
 
-    function initCharts() {
-      const ctxLine = document.getElementById('overviewChart').getContext('2d');
-      lineChart = new Chart(ctxLine, {
-        type: 'line',
-        data: { labels: [], datasets: [
-          { label: 'Inflow', data: [], borderColor: '#4f46e5', borderWidth: 3, pointRadius: 4, tension: 0.3 },
-          { label: 'Outflow', data: [], borderColor: '#f43f5e', borderWidth: 2, pointRadius: 3, tension: 0.3 }
-        ] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { callback: v => '₹' + v } } } }
-      });
-
-      const ctxDoughnut = document.getElementById('categoryChart').getContext('2d');
-      doughnutChart = new Chart(ctxDoughnut, {
-        type: 'doughnut',
-        data: { labels: [], datasets: [{ data: [], backgroundColor: ['#4f46e5', '#22c55e', '#06b6d4', '#eab308', '#ec4899', '#8b5cf6'] }] },
-        options: { responsive: true, maintainAspectRatio: false, cutout: '78%', plugins: { legend: { display: false } } }
-      });
-    }
-
-    function updateCharts() {
-      const groupedByDate = {};
-      transactions.forEach(t => {
-        const formattedDate = formatDateToDDMMYYYY(t.date);
-        groupedByDate[formattedDate] = (groupedByDate[formattedDate] || 0) + (t.totalAmount || t.amount);
-      });
-
-      lineChart.data.labels = Object.keys(groupedByDate).length > 0 ? Object.keys(groupedByDate) : ['No Data'];
-      lineChart.data.datasets[0].data = Object.values(groupedByDate).length > 0 ? Object.values(groupedByDate) : [0];
-      lineChart.update();
-
-      const categoryMap = {};
-      transactions.forEach(t => categoryMap[t.category] = (categoryMap[t.category] || 0) + (t.totalAmount || t.amount));
-
-      doughnutChart.data.labels = Object.keys(categoryMap);
-      doughnutChart.data.datasets[0].data = Object.values(categoryMap);
-      doughnutChart.update();
-
-      const legendContainer = document.getElementById('category-legend');
-      if (legendContainer) {
-        legendContainer.innerHTML = '';
-        Object.entries(categoryMap).forEach(([cat, val], idx) => {
-          const color = doughnutChart.data.datasets[0].backgroundColor[idx % 6];
-          legendContainer.innerHTML += `
-            <div class="flex justify-between items-center"><span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full" style="background:${color}"></span> ${cat}</span><span>₹${val.toLocaleString()}</span></div>
-          `;
-        });
-      }
-    }
-
-    /* ---------------- CONVERSION UTILITIES ENGINE ---------------- */
-
-    // 1. Image to PDF
-    function convertImageToPDF() {
-      const fileInput = document.getElementById('img-file-input');
-      if (!fileInput.files || !fileInput.files.length) {
-        return alert('Please select an image file first!');
-      }
-
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-
-      reader.onload = function(e) {
-        try {
-          const imgData = e.target.result;
-          const jsPDF = window.jspdf.jsPDF;
-          const doc = new jsPDF({
-            orientation: 'p',
-            unit: 'mm',
-            format: 'a4'
-          });
-
-          const imgProps = doc.getImageProperties(imgData);
-          const pdfWidth = doc.internal.pageSize.getWidth();
-          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-          doc.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-          doc.save(`Image_Converted_${Date.now()}.pdf`);
-        } catch (err) {
-          alert('Error generating PDF: ' + err.message);
-        }
-      };
-
-      reader.readAsDataURL(file);
-    }
-
-    // 2. Excel to PDF
-    function convertExcelToPDF() {
-      const fileInput = document.getElementById('excel-file-input');
-      if (!fileInput.files || !fileInput.files.length) {
-        return alert('Please select an Excel file (.xlsx or .xls) first!');
-      }
-
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-
-      reader.onload = function(e) {
-        try {
-          const data = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(data, { type: 'array' });
-          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-          const htmlTable = XLSX.utils.sheet_to_html(firstSheet);
-
-          const tempContainer = document.createElement('div');
-          tempContainer.innerHTML = `
-            <div style="padding: 20px; font-family: sans-serif;">
-              <h2 style="color: #4f46e5; margin-bottom: 10px;">Khata Bahi - Excel Document Export</h2>
-              ${htmlTable}
-            </div>
-          `;
-
-          html2pdf().from(tempContainer).set({
-            margin: 10,
-            filename: `Excel_Export_${Date.now()}.pdf`,
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-          }).save();
-        } catch (err) {
-          alert('Error parsing Excel sheet: ' + err.message);
-        }
-      };
-
-      reader.readAsArrayBuffer(file);
-    }
-
-    // 3. PDF to Excel
-    async function convertPdfToExcel() {
-      const fileInput = document.getElementById('pdf-to-excel-input');
-      if (!fileInput.files || !fileInput.files.length) {
-        return alert('Please select a PDF file first!');
-      }
-
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-
-      reader.onload = async function() {
-        try {
-          const typedarray = new Uint8Array(this.result);
-          const pdf = await pdfjsLib.getDocument(typedarray).promise;
-          let extractedRows = [];
-
-          for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const textContent = await page.getTextContent();
-            let pageText = textContent.items.map(item => item.str);
-            
-            let row = [];
-            pageText.forEach((text, index) => {
-              row.push(text);
-              if ((index + 1) % 4 === 0) {
-                extractedRows.push([...row]);
-                row = [];
-              }
-            });
-            if (row.length > 0) extractedRows.push(row);
-          }
-
-          const ws = XLSX.utils.aoa_to_sheet(extractedRows);
-          const wb = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(wb, ws, "PDF_Export");
-          XLSX.writeFile(wb, `PDF_Converted_${Date.now()}.xlsx`);
-        } catch (err) {
-          alert('Error converting PDF to Excel: ' + err.message);
-        }
-      };
-
-      reader.readAsArrayBuffer(file);
-    }
-
-    // 4. PDF to Image
-    async function convertPdfToImage() {
-      const fileInput = document.getElementById('pdf-to-img-input');
-      if (!fileInput.files || !fileInput.files.length) {
-        return alert('Please select a PDF file first!');
-      }
-
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-
-      reader.onload = async function() {
-        try {
-          const typedarray = new Uint8Array(this.result);
-          const pdf = await pdfjsLib.getDocument(typedarray).promise;
-          const page = await pdf.getPage(1);
-
-          const viewport = page.getViewport({ scale: 1.5 });
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
-
-          await page.render({ canvasContext: context, viewport: viewport }).promise;
-
-          const imageURL = canvas.toDataURL("image/png");
-          const a = document.createElement('a');
-          a.href = imageURL;
-          a.download = `PDF_Page1_${Date.now()}.png`;
-          a.click();
-        } catch (err) {
-          alert('Error rendering PDF to Image: ' + err.message);
-        }
-      };
-
-      reader.readAsArrayBuffer(file);
-    }
-
-    /* ---------------- MODALS & SUBSCRIPTION ---------------- */
-    function openModal() { document.getElementById('modal').classList.remove('hidden'); calculateAmounts(); }
-    function closeModal() { document.getElementById('modal').classList.add('hidden'); }
-
-    function openUpgradeModal() { document.getElementById('upgrade-modal').classList.remove('hidden'); }
-    function closeUpgradeModal() { document.getElementById('upgrade-modal').classList.add('hidden'); }
-
+    // Access Code Unlock
     function applyPromoCode() {
-      const inputCode = document.getElementById('promo-code-input').value.trim().toUpperCase();
-      if (inputCode === 'ADITYAMODEL') {
-        activate30DaysPro('Code ADITYAMODEL');
+      const code = document.getElementById('promo-code-input').value.trim().toUpperCase();
+      if (code === "PRO2026" || code === "ADMIN") {
+        activate30DaysPro("Access Code Applied");
       } else {
-        alert('Invalid access code! Please pay ₹99/mo or enter a valid code.');
+        alert("Invalid Access Code");
       }
     }
 
-    function initiatePayment() {
-      const upiUrl = "upi://pay?pa=aditya@upi&pn=KhataBahi&am=99&cu=INR&tn=KhataBahi_Pro_Subscription";
-      window.location.href = upiUrl;
-      alert("Redirecting to UPI payment app... After completing payment, enter your activation code provided by admin.");
-    }
-
-    function activate30DaysPro(source = 'Payment') {
-      const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
-      const expiryTimestamp = Date.now() + thirtyDaysMs;
-
-      isProUser = true;
-      proExpiry = expiryTimestamp;
-
-      localStorage.setItem('ledger_is_pro', JSON.stringify(true));
-      localStorage.setItem('ledger_pro_expiry', JSON.stringify(expiryTimestamp));
-
-      updateProStatusUI();
+    // Activate Pro Plan for 30 Days
+    function activate30DaysPro(reason) {
+      const expiry = new Date().getTime() + (30 * 24 * 60 * 60 * 1000); // 30 days in milliseconds
+      localStorage.setItem('khata_pro_expiry', expiry);
+      alert("🎉 Pro Membership Activated for 30 Days!");
       closeUpgradeModal();
-      alert(`🎉 Khata Pro Activated via ${source}!\nYour subscription is valid for 30 days.`);
+      location.reload();
     }
 
-    document.getElementById('transaction-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      const type = document.getElementById('type').value;
-      const amountVal = parseFloat(document.getElementById('rate').value) || 0;
+    // Add Transaction Entry
+    function addEntry(type) {
+      const party = document.getElementById('party-name').value.trim();
+      const desc = document.getElementById('desc-input').value.trim();
+      const amount = parseFloat(document.getElementById('amount-input').value);
 
-      if (!isProUser) {
-        transactions.push({
-          id: Date.now(),
-          type: type,
-          partyName: '-',
-          description: document.getElementById('description').value,
-          amount: amountVal,
-          totalAmount: amountVal,
-          gstAmount: 0,
-          category: document.getElementById('category').value,
-          method: document.getElementById('method').value,
-          date: document.getElementById('date').value
-        });
-      } else {
-        const qty = parseFloat(document.getElementById('quantity').value) || 1;
-        const gstPct = parseFloat(document.getElementById('gst-rate').value) || 0;
-        const subtotal = qty * amountVal;
-        const gstAmount = subtotal * (gstPct / 100);
-        const totalAmount = subtotal + gstAmount;
-
-        transactions.push({
-          id: Date.now(),
-          type: type,
-          partyName: document.getElementById('party-name').value || '-',
-          description: document.getElementById('description').value,
-          quantity: qty,
-          rate: amountVal,
-          gstRate: gstPct,
-          gstAmount: gstAmount,
-          subtotal: subtotal,
-          totalAmount: totalAmount,
-          category: document.getElementById('category').value,
-          method: document.getElementById('method').value,
-          date: document.getElementById('date').value
-        });
-      }
-
-      saveAndRender();
-      closeModal();
-      e.target.reset();
-      document.getElementById('date').value = new Date().toISOString().split('T')[0];
-    });
-
-    function clearAllData() {
-      if(confirm("Are you sure you want to reset all tracker history data?")) {
-        transactions = [];
-        saveAndRender();
-      }
-    }
-
-    function exportData() {
-      if (transactions.length === 0) {
-        alert("No entries to export!");
+      if (!desc || isNaN(amount) || amount <= 0) {
+        alert("Please enter a valid description and amount.");
         return;
       }
 
-      let csvContent = "Date (DD-MM-YYYY),Voucher Type,Party Name,Description,Quantity,Rate per Unit,GST Rate,GST Amount,Total Amount,Payment Mode\n";
+      const entry = {
+        id: Date.now(),
+        party: party || "General",
+        desc: desc,
+        amount: amount,
+        type: type
+      };
 
-      transactions.forEach(t => {
-        const formattedDate = formatDateToDDMMYYYY(t.date);
-        const party = `"${(t.partyName || '-').replace(/"/g, '""')}"`;
-        const desc = `"${t.description.replace(/"/g, '""')}"`;
-        const method = `"${(t.method || 'UPI').replace(/"/g, '""')}"`;
-        csvContent += `${formattedDate},${t.type.toUpperCase()},${party},${desc},${t.quantity || 1},${t.rate || t.amount},${t.gstRate || 0}%,${t.gstAmount || 0},${t.totalAmount || t.amount},${method}\n`;
-      });
+      transactions.push(entry);
+      updateUI();
 
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'khata_bahi_register.csv';
-      a.click();
+      // Clear input fields
+      document.getElementById('party-name').value = '';
+      document.getElementById('desc-input').value = '';
+      document.getElementById('amount-input').value = '';
     }
 
-    document.getElementById('date').value = new Date().toISOString().split('T')[0];
+    // Update UI Stats & Table
+    function updateUI() {
+      let jama = 0;
+      let nikasi = 0;
+      const tbody = document.getElementById('invoice-items');
+      tbody.innerHTML = '';
 
-    // Initialize
-    checkAuth();
-    initCharts();
-    saveAndRender();
+      transactions.forEach(t => {
+        if (t.type === 'jama') jama += t.amount;
+        if (t.type === 'nikasi') nikasi += t.amount;
+
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-slate-100';
+        tr.innerHTML = `
+          <td class="p-2 font-medium text-slate-800">${t.party} - <span class="text-slate-500">${t.desc}</span></td>
+          <td class="p-2 font-bold ${t.type === 'jama' ? 'text-emerald-600' : 'text-rose-600'}">${t.type.toUpperCase()}</td>
+          <td class="p-2 text-right font-bold text-slate-800">₹${t.amount.toLocaleString('en-IN')}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('total-jama').innerText = `₹${jama.toLocaleString('en-IN')}`;
+      document.getElementById('total-nikasi').innerText = `₹${nikasi.toLocaleString('en-IN')}`;
+    }
+
+    // Generate Invoice PDF
+    function generateInvoicePDF() {
+      if (transactions.length === 0) {
+        alert("Please add at least one transaction before downloading an invoice.");
+        return;
+      }
+
+      const element = document.getElementById('invoice-template');
+      const opt = {
+        margin:       10,
+        filename:     'Khata_Bahi_Invoice.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save();
+    }
   </script>
 </body>
 </html>
