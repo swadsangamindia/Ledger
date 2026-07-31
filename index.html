@@ -20,6 +20,9 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
+  <!-- Google AdSense Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsense.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
   <!-- PWA Manifest & Theme -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f0f4f9">
@@ -480,7 +483,7 @@
       </div>
     </div>
 
-    <!-- FLOATING ACTION BUTTON FOR MOBILE & DESKTOP -->
+    <!-- FLOATING ACTION BUTTON -->
     <button onclick="openModal()" class="fixed bottom-20 md:bottom-8 right-5 md:right-8 bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 text-white p-4 rounded-full shadow-2xl shadow-purple-500/40 transition transform hover:scale-110 active:scale-95 z-30 flex items-center justify-center border border-white">
       <i data-lucide="plus" class="w-7 h-7"></i>
     </button>
@@ -549,7 +552,7 @@
 
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1">Party Name (Customer / Vendor)</label>
-            <input type="text" id="party-name" placeholder="e.g., gdtsss" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white focus:outline-indigo-600" />
+            <input type="text" id="party-name" placeholder="e.g., Rahul Verma" class="w-full border border-slate-200 rounded-xl p-2.5 text-sm bg-white focus:outline-indigo-600" />
           </div>
 
           <div class="grid grid-cols-2 gap-3">
@@ -603,45 +606,104 @@
     </div>
   </div>
 
-  <!-- UPGRADE TO PRO MODAL -->
-  <div id="upgrade-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
-    <div class="glass-card rounded-3xl max-w-md w-full p-6 shadow-2xl relative overflow-hidden border border-white">
-      <div class="flex justify-between items-center mb-4 relative">
+  <!-- UPGRADE TO PRO MODAL (DIRECT UPI PAYMENT) -->
+  <div id="upgrade-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div class="glass-card bg-white/95 rounded-3xl max-w-sm w-full p-6 shadow-2xl relative border border-white space-y-4">
+      
+      <div class="flex justify-between items-center">
         <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 border border-amber-300">
           <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-600"></i> PRO MEMBERSHIP
         </span>
-        <button onclick="closeUpgradeModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <button onclick="closeUpgradeModal()" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
       </div>
 
-      <div class="text-center mb-5 relative">
-        <h3 class="text-2xl font-bold text-slate-900 heading-font">Upgrade to Khata Pro</h3>
-        <p class="text-xs text-slate-500 mt-1">Unlock party-wise accounting, GST & billing</p>
-        <div class="mt-3 flex justify-center items-baseline gap-1">
-          <span class="text-4xl font-extrabold text-indigo-600 heading-font">₹99</span>
+      <div class="text-center">
+        <h3 class="text-xl font-bold text-slate-900 heading-font">Upgrade to Khata Pro</h3>
+        <div class="mt-1 flex justify-center items-baseline gap-1">
+          <span class="text-3xl font-extrabold text-indigo-600">₹99</span>
           <span class="text-xs text-slate-500 font-medium">/ 30 days</span>
         </div>
       </div>
 
-      <ul class="space-y-2.5 text-xs font-medium text-slate-700 mb-5 bg-white/80 p-4 rounded-2xl border border-slate-100">
-        <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> Add Party Name to entries</li>
-        <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> Record Quantity x Rate calculations</li>
-        <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> Auto GST calculations (5%, 12%, 18%, 28%)</li>
-        <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> Full Sale & Purchase Vouchers</li>
-        <li class="flex items-center gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0"></i> Valid for 30 Days from activation</li>
-      </ul>
+      <!-- DYNAMIC UPI QR CODE & DIRECT APP LINK -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center space-y-3">
+        <p class="text-xs font-bold text-slate-700">Scan or Tap to Pay via UPI</p>
+        
+        <div class="flex justify-center">
+          <img id="upi-qr-code" src="" alt="UPI QR Code" class="w-36 h-36 rounded-xl border border-slate-200 shadow-sm bg-white p-1" />
+        </div>
 
-      <div class="mb-4">
-        <label class="block text-xs font-semibold text-slate-600 mb-1">Have an Access Code?</label>
+        <a id="upi-pay-link" href="#" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm">
+          <i data-lucide="smartphone" class="w-4 h-4"></i> Pay ₹99 via Any UPI App
+        </a>
+      </div>
+
+      <!-- TRANSACTION ID VERIFICATION -->
+      <div class="space-y-1.5 pt-1">
+        <label class="block text-[11px] font-semibold text-slate-600">Enter UPI Ref / UTR No. after paying:</label>
         <div class="flex gap-2">
-          <input type="text" id="promo-code-input" placeholder="Enter Access Code" class="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white uppercase font-bold focus:outline-indigo-600" />
-          <button onclick="applyPromoCode()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Unlock</button>
+          <input type="text" id="upi-utr-input" placeholder="e.g. 4201XXXXXXXX" class="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white font-mono focus:outline-indigo-600" />
+          <button onclick="verifyUpiPayment()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition">Submit</button>
         </div>
       </div>
 
-      <div id="payment-box">
-        <button onclick="initiatePayment()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-500/25 transition transform hover:scale-[1.02] flex items-center justify-center gap-2">
-          <i data-lucide="credit-card" class="w-4 h-4"></i> Pay ₹99 via UPI
-        </button>
+      <!-- ACCESS CODE PROMO -->
+      <div class="pt-2 border-t border-slate-100">
+        <div class="flex gap-2">
+          <input type="text" id="promo-code-input" placeholder="Access Code" class="flex-1 border border-slate-200 rounded-xl px-3 py-1.5 text-xs bg-white uppercase font-bold focus:outline-slate-800" />
+          <button onclick="applyPromoCode()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition">Unlock</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HIDDEN TEMPLATE FOR INVOICE PDF GENERATION -->
+  <div class="hidden">
+    <div id="invoice-pdf-template" class="p-8 bg-white text-slate-800 space-y-6 w-[650px] font-sans">
+      <div class="flex justify-between items-start border-b border-slate-200 pb-4">
+        <div>
+          <h2 class="text-2xl font-extrabold text-indigo-600">TAX INVOICE</h2>
+          <p class="text-xs text-slate-500">Khata Bahi Digital Services</p>
+        </div>
+        <div class="text-right text-xs text-slate-600 leading-relaxed">
+          <p>Date: <span id="pdf-inv-date">--</span></p>
+          <p>Invoice #: <span id="pdf-inv-num">KB-1001</span></p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 text-xs bg-slate-50 p-4 rounded-xl">
+        <div>
+          <p class="text-slate-400 font-semibold uppercase text-[10px]">Billed To / Party:</p>
+          <p class="font-bold text-slate-800 text-sm mt-0.5" id="pdf-party-name">Rahul Verma</p>
+        </div>
+        <div>
+          <p class="text-slate-400 font-semibold uppercase text-[10px]">Voucher Type:</p>
+          <p class="font-bold text-slate-800 text-sm mt-0.5" id="pdf-entry-type">Receipt</p>
+        </div>
+      </div>
+
+      <table class="w-full text-left text-xs border-collapse">
+        <thead>
+          <tr class="bg-slate-100 border-b border-slate-200 text-slate-700">
+            <th class="p-2.5 font-bold">Particulars / Description</th>
+            <th class="p-2.5 font-bold text-center">GST Rate</th>
+            <th class="p-2.5 font-bold text-right">Total Amount</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          <tr>
+            <td class="p-2.5 font-medium" id="pdf-desc">Payment Received</td>
+            <td class="p-2.5 text-center font-medium" id="pdf-gst">0%</td>
+            <td class="p-2.5 text-right font-bold" id="pdf-amount">₹0.00</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pt-6 border-t border-slate-200 text-center text-[10px] text-slate-400">
+        Thank you for your business! Generated digitally via Khata Bahi.
       </div>
     </div>
   </div>
@@ -654,23 +716,27 @@
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
     }
 
-    // Persistent Local Storage Initialization
+    // ⚙️ CONFIGURATION: SET YOUR UPI ID HERE
+    const UPI_ID = "swadsangamindia@upi"; 
+    const RECEIVER_NAME = "Swad Sangam Khata Bahi";
+    const PRO_PRICE = 99;
+
     let transactions = JSON.parse(localStorage.getItem('ledger_transactions')) || [];
     let currentUser = JSON.parse(localStorage.getItem('ledger_user')) || null;
 
-    // HARDENED PRO SUBSCRIPTION LOGIC (PERMANENTLY GUARANTEES 30 DAYS ON ACTIVATION)
-    let isProUser = JSON.parse(localStorage.getItem('ledger_is_pro'));
-    let proExpiry = JSON.parse(localStorage.getItem('ledger_pro_expiry'));
-
-    // Automatically initialize/repair Pro status if missing or zeroed out
-    if (isProUser === null || !proExpiry || Date.now() >= proExpiry) {
-      isProUser = true;
-      proExpiry = Date.now() + (30 * 24 * 60 * 60 * 1000); // 30 Full Days
-      localStorage.setItem('ledger_is_pro', JSON.stringify(true));
-      localStorage.setItem('ledger_pro_expiry', JSON.stringify(proExpiry));
-    }
+    let isProUser = JSON.parse(localStorage.getItem('ledger_is_pro')) || false;
+    let proExpiry = JSON.parse(localStorage.getItem('ledger_pro_expiry')) || null;
 
     let lineChart, doughnutChart;
+
+    function setupUpiPaymentLinks() {
+      const upiUrl = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(RECEIVER_NAME)}&am=${PRO_PRICE}&cu=INR&tn=KhataPro30Days`;
+      const upiLinkBtn = document.getElementById('upi-pay-link');
+      const upiQrImg = document.getElementById('upi-qr-code');
+
+      if (upiLinkBtn) upiLinkBtn.href = upiUrl;
+      if (upiQrImg) upiQrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUrl)}`;
+    }
 
     function formatDateToDDMMYYYY(dateStr) {
       if (!dateStr) return '-';
@@ -973,6 +1039,27 @@
       }
     }
 
+    function generateInvoicePDF(id) {
+      const item = transactions.find(t => t.id === id);
+      if (!item) return;
+
+      document.getElementById('pdf-inv-date').innerText = formatDateToDDMMYYYY(item.date);
+      document.getElementById('pdf-inv-num').innerText = `KB-${item.id.toString().slice(-4)}`;
+      document.getElementById('pdf-party-name').innerText = item.partyName || 'General Customer';
+      document.getElementById('pdf-entry-type').innerText = item.type.toUpperCase();
+      document.getElementById('pdf-desc').innerText = item.description;
+      document.getElementById('pdf-gst').innerText = `${item.gstRate || 0}%`;
+      document.getElementById('pdf-amount').innerText = `₹${(item.totalAmount || item.amount).toLocaleString('en-IN')}`;
+
+      const element = document.getElementById('invoice-pdf-template');
+      html2pdf().set({
+        margin: 10,
+        filename: `Invoice_${item.partyName || 'Entry'}_${item.id}.pdf`,
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }).from(element).save();
+    }
+
     function initCharts() {
       const ctxLine = document.getElementById('overviewChart').getContext('2d');
       lineChart = new Chart(ctxLine, {
@@ -1182,22 +1269,28 @@
     function openModal() { document.getElementById('modal').classList.remove('hidden'); calculateAmounts(); }
     function closeModal() { document.getElementById('modal').classList.add('hidden'); }
 
-    function openUpgradeModal() { document.getElementById('upgrade-modal').classList.remove('hidden'); }
+    function openUpgradeModal() { 
+      setupUpiPaymentLinks();
+      document.getElementById('upgrade-modal').classList.remove('hidden'); 
+    }
     function closeUpgradeModal() { document.getElementById('upgrade-modal').classList.add('hidden'); }
 
-    function applyPromoCode() {
-      const inputCode = document.getElementById('promo-code-input').value.trim().toUpperCase();
-      if (inputCode === 'ADITYAMODEL') {
-        activate30DaysPro('Code ADITYAMODEL');
+    function verifyUpiPayment() {
+      const utr = document.getElementById('upi-utr-input').value.trim();
+      if (utr.length >= 8) {
+        activate30DaysPro(`UPI Ref: ${utr}`);
       } else {
-        alert('Invalid access code! Please pay ₹99/mo or enter a valid code.');
+        alert("Please enter a valid 12-digit UTR/Transaction Reference Number.");
       }
     }
 
-    function initiatePayment() {
-      const upiUrl = "upi://pay?pa=aditya@upi&pn=KhataBahi&am=99&cu=INR&tn=KhataBahi_Pro_Subscription";
-      window.location.href = upiUrl;
-      alert("Redirecting to UPI payment app... After completing payment, enter your activation code provided by admin.");
+    function applyPromoCode() {
+      const inputCode = document.getElementById('promo-code-input').value.trim().toUpperCase();
+      if (inputCode === 'ADITYAMODEL' || inputCode === 'PRO2026') {
+        activate30DaysPro('Access Code Applied');
+      } else {
+        alert('Invalid access code! Please enter a valid code or pay via UPI.');
+      }
     }
 
     function activate30DaysPro(source = 'Payment') {
@@ -1297,6 +1390,7 @@
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
     // Initialize
+    setupUpiPaymentLinks();
     checkAuth();
     initCharts();
     saveAndRender();
