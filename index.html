@@ -496,37 +496,40 @@
 </div>
   
     
-    <!-- 7. SETTINGS VIEW -->
-    <div id="view-settings" class="tab-view hidden">
-      <div class="glass-card p-5 md:p-6 rounded-3xl max-w-xl">
-        <h3 class="font-bold text-slate-800 text-base md:text-lg heading-font mb-4">Settings & Membership</h3>
-        <div class="space-y-6">
-          <div class="flex items-center justify-between pb-4 border-b border-slate-200/80">
-            <div>
-              <h4 class="font-semibold text-sm text-slate-800">Current Plan</h4>
-              <p class="text-[11px] text-slate-500" id="settings-plan-desc">Free Plan (Receipt & Payment only)</p>
-            </div>
-            <button onclick="openUpgradeModal()" id="settings-upgrade-btn" class="bg-amber-500 hover:bg-amber-600 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-md shadow-amber-500/20">
-              <i data-lucide="crown" class="w-3.5 h-3.5"></i> Upgrade Pro (₹99)
-            </button>
-          </div>
-          <div class="flex items-center justify-between pb-4 border-b border-slate-200/80">
-            <div>
-              <h4 class="font-semibold text-sm text-slate-800">Clear Data</h4>
-              <p class="text-[11px] text-slate-500">Reset all vouchers and local data</p>
-            </div>
-            <button onclick="clearAllData()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 px-3.5 py-2 rounded-xl text-xs font-bold transition">Reset App</button>
-          </div>
-          <div class="flex items-center justify-between">
-            <div>
-              <h4 class="font-semibold text-sm text-slate-800">Export Transactions</h4>
-              <p class="text-[11px] text-slate-500">Download Khata Bahi with DD-MM-YYYY dates</p>
-            </div>
-            <button onclick="exportData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold transition">Export CSV</button>
-          </div>
-        </div>
+<!-- 7. SETTINGS VIEW -->
+<div id="view-settings" class="tab-view hidden space-y-6">
+  <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-lg border border-white/40 space-y-6 max-w-2xl">
+    <div>
+      <h3 class="text-xl font-bold text-slate-800">Settings</h3>
+      <p class="text-xs md:text-sm text-slate-500">System preferences and account plan details.</p>
+    </div>
+
+    <!-- Membership Plan Status -->
+    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 flex items-center justify-between">
+      <div>
+        <h4 class="font-bold text-slate-800 text-sm">Account Plan</h4>
+        <p id="settings-plan-desc" class="text-xs text-slate-500">Free Plan (Receipts & Payments)</p>
+      </div>
+      <button id="settings-upgrade-btn" onclick="openUpgradeModal()" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-sm">
+        <i data-lucide="crown" class="w-4 h-4"></i> Upgrade Pro (₹99)
+      </button>
+    </div>
+
+    <!-- App Data Management -->
+    <div class="space-y-3 pt-2">
+      <h4 class="font-bold text-slate-800 text-sm">Data & Backup</h4>
+      <div class="flex gap-3">
+        <button onclick="exportData()" class="px-4 py-2.5 rounded-xl bg-purple-50 text-purple-700 font-semibold text-xs border border-purple-200 hover:bg-purple-100 transition-all">
+          Export Backup (CSV)
+        </button>
+        <button onclick="clearAllData()" class="px-4 py-2.5 rounded-xl bg-red-50 text-red-600 font-semibold text-xs border border-red-200 hover:bg-red-100 transition-all">
+          Clear Local Cache
+        </button>
       </div>
     </div>
+  </div>
+</div>
+
 
     <!-- FLOATING ACTION BUTTON -->
     <button onclick="openModal()" class="fixed bottom-20 md:bottom-8 right-5 md:right-8 bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 text-white p-4 rounded-full shadow-2xl shadow-purple-500/40 transition transform hover:scale-110 active:scale-95 z-30 flex items-center justify-center border border-white">
