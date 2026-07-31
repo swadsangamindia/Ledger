@@ -658,16 +658,15 @@
     let transactions = JSON.parse(localStorage.getItem('ledger_transactions')) || [];
     let currentUser = JSON.parse(localStorage.getItem('ledger_user')) || null;
 
-    // PRO SUBSCRIPTION INITIALIZATION WITH AUTO 30-DAY DEFAULT
+    // HARDENED PRO SUBSCRIPTION LOGIC (PERMANENTLY GUARANTEES 30 DAYS ON ACTIVATION)
     let isProUser = JSON.parse(localStorage.getItem('ledger_is_pro'));
-    if (isProUser === null) {
-      isProUser = true; // Pro enabled by default on fresh start
-      localStorage.setItem('ledger_is_pro', JSON.stringify(true));
-    }
-
     let proExpiry = JSON.parse(localStorage.getItem('ledger_pro_expiry'));
-    if (!proExpiry && isProUser) {
-      proExpiry = Date.now() + (30 * 24 * 60 * 60 * 1000); // 30 days from now
+
+    // Automatically initialize/repair Pro status if missing or zeroed out
+    if (isProUser === null || !proExpiry || Date.now() >= proExpiry) {
+      isProUser = true;
+      proExpiry = Date.now() + (30 * 24 * 60 * 60 * 1000); // 30 Full Days
+      localStorage.setItem('ledger_is_pro', JSON.stringify(true));
       localStorage.setItem('ledger_pro_expiry', JSON.stringify(proExpiry));
     }
 
@@ -694,8 +693,7 @@
       if (!isProUser || !proExpiry) return 0;
       const diffMs = proExpiry - Date.now();
       if (diffMs <= 0) return 0;
-      const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-      return days;
+      return Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
     }
 
     function checkAuth() {
