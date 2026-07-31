@@ -9,116 +9,117 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- HTML2PDF Library (Required for PDF Invoice Generation) -->
+  <!-- HTML2PDF Library (Required for Invoice Generation) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  <!-- ⬇️ GOOGLE ADSENSE CODE ⬇️ -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8403484408535539"
-     crossorigin="anonymous"></script>
-  <!-- ⬆️ REPLACE WITH YOUR ADSENSE PUBLISHER ID ⬆️ -->
+  <!-- Google AdSense Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsense.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      background-color: #f1f5f9;
+    }
   </style>
 </head>
-<body class="bg-slate-100 min-h-screen text-slate-800 pb-12">
+<body class="min-h-screen pb-12 text-slate-800">
 
   <!-- TOP HEADER -->
-  <header class="bg-slate-900 text-white p-4 shadow-lg sticky top-0 z-40">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <div class="flex items-center gap-2">
-        <div class="bg-indigo-600 p-2 rounded-xl">
+  <header class="bg-[#0f172a] text-white p-4 shadow-md sticky top-0 z-40">
+    <div class="max-w-xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="bg-[#4f46e5] p-2.5 rounded-2xl flex items-center justify-center">
           <i data-lucide="book-open" class="w-6 h-6 text-white"></i>
         </div>
         <div>
-          <h1 class="text-lg font-bold leading-tight">Khata Bahi</h1>
-          <p class="text-xs text-slate-400">Digital Ledger & Invoicing</p>
+          <h1 class="text-xl font-bold leading-tight tracking-tight">Khata Bahi</h1>
+          <p class="text-xs text-slate-400 font-medium">Digital Ledger & Invoicing</p>
         </div>
       </div>
 
       <!-- PRO STATUS BUTTON -->
       <div id="pro-badge-container">
-        <button onclick="openUpgradeModal()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 transition">
-          <i data-lucide="crown" class="w-4 h-4"></i> Upgrade to Pro
+        <button onclick="openUpgradeModal()" class="bg-[#f59e0b] hover:bg-[#d97706] text-slate-950 text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-1.5 transition shadow-sm">
+          <i data-lucide="crown" class="w-4 h-4 fill-slate-950"></i> Upgrade to Pro
         </button>
       </div>
     </div>
   </header>
 
-  <!-- MAIN CONTAINER -->
-  <main class="max-w-4xl mx-auto p-4 space-y-6">
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-xl mx-auto p-4 space-y-5">
 
     <!-- DASHBOARD STATS -->
-    <div class="grid grid-cols-2 gap-4">
-      <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl">
-        <p class="text-xs text-emerald-600 font-medium">Total Income (Jama)</p>
-        <p class="text-2xl font-bold text-emerald-700 mt-1" id="total-jama">₹0</p>
+    <div class="grid grid-cols-2 gap-3.5">
+      <div class="bg-[#f0fdf4] border border-[#bbf7d0] p-4 rounded-2xl shadow-sm">
+        <p class="text-xs text-[#16a34a] font-medium">Total Income (Jama)</p>
+        <p class="text-2xl font-extrabold text-[#15803d] mt-1" id="total-jama">₹0</p>
       </div>
-      <div class="bg-rose-50 border border-rose-200 p-4 rounded-2xl">
-        <p class="text-xs text-rose-600 font-medium">Total Expense (Nikasi)</p>
-        <p class="text-2xl font-bold text-rose-700 mt-1" id="total-nikasi">₹0</p>
+      <div class="bg-[#fef2f2] border border-[#fecaca] p-4 rounded-2xl shadow-sm">
+        <p class="text-xs text-[#dc2626] font-medium">Total Expense (Nikasi)</p>
+        <p class="text-2xl font-extrabold text-[#b91c1c] mt-1" id="total-nikasi">₹0</p>
       </div>
     </div>
 
-    <!-- ENTRY FORM -->
-    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-      <h2 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
-        <i data-lucide="plus-circle" class="w-4 h-4 text-indigo-600"></i> Add New Transaction
+    <!-- ENTRY FORM CARD -->
+    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-4">
+      <h2 class="text-sm font-bold text-[#1e293b] flex items-center gap-2">
+        <i data-lucide="plus-circle" class="w-4.5 h-4.5 text-[#4f46e5]"></i> Add New Transaction
       </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <input type="text" id="party-name" placeholder="Party Name (Optional for Free)" class="border border-slate-200 p-2.5 rounded-xl text-xs focus:outline-indigo-600" />
-        <input type="text" id="desc-input" placeholder="Description / Particulars" class="border border-slate-200 p-2.5 rounded-xl text-xs focus:outline-indigo-600" />
-        <input type="number" id="amount-input" placeholder="Amount (₹)" class="border border-slate-200 p-2.5 rounded-xl text-xs focus:outline-indigo-600" />
+
+      <div class="space-y-3">
+        <input type="text" id="party-name" placeholder="Party Name (Optional for Free)" class="w-full border border-slate-200 p-3 rounded-2xl text-xs bg-slate-50/50 focus:bg-white focus:outline-[#4f46e5] transition" />
+        <input type="text" id="desc-input" placeholder="Description / Particulars" class="w-full border border-slate-200 p-3 rounded-2xl text-xs bg-slate-50/50 focus:bg-white focus:outline-[#4f46e5] transition" />
+        <input type="number" id="amount-input" placeholder="Amount (₹)" class="w-full border border-slate-200 p-3 rounded-2xl text-xs bg-slate-50/50 focus:bg-white focus:outline-[#4f46e5] transition" />
       </div>
 
-      <div class="flex gap-3 mt-4">
-        <button onclick="addEntry('jama')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1">
+      <div class="grid grid-cols-2 gap-3 pt-1">
+        <button onclick="addEntry('jama')" class="bg-[#059669] hover:bg-[#047857] text-white font-bold py-3 rounded-2xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
           <i data-lucide="arrow-down-left" class="w-4 h-4"></i> Cash In (Jama)
         </button>
-        <button onclick="addEntry('nikasi')" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1">
+        <button onclick="addEntry('nikasi')" class="bg-[#e11d48] hover:bg-[#be123c] text-white font-bold py-3 rounded-2xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
           <i data-lucide="arrow-up-right" class="w-4 h-4"></i> Cash Out (Nikasi)
         </button>
       </div>
     </div>
 
-    <!-- INVOICE PREVIEW SECTION -->
-    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-sm font-bold text-slate-700 flex items-center gap-2">
-          <i data-lucide="file-text" class="w-4 h-4 text-indigo-600"></i> Invoice Generator
+    <!-- INVOICE SECTION CARD -->
+    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-4">
+      <div class="flex justify-between items-center">
+        <h2 class="text-sm font-bold text-[#1e293b] flex items-center gap-2">
+          <i data-lucide="file-text" class="w-4.5 h-4.5 text-[#4f46e5]"></i> Invoice Generator
         </h2>
-        <button onclick="generateInvoicePDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+        <button onclick="generateInvoicePDF()" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-sm">
           <i data-lucide="download" class="w-4 h-4"></i> Download PDF
         </button>
       </div>
 
-      <!-- PDF TARGET ELEMENT -->
-      <div id="invoice-template" class="p-6 border border-slate-200 rounded-xl bg-white space-y-4">
-        <div class="flex justify-between items-start border-b border-slate-100 pb-4">
+      <!-- INVOICE PREVIEW CONTAINER FOR PDF -->
+      <div id="invoice-template" class="p-5 border border-slate-200 rounded-2xl bg-white space-y-4">
+        <div class="flex justify-between items-start border-b border-slate-100 pb-3">
           <div>
-            <h3 class="text-xl font-bold text-indigo-600">TAX INVOICE</h3>
-            <p class="text-xs text-slate-400 mt-0.5">Khata Bahi Digital Services</p>
+            <h3 class="text-lg font-extrabold text-[#4f46e5] tracking-wide">TAX INVOICE</h3>
+            <p class="text-[11px] text-slate-400">Khata Bahi Digital Services</p>
           </div>
-          <div class="text-right text-xs text-slate-500">
+          <div class="text-right text-[11px] text-slate-500 font-medium leading-relaxed">
             <p>Date: <span id="inv-date">--</span></p>
             <p>Invoice #: KB-<span id="inv-num">1001</span></p>
           </div>
         </div>
 
-        <!-- TRANSACTIONS LIST -->
+        <!-- TRANSACTIONS TABLE -->
         <table class="w-full text-left text-xs">
           <thead>
-            <tr class="bg-slate-50 border-b border-slate-200">
-              <th class="p-2 text-slate-600">Party / Details</th>
-              <th class="p-2 text-slate-600">Type</th>
-              <th class="p-2 text-right text-slate-600">Amount</th>
+            <tr class="bg-slate-50/80 text-slate-500 font-semibold border-b border-slate-100">
+              <th class="p-2">Party / Details</th>
+              <th class="p-2 text-center">Type</th>
+              <th class="p-2 text-right">Amount</th>
             </tr>
           </thead>
-          <tbody id="invoice-items">
+          <tbody id="invoice-items" class="divide-y divide-slate-100 text-slate-700">
             <tr>
-              <td colspan="3" class="p-4 text-center text-slate-400">No transactions recorded yet.</td>
+              <td colspan="3" class="p-6 text-center text-slate-400 font-medium">No transactions recorded yet.</td>
             </tr>
           </tbody>
         </table>
@@ -128,9 +129,10 @@
 
   <!-- UPGRADE TO PRO MODAL (DIRECT UPI PAYMENT) -->
   <div id="upgrade-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-    <div class="glass-card rounded-3xl max-w-md w-full p-6 shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center mb-3">
-        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 border border-amber-300">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl relative border border-slate-100 space-y-4">
+      
+      <div class="flex justify-between items-center">
+        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 border border-amber-200">
           <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-600"></i> PRO MEMBERSHIP
         </span>
         <button onclick="closeUpgradeModal()" class="text-slate-400 hover:text-slate-600">
@@ -138,53 +140,53 @@
         </button>
       </div>
 
-      <div class="text-center mb-4">
+      <div class="text-center">
         <h3 class="text-xl font-bold text-slate-900">Upgrade to Khata Pro</h3>
-        <div class="mt-2 flex justify-center items-baseline gap-1">
-          <span class="text-3xl font-extrabold text-indigo-600">₹99</span>
+        <div class="mt-1 flex justify-center items-baseline gap-1">
+          <span class="text-3xl font-extrabold text-[#4f46e5]">₹99</span>
           <span class="text-xs text-slate-500 font-medium">/ month</span>
         </div>
       </div>
 
-      <!-- DYNAMIC UPI QR & DIRECT BUTTON -->
-      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center mb-4 space-y-3">
+      <!-- DIRECT UPI PAYMENT BLOCK -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center space-y-3">
         <p class="text-xs font-bold text-slate-700">Scan or Tap to Pay via UPI</p>
         
-        <!-- Generated UPI QR Code Image -->
+        <!-- Dynamic QR Code -->
         <div class="flex justify-center">
           <img id="upi-qr-code" src="" alt="UPI QR Code" class="w-36 h-36 rounded-xl border border-slate-200 shadow-sm bg-white p-1" />
         </div>
 
-        <!-- Direct UPI Link Button (Opens GPay, PhonePe, Paytm on Mobile) -->
-        <a id="upi-pay-link" href="#" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2">
-          <i data-lucide="smartphone" class="w-4 h-4"></i> Pay ₹99 via Any UPI App
+        <!-- Direct UPI Link for PhonePe/GPay/Paytm -->
+        <a id="upi-pay-link" href="#" class="w-full bg-[#059669] hover:bg-[#047857] text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm">
+          <i data-lucide="smartphone" class="w-4 h-4"></i> Open UPI App (₹99)
         </a>
       </div>
 
-      <!-- VERIFY TRANSACTION ID -->
-      <div class="space-y-2 pt-2 border-t border-slate-200">
-        <label class="block text-xs font-semibold text-slate-700">Submit UPI Ref / UTR Number after Payment:</label>
+      <!-- TRANSACTION ID VERIFICATION -->
+      <div class="space-y-1.5 pt-1">
+        <label class="block text-[11px] font-semibold text-slate-600">Enter UPI Ref / UTR No. after paying:</label>
         <div class="flex gap-2">
-          <input type="text" id="upi-utr-input" placeholder="e.g. 4201XXXXXXXX" class="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white font-mono focus:outline-indigo-600" />
-          <button onclick="verifyUpiPayment()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Submit</button>
+          <input type="text" id="upi-utr-input" placeholder="e.g. 4201XXXXXXXX" class="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white font-mono focus:outline-[#4f46e5]" />
+          <button onclick="verifyUpiPayment()" class="bg-[#4f46e5] hover:bg-[#4338ca] text-white text-xs font-bold px-3.5 py-2 rounded-xl transition">Submit</button>
         </div>
       </div>
 
-      <!-- ACCESS CODE PROMO -->
-      <div class="mt-4 pt-3 border-t border-slate-200">
-        <label class="block text-xs font-semibold text-slate-600 mb-1">Have an Access Code?</label>
+      <!-- ACCESS CODE / PROMO -->
+      <div class="pt-2 border-t border-slate-100">
         <div class="flex gap-2">
-          <input type="text" id="promo-code-input" placeholder="Enter Access Code" class="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-xs bg-white uppercase font-bold focus:outline-indigo-600" />
-          <button onclick="applyPromoCode()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl transition">Unlock</button>
+          <input type="text" id="promo-code-input" placeholder="Access Code" class="flex-1 border border-slate-200 rounded-xl px-3 py-1.5 text-xs bg-white uppercase font-bold focus:outline-slate-800" />
+          <button onclick="applyPromoCode()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition">Unlock</button>
         </div>
       </div>
+
     </div>
   </div>
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    // ⚙️ CONFIGURATION: Set your UPI ID (VPA) and Receiver Name here
-    const UPI_ID = "swadsangamindia@upi"; // 👈 REPLACE WITH YOUR REAL UPI ID
+    // ⚙️ SET YOUR UPI ID AND NAME HERE
+    const UPI_ID = "swadsangamindia@upi"; // 👈 Your actual UPI ID
     const RECEIVER_NAME = "Swad Sangam Khata Bahi";
     const PRO_PRICE = 99;
 
@@ -199,33 +201,31 @@
       checkProStatus();
     });
 
-    // Generate Dynamic UPI QR & Deep Links
+    // Generate Dynamic UPI QR & Payment Link
     function setupUpiPaymentLinks() {
       const upiUrl = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(RECEIVER_NAME)}&am=${PRO_PRICE}&cu=INR&tn=KhataPro30Days`;
       
-      // Set Direct Pay Button Link
       document.getElementById('upi-pay-link').href = upiUrl;
 
-      // Generate Dynamic QR Code using QR Server API
       const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUrl)}`;
       document.getElementById('upi-qr-code').src = qrApiUrl;
     }
 
-    // Check Pro Status on Load
+    // Check Local Storage Pro Status
     function checkProStatus() {
       const proExpiry = localStorage.getItem('khata_pro_expiry');
       if (proExpiry && new Date().getTime() < parseInt(proExpiry)) {
         isProUser = true;
         document.getElementById('pro-badge-container').innerHTML = `
-          <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1">
-            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i> PRO ACTIVE
+          <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1 shadow-sm">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i> PRO ACTIVE
           </span>
         `;
         lucide.createIcons();
       }
     }
 
-    // Modal Handlers
+    // Modal Control
     function openUpgradeModal() {
       document.getElementById('upgrade-modal').classList.remove('hidden');
     }
@@ -234,13 +234,13 @@
       document.getElementById('upgrade-modal').classList.add('hidden');
     }
 
-    // Manual UPI UTR Verification
+    // Verify UTR Payment Submission
     function verifyUpiPayment() {
       const utr = document.getElementById('upi-utr-input').value.trim();
       if (utr.length >= 8) {
         activate30DaysPro(`UPI Ref: ${utr}`);
       } else {
-        alert("Please enter a valid 12-digit UPI UTR / Transaction ID from your payment receipt.");
+        alert("Please enter a valid UPI UTR / Transaction ID from your payment receipt.");
       }
     }
 
@@ -254,16 +254,16 @@
       }
     }
 
-    // Activate Pro Plan for 30 Days
+    // Activate 30-Day Pro Subscription
     function activate30DaysPro(reason) {
-      const expiry = new Date().getTime() + (30 * 24 * 60 * 60 * 1000); // 30 days in milliseconds
+      const expiry = new Date().getTime() + (30 * 24 * 60 * 60 * 1000);
       localStorage.setItem('khata_pro_expiry', expiry);
       alert("🎉 Pro Membership Activated for 30 Days!");
       closeUpgradeModal();
       location.reload();
     }
 
-    // Add Transaction Entry
+    // Add Entry
     function addEntry(type) {
       const party = document.getElementById('party-name').value.trim();
       const desc = document.getElementById('desc-input').value.trim();
@@ -291,7 +291,7 @@
       document.getElementById('amount-input').value = '';
     }
 
-    // Update UI Stats & Table
+    // Update Totals & Invoice Table
     function updateUI() {
       let jama = 0;
       let nikasi = 0;
@@ -306,7 +306,7 @@
         tr.className = 'border-b border-slate-100';
         tr.innerHTML = `
           <td class="p-2 font-medium text-slate-800">${t.party} - <span class="text-slate-500">${t.desc}</span></td>
-          <td class="p-2 font-bold ${t.type === 'jama' ? 'text-emerald-600' : 'text-rose-600'}">${t.type.toUpperCase()}</td>
+          <td class="p-2 text-center font-bold ${t.type === 'jama' ? 'text-emerald-600' : 'text-rose-600'}">${t.type.toUpperCase()}</td>
           <td class="p-2 text-right font-bold text-slate-800">₹${t.amount.toLocaleString('en-IN')}</td>
         `;
         tbody.appendChild(tr);
