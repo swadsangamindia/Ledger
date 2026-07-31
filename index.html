@@ -1434,137 +1434,54 @@ if (authForm) {
     checkAuth();
     initCharts();
     saveAndRender();
-  </script>
-  <!-- Firebase Google Login Script -->
+  // Combine all Firebase Auth & Sign-in logic here
+</script>
+
+<!-- Firebase Google Login Script -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-  // Replace with your Firebase configuration keys
+  // Your Firebase configuration
   const firebaseConfig = {
-  apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
-  authDomain: "ledger-expenses.firebaseapp.com",
-  projectId: "ledger-expenses",
-  storageBucket: "ledger-expenses.firebasestorage.app",
-  messagingSenderId: "746540126053",
-  appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
-};
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
 
+  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  window.loginWithGoogle = async function() {
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      alert("Sign in failed: " + error.message);
-    }
-  };
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const overlay = document.getElementById('auth-overlay');
-      if (overlay) overlay.classList.add('hidden');
-
-      const name = user.displayName || user.email.split('@')[0];
-      const email = user.email || '';
-      const photo = user.photoURL;
-      const initial = name.charAt(0).toUpperCase();
-
-      // Top Welcome Header
-      const heading = document.getElementById('welcome-heading');
-      if (heading) heading.innerHTML = `Hello, ${name} 👋`;
-
-      // Profile Name & Email
-      const profileName = document.getElementById('profile-display-name');
-      const profileEmail = document.getElementById('profile-display-email');
-      if (profileName) profileName.textContent = name;
-      if (profileEmail) profileEmail.textContent = email;
-
-      // Profile Picture Image load
-      const avatarImg = document.getElementById('profile-avatar-img');
-      const avatarInitial = document.getElementById('profile-avatar-initial');
-
-      if (photo && avatarImg) {
-        avatarImg.src = photo;
-        avatarImg.classList.remove('hidden');
-        if (avatarInitial) avatarInitial.classList.add('hidden');
-      } else if (avatarInitial) {
-        avatarInitial.textContent = initial;
-      }
-
-      // Input auto-fill
-      const nameInput = document.getElementById('business-name-input');
-      const emailInput = document.getElementById('business-email-input');
-      if (nameInput) nameInput.value = name;
-      if (emailInput) emailInput.value = email;
-
-    } else {
-      const overlay = document.getElementById('auth-overlay');
-      if (overlay) overlay.classList.remove('hidden');
-    }
-
-    // Function to switch between any tab view
-window.switchTab = function(tabName) {
-  // Hide all tab views
-  document.querySelectorAll('.tab-view').forEach(view => view.classList.add('hidden'));
-
-  // Normalize tab ID name (e.g., "All Entries" -> "view-all-entries")
-  const formattedId = `view-${tabName.toLowerCase().replace(/\s+/g, '-')}`;
-  const targetView = document.getElementById(formattedId) || document.getElementById(`view-${tabName}`);
-
-  if (targetView) {
-    targetView.classList.remove('hidden');
-  }
-};
-
-// Automatically connect every sidebar item to switchTab
-document.addEventListener('DOMContentLoaded', () => {
-  const sidebarItems = document.querySelectorAll('aside nav a, aside nav button, aside nav div');
-
-  sidebarItems.forEach(item => {
-    const text = item.textContent ? item.textContent.trim().toLowerCase() : '';
-    if (!text) return;
-
-    item.style.cursor = 'pointer';
-
-    // Special case for "Add Entry" to open modal if you have one
-    if (text === 'add entry') {
-      item.onclick = (e) => {
-        e.preventDefault();
-        if (typeof window.openModal === 'function') {
-          window.openModal();
-        }
-      };
-    } else {
-      item.onclick = (e) => {
-        e.preventDefault();
-        switchTab(text);
-      };
-    }
-  });
-
- // Define both function names so whichever one is clicked works!
+  // Attach Google Sign-In function directly to window so HTML button can trigger it
   window.handleGoogleSignIn = window.loginWithGoogle = async function() {
     try {
-      // If auth or googleProvider aren't imported at top, use window.auth / window.googleProvider
-      const authObj = typeof auth !== 'undefined' ? auth : window.auth;
-      const providerObj = typeof googleProvider !== 'undefined' ? googleProvider : window.googleProvider;
+      const result = await signInWithPopup(auth, provider);
+      console.log("Logged in successfully:", result.user);
 
-      const result = await signInWithPopup(authObj, providerObj);
-      console.log("Logged in:", result.user);
-
-      // Hide overlay when sign-in completes
+      // Hide auth overlay modal
       const authOverlay = document.getElementById('auth-overlay');
       if (authOverlay) {
         authOverlay.classList.add('hidden');
       }
     } catch (error) {
-      console.error("Authentication Error:", error);
-      alert("Sign-in error: " + error.message);
+      console.error("Sign-in Error:", error);
+      alert("Sign-in failed: " + error.message);
     }
   };
+
+  // Track authentication state
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log("User is signed in:", user.displayName);
+      const authOverlay = document.getElementById('auth-overlay');
+      if (authOverlay) authOverlay.classList.add('hidden');
+    }
+  });
 </script>
 </body>
 </html>
