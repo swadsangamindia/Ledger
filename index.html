@@ -1427,7 +1427,7 @@
   // 2. Auth Observer - Automatically Updates the Whole UI
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // Hide login overlay
+      // Hide auth overlay
       const overlay = document.getElementById('auth-overlay');
       if (overlay) overlay.classList.add('hidden');
 
@@ -1435,16 +1435,31 @@
       const email = user.email || '';
       const initial = name.charAt(0).toUpperCase();
 
-      // Update top header ("Hello, Babita Jha 👋")
+      // 1. Top Greeting Header
       const heading = document.getElementById('welcome-heading');
       if (heading) heading.innerHTML = `Hello, ${name} 👋`;
 
-      // Find profile card elements and update them directly
-      const allParagraphs = document.querySelectorAll('p');
-      allParagraphs.forEach(p => {
-        if (p.textContent.trim() === 'aditya') p.textContent = name;
-        if (p.textContent.trim() === 'aditya@example.com') p.textContent = email;
-      });
+      // 2. Profile Card Header
+      const profileName = document.getElementById('profile-display-name');
+      const profileEmail = document.getElementById('profile-display-email');
+      const profileAvatar = document.getElementById('profile-avatar');
+
+      if (profileName) profileName.textContent = name;
+      if (profileEmail) profileEmail.textContent = email;
+      if (profileAvatar) profileAvatar.textContent = initial;
+
+      // 3. Form Input Auto-fill
+      const nameInput = document.getElementById('business-name-input');
+      const emailInput = document.getElementById('business-email-input');
+
+      if (nameInput) nameInput.value = name;
+      if (emailInput) emailInput.value = email;
+
+    } else {
+      const overlay = document.getElementById('auth-overlay');
+      if (overlay) overlay.classList.remove('hidden');
+    }
+  });
 
       // Update avatar circle initial
       const avatarDivs = document.querySelectorAll('div');
