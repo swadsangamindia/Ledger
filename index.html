@@ -1502,6 +1502,35 @@ if (authForm) {
       // Update top header name if you have an ID like 'header-user-name'
       const userHeader = document.getElementById('user-header-name');
       if (userHeader) userHeader.innerText = user.displayName || 'Aditya';
+// Default user plan state (defaults to false / Free)
+let isProUser = localStorage.getItem('isProUser') === 'true';
+
+function updatePlanUI(isPro) {
+  const badge = document.getElementById('user-plan-badge');
+  const planDesc = document.getElementById('settings-plan-desc');
+  
+  if (isPro) {
+    if (badge) {
+      badge.innerText = "Pro (30d left)";
+      badge.className = "text-[10px] bg-amber-400/20 text-amber-700 font-bold px-2 py-0.5 rounded-full border border-amber-300/40";
+    }
+    if (planDesc) planDesc.innerText = "Pro Plan Active";
+  } else {
+    if (badge) {
+      badge.innerText = "Free Plan";
+      badge.className = "text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-full border border-slate-200";
+    }
+    if (planDesc) planDesc.innerText = "Free Plan (Receipt & Payment only)";
+  }
+}
+
+// Inside your existing onAuthStateChanged listener:
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // Sync Pro status for the logged-in user
+    updatePlanUI(isProUser);
+  }
+});
 
       // Update Profile View Elements
       const profileName = document.getElementById('profile-display-name');
