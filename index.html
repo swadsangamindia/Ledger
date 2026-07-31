@@ -1396,5 +1396,71 @@
     initCharts();
     saveAndRender();
   </script>
+  <!-- Firebase Google Login Script -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { 
+    getAuth, 
+    GoogleAuthProvider, 
+    signInWithPopup, 
+    signOut, 
+    onAuthStateChanged 
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  // PASTE YOUR COPIED FIREBASE CONFIG HERE:
+  const firebaseConfig = {
+    apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
+    authDomain: "ledger-expenses.firebaseapp.com",
+    projectId: "ledger-expenses",
+    storageBucket: "ledger-expenses.firebasestorage.app",
+    messagingSenderId: "746540126053",
+    appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
+  };
+
+  // Initialize Firebase & Auth
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // Login Function
+  window.loginWithGoogle = async function() {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      localStorage.setItem('ledger_user', JSON.stringify({
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+        uid: user.uid
+      }));
+      if (document.getElementById('auth-overlay')) {
+        document.getElementById('auth-overlay').classList.add('hidden');
+      }
+      location.reload();
+    } catch (error) {
+      alert("Sign in failed: " + error.message);
+    }
+  };
+
+  // Logout Function
+  window.logoutGoogle = async function() {
+    await signOut(auth);
+    localStorage.removeItem('ledger_user');
+    location.reload();
+  };
+
+  // Auth Observer
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      if (document.getElementById('auth-overlay')) {
+        document.getElementById('auth-overlay').classList.add('hidden');
+      }
+    } else {
+      if (document.getElementById('auth-overlay')) {
+        document.getElementById('auth-overlay').classList.remove('hidden');
+      }
+    }
+  });
+</script>
 </body>
 </html>
