@@ -1402,22 +1402,21 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-  // Your Firebase Configuration
+  // YOUR FIREBASE CONFIG HERE
   const firebaseConfig = {
-  apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
-  authDomain: "ledger-expenses.firebaseapp.com",
-  projectId: "ledger-expenses",
-  storageBucket: "ledger-expenses.firebasestorage.app",
-  messagingSenderId: "746540126053",
-  appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
-};
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  // 1. Google Login Function
+  // Attach to window so HTML onclick="loginWithGoogle()" can find it!
   window.loginWithGoogle = async function() {
     try {
       await signInWithPopup(auth, provider);
@@ -1426,10 +1425,10 @@
     }
   };
 
-  // 2. Auth Observer - Automatically Updates the Whole UI
+  // Auth state listener
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // Hide auth overlay
+      // Hide login overlay
       const overlay = document.getElementById('auth-overlay');
       if (overlay) overlay.classList.add('hidden');
 
@@ -1437,11 +1436,11 @@
       const email = user.email || '';
       const initial = name.charAt(0).toUpperCase();
 
-      // 1. Top Greeting Header
+      // Top greeting
       const heading = document.getElementById('welcome-heading');
       if (heading) heading.innerHTML = `Hello, ${name} 👋`;
 
-      // 2. Profile Card Header
+      // Profile details
       const profileName = document.getElementById('profile-display-name');
       const profileEmail = document.getElementById('profile-display-email');
       const profileAvatar = document.getElementById('profile-avatar');
@@ -1450,7 +1449,7 @@
       if (profileEmail) profileEmail.textContent = email;
       if (profileAvatar) profileAvatar.textContent = initial;
 
-      // 3. Form Input Auto-fill
+      // Inputs
       const nameInput = document.getElementById('business-name-input');
       const emailInput = document.getElementById('business-email-input');
 
@@ -1458,39 +1457,6 @@
       if (emailInput) emailInput.value = email;
 
     } else {
-      const overlay = document.getElementById('auth-overlay');
-      if (overlay) overlay.classList.remove('hidden');
-    }
-  });
-
-      // Update avatar circle initial
-      const avatarDivs = document.querySelectorAll('div');
-      avatarDivs.forEach(div => {
-        if (div.textContent.trim() === 'A' && div.classList.contains('rounded-full')) {
-          div.textContent = initial;
-        }
-      });
-
-      // Fill in input boxes
-      const inputs = document.querySelectorAll('input[type="text"]');
-      if (inputs.length >= 2) {
-        if (!inputs[0].value) inputs[0].value = name;
-        if (!inputs[1].value) inputs[1].value = email;
-      }
-
-      // Update profile display name and email automatically from Google login
-const profileName = document.getElementById('profile-display-name');
-const profileEmail = document.getElementById('profile-display-email');
-
-if (profileName) {
-  profileName.textContent = user.displayName || 'User';
-}
-if (profileEmail) {
-  profileEmail.textContent = user.email || '';
-}
-      
-    } else {
-      // Show login modal if logged out
       const overlay = document.getElementById('auth-overlay');
       if (overlay) overlay.classList.remove('hidden');
     }
