@@ -1545,27 +1545,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  import { auth, googleProvider } from './firebase-config.js'; // Adjust path if using inline config
-import { signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+ // Define both function names so whichever one is clicked works!
+  window.handleGoogleSignIn = window.loginWithGoogle = async function() {
+    try {
+      // If auth or googleProvider aren't imported at top, use window.auth / window.googleProvider
+      const authObj = typeof auth !== 'undefined' ? auth : window.auth;
+      const providerObj = typeof googleProvider !== 'undefined' ? googleProvider : window.googleProvider;
 
-// Define both function names so whichever one is clicked works!
-window.handleGoogleSignIn = window.loginWithGoogle = async function() {
-  try {
-    const result = await signInWithPopup(auth, googleProvider);
-    console.log("Logged in:", result.user);
+      const result = await signInWithPopup(authObj, providerObj);
+      console.log("Logged in:", result.user);
 
-    // Hide overlay when sign-in completes
-    const authOverlay = document.getElementById('auth-overlay');
-    if (authOverlay) {
-      authOverlay.classList.add('hidden');
+      // Hide overlay when sign-in completes
+      const authOverlay = document.getElementById('auth-overlay');
+      if (authOverlay) {
+        authOverlay.classList.add('hidden');
+      }
+    } catch (error) {
+      console.error("Authentication Error:", error);
+      alert("Sign-in error: " + error.message);
     }
-  } catch (error) {
-    console.error("Authentication Error:", error);
-    alert("Sign-in error: " + error.message);
-  }
-};
-  
-});
+  };
 </script>
 </body>
 </html>
