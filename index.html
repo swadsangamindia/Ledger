@@ -1397,84 +1397,72 @@
   </script>
   <!-- Firebase Google Login Script -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { 
-    getAuth, 
-    GoogleAuthProvider, 
-    signInWithPopup, 
-    signOut, 
-    onAuthStateChanged 
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-  // PASTE YOUR COPIED FIREBASE CONFIG HERE:
+  // Your Firebase Configuration
   const firebaseConfig = {
-    apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
-    authDomain: "ledger-expenses.firebaseapp.com",
-    projectId: "ledger-expenses",
-    storageBucket: "ledger-expenses.firebasestorage.app",
-    messagingSenderId: "746540126053",
-    appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
-  };
+  apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
+  authDomain: "ledger-expenses.firebaseapp.com",
+  projectId: "ledger-expenses",
+  storageBucket: "ledger-expenses.firebasestorage.app",
+  messagingSenderId: "746540126053",
+  appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
+};
 
-  // Initialize Firebase & Auth
+  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  // Login Function
+  // 1. Google Login Function
   window.loginWithGoogle = async function() {
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      localStorage.setItem('ledger_user', JSON.stringify({
-        name: user.displayName,
-        email: user.email,
-        photo: user.photoURL,
-        uid: user.uid
-      }));
-      if (document.getElementById('auth-overlay')) {
-        document.getElementById('auth-overlay').classList.add('hidden');
-      }
-      location.reload();
+      await signInWithPopup(auth, provider);
     } catch (error) {
       alert("Sign in failed: " + error.message);
     }
   };
 
-  // Logout Function
-  window.logoutGoogle = async function() {
-    await signOut(auth);
-    localStorage.removeItem('ledger_user');
-    location.reload();
-  };
-
-  // Auth Observer
-  // Auth Observer - Syncs Google Account Data Automatically
-  // Auth Observer - Updates heading dynamically
+  // 2. Auth Observer - Automatically Updates the Whole UI
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // 1. Hide login overlay
+      // Hide login overlay
       const overlay = document.getElementById('auth-overlay');
       if (overlay) overlay.classList.add('hidden');
 
-      // 2. Update the heading with the logged-in Google name
+      const name = user.displayName || user.email.split('@')[0];
+      const email = user.email || '';
+      const initial = name.charAt(0).toUpperCase();
+
+      // Update top header ("Hello, Babita Jha 👋")
       const heading = document.getElementById('welcome-heading');
-      if (heading) {
-        // Uses Google display name, or the first part of email if name isn't available
-        const userName = user.displayName || user.email.split('@')[0];
-        heading.innerHTML = `Hello, ${userName} 👋`;
+      if (heading) heading.innerHTML = `Hello, ${name} 👋`;
+
+      // Find profile card elements and update them directly
+      const allParagraphs = document.querySelectorAll('p');
+      allParagraphs.forEach(p => {
+        if (p.textContent.trim() === 'aditya') p.textContent = name;
+        if (p.textContent.trim() === 'aditya@example.com') p.textContent = email;
+      });
+
+      // Update avatar circle initial
+      const avatarDivs = document.querySelectorAll('div');
+      avatarDivs.forEach(div => {
+        if (div.textContent.trim() === 'A' && div.classList.contains('rounded-full')) {
+          div.textContent = initial;
+        }
+      });
+
+      // Fill in input boxes
+      const inputs = document.querySelectorAll('input[type="text"]');
+      if (inputs.length >= 2) {
+        if (!inputs[0].value) inputs[0].value = name;
+        if (!inputs[1].value) inputs[1].value = email;
       }
 
-      // 3. Save current user to localStorage
-      localStorage.setItem('ledger_user', JSON.stringify({
-        name: user.displayName || user.email.split('@')[0],
-        email: user.email,
-        photo: user.photoURL,
-        uid: user.uid
-      }));
-
     } else {
-      // Show login overlay if user is logged out
+      // Show login modal if logged out
       const overlay = document.getElementById('auth-overlay');
       if (overlay) overlay.classList.remove('hidden');
     }
