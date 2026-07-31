@@ -1449,15 +1449,43 @@
   };
 
   // Auth Observer
+  // Auth Observer - Syncs Google Account Data Automatically
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      if (document.getElementById('auth-overlay')) {
-        document.getElementById('auth-overlay').classList.add('hidden');
+      // 1. Hide the login pop-up card
+      const overlay = document.getElementById('auth-overlay');
+      if (overlay) overlay.classList.add('hidden');
+
+      // 2. Save actual Google user info to local storage
+      const userData = {
+        name: user.displayName || 'User',
+        email: user.email,
+        photo: user.photoURL,
+        uid: user.uid
+      };
+      localStorage.setItem('ledger_user', JSON.stringify(userData));
+
+      // 3. Update top greeting text (e.g. "Hello, Babita")
+      const userHeader = document.querySelector('h1');
+      if (userHeader && userHeader.innerText.includes('Hello')) {
+        userHeader.innerText = `Hello, ${user.displayName || 'User'} 👋`;
       }
+
+      // 4. Update Business Profile inputs with real Google details
+      const profileNameInput = document.querySelector('input[placeholder*="aditya"]') || document.querySelectorAll('input[type="text"]')[0];
+      const profileEmailInput = document.querySelector('input[placeholder*="example.com"]') || document.querySelectorAll('input[type="text"]')[1];
+
+      if (profileNameInput && !profileNameInput.value) {
+        profileNameInput.value = user.displayName || '';
+      }
+      if (profileEmailInput && !profileEmailInput.value) {
+        profileEmailInput.value = user.email || '';
+      }
+
     } else {
-      if (document.getElementById('auth-overlay')) {
-        document.getElementById('auth-overlay').classList.remove('hidden');
-      }
+      // Show login overlay if logged out
+      const overlay = document.getElementById('auth-overlay');
+      if (overlay) overlay.classList.remove('hidden');
     }
   });
 </script>
