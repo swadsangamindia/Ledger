@@ -840,17 +840,21 @@
       lucide.createIcons();
     }
 
-    document.getElementById('auth-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      currentUser = {
-        name: document.getElementById('auth-name').value || 'aditya',
-        email: document.getElementById('auth-email').value || 'aditya@example.com',
-        currency: '₹'
-      };
-      localStorage.setItem('ledger_user', JSON.stringify(currentUser));
-      checkAuth();
-      saveAndRender();
-    });
+  // ✅ Safe check so it won't crash if 'auth-form' isn't on the page
+const authForm = document.getElementById('auth-form');
+if (authForm) {
+  authForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    currentUser = {
+      name: document.getElementById('auth-name')?.value || 'aditya',
+      email: document.getElementById('auth-email')?.value || 'aditya@example.com',
+      currency: '₹'
+    };
+    localStorage.setItem('ledger_user', JSON.stringify(currentUser));
+    checkAuth();
+    saveAndRender();
+  });
+}
 
     function logout() {
       if (confirm('Switching profiles will clear local user login session. Continue?')) {
