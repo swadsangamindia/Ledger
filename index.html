@@ -415,15 +415,15 @@
       </div>
     </div>
 
-    <!-- 6. PROFILE VIEW -->
     <!-- Business Profile Settings Card -->
 <div class="bg-white/70 backdrop-blur-md rounded-2xl p-6 shadow-sm border border-white/20">
   <h3 class="text-lg font-bold text-slate-800 mb-4">Business Profile Settings</h3>
 
-  <!-- User Header Section -->
+  <!-- User Avatar & Details Header -->
   <div class="flex items-center gap-4 mb-6">
-    <div id="profile-avatar" class="w-12 h-12 rounded-full bg-purple-600 text-white font-bold text-xl flex items-center justify-center">
-      B
+    <div class="relative w-12 h-12 rounded-full bg-purple-600 text-white font-bold text-xl flex items-center justify-center overflow-hidden shadow-sm">
+      <span id="profile-avatar-initial">B</span>
+      <img id="profile-avatar-img" class="absolute inset-0 w-full h-full object-cover hidden" alt="Profile Picture" />
     </div>
     <div>
       <h4 id="profile-display-name" class="font-bold text-slate-800 text-sm md:text-base">User</h4>
