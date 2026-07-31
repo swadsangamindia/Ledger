@@ -1450,40 +1450,31 @@
 
   // Auth Observer
   // Auth Observer - Syncs Google Account Data Automatically
+  // Auth Observer - Updates heading dynamically
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // 1. Hide the login pop-up card
+      // 1. Hide login overlay
       const overlay = document.getElementById('auth-overlay');
       if (overlay) overlay.classList.add('hidden');
 
-      // 2. Save actual Google user info to local storage
-      const userData = {
-        name: user.displayName || 'User',
+      // 2. Update the heading with the logged-in Google name
+      const heading = document.getElementById('welcome-heading');
+      if (heading) {
+        // Uses Google display name, or the first part of email if name isn't available
+        const userName = user.displayName || user.email.split('@')[0];
+        heading.innerHTML = `Hello, ${userName} 👋`;
+      }
+
+      // 3. Save current user to localStorage
+      localStorage.setItem('ledger_user', JSON.stringify({
+        name: user.displayName || user.email.split('@')[0],
         email: user.email,
         photo: user.photoURL,
         uid: user.uid
-      };
-      localStorage.setItem('ledger_user', JSON.stringify(userData));
-
-      // 3. Update top greeting text (e.g. "Hello, Babita")
-      const userHeader = document.querySelector('h1');
-      if (userHeader && userHeader.innerText.includes('Hello')) {
-        userHeader.innerText = `Hello, ${user.displayName || 'User'} 👋`;
-      }
-
-      // 4. Update Business Profile inputs with real Google details
-      const profileNameInput = document.querySelector('input[placeholder*="aditya"]') || document.querySelectorAll('input[type="text"]')[0];
-      const profileEmailInput = document.querySelector('input[placeholder*="example.com"]') || document.querySelectorAll('input[type="text"]')[1];
-
-      if (profileNameInput && !profileNameInput.value) {
-        profileNameInput.value = user.displayName || '';
-      }
-      if (profileEmailInput && !profileEmailInput.value) {
-        profileEmailInput.value = user.email || '';
-      }
+      }));
 
     } else {
-      // Show login overlay if logged out
+      // Show login overlay if user is logged out
       const overlay = document.getElementById('auth-overlay');
       if (overlay) overlay.classList.remove('hidden');
     }
