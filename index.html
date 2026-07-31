@@ -1466,6 +1466,40 @@
       const overlay = document.getElementById('auth-overlay');
       if (overlay) overlay.classList.remove('hidden');
     }
+
+    // 1. Function to switch between Dashboard and Profile
+  window.switchTab = function(tabName) {
+    const dash = document.getElementById('view-dashboard');
+    const prof = document.getElementById('view-profile');
+
+    if (tabName === 'profile') {
+      if (dash) dash.classList.add('hidden');
+      if (prof) prof.classList.remove('hidden');
+    } else {
+      if (prof) prof.classList.add('hidden');
+      if (dash) dash.classList.remove('hidden');
+    }
+  };
+
+  // 2. Automatically attach click events to sidebar links so you don't have to edit HTML!
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('*').forEach(el => {
+      const text = el.textContent ? el.textContent.trim().toLowerCase() : '';
+      
+      // Auto-detect Profile button
+      if (text === 'profile' && (el.tagName === 'A' || el.tagName === 'DIV' || el.tagName === 'BUTTON')) {
+        el.style.cursor = 'pointer';
+        el.onclick = () => switchTab('profile');
+      }
+      
+      // Auto-detect Dashboard button
+      if (text === 'dashboard' && (el.tagName === 'A' || el.tagName === 'DIV' || el.tagName === 'BUTTON')) {
+        el.style.cursor = 'pointer';
+        el.onclick = () => switchTab('dashboard');
+      }
+    });
+  });
+    
   });
 </script>
 </body>
