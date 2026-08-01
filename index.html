@@ -1481,11 +1481,11 @@ if (authForm) {
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  // Attach Google Sign-In function directly to window
-// Attach Google Sign-In function directly to window
+  // Google Sign-In Function
 window.handleGoogleSignIn = window.loginWithGoogle = function() {
   signInWithRedirect(auth, provider);
 };
+
 
 
   // Function to update both top badge & settings UI
