@@ -1592,40 +1592,31 @@ onAuthStateChanged(auth, (user) => {
 });
 
   
-// Function to update UI with NEW glowing yellow badge color for Pro
+// Function to update ALL plan badges (Sidebar + Header + Settings)
 window.updatePlanUI = function(isPro) {
-  const topBadge = document.getElementById('user-plan-badge') || document.getElementById('plan-badge');
+  // Select all potential badge elements on the page
+  const badges = document.querySelectorAll('#user-plan-badge, #plan-badge, .plan-badge-tag');
   const planDesc = document.getElementById('settings-plan-desc');
   const upgradeBtn = document.getElementById('settings-upgrade-btn');
 
-  if (isPro) {
-    if (topBadge) {
-      topBadge.innerText = "Pro (30d left)";
-      // CHANGED: text-amber-300 (gold/amber text), bg-amber-400/10 (very transparent background), border-amber-300/20 (subtle gold border)
-      topBadge.className = "text-[10px] bg-amber-400/10 text-amber-300 font-bold px-2.5 py-1 rounded-full border border-amber-300/20 shadow-inner";
+  badges.forEach(badge => {
+    if (isPro) {
+      badge.innerText = "Pro (30d left)";
+      badge.className = "text-[10px] bg-amber-400/20 text-amber-300 font-bold px-2.5 py-1 rounded-full border border-amber-300/30 shadow-sm inline-block";
+    } else {
+      badge.innerText = "Free Plan";
+      badge.className = "text-[10px] bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-full border border-slate-200 inline-block";
     }
-    if (planDesc) {
-      planDesc.innerText = "Pro Membership Active (30 days remaining)";
-    }
-    if (upgradeBtn) {
-      upgradeBtn.style.display = "none";
-    }
-  } else {
-    if (topBadge) {
-      topBadge.innerText = "Free Plan";
-      // Standard Free Plan colors (Slate)
-      topBadge.className = "text-[10px] bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-full border border-slate-200";
-    }
-    if (planDesc) {
-      planDesc.innerText = "Free Plan (Receipt & Payment only)";
-    }
-    if (upgradeBtn) {
-      upgradeBtn.style.display = "block";
-    }
+  });
+
+  if (planDesc) {
+    planDesc.innerText = isPro ? "Pro Membership Active (30 days remaining)" : "Free Plan (Receipt & Payment only)";
+  }
+
+  if (upgradeBtn) {
+    upgradeBtn.style.display = isPro ? "none" : "block";
   }
 };
-
-
 
   // Track authentication state
   onAuthStateChanged(auth, (user) => {
