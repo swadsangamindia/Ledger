@@ -1557,46 +1557,10 @@ if (authForm) {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
-
-// Google Sign-In Function
-window.handleGoogleSignIn = window.loginWithGoogle = async function() {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    console.log("Logged in successfully:", result.user);
-
-    // Hide the login overlay modal immediately
-    const authOverlay = document.getElementById('auth-overlay');
-    if (authOverlay) {
-      authOverlay.classList.add('hidden');
-    }
-  } catch (error) {
-    console.error("Sign-in Error:", error);
-    alert("Sign-in failed: " + error.message);
-  }
-};
-
-// Automatically hide modal whenever Firebase detects a logged-in user
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const authOverlay = document.getElementById('auth-overlay');
-    if (authOverlay) {
-      authOverlay.classList.add('hidden');
-    }
-
-    // Update greeting name on header
-    const userHeader = document.getElementById('user-header-name');
-    if (userHeader) {
-      userHeader.innerText = user.displayName || 'Aditya';
-    }
-  }
-});
-
-  // Universal update function with text-fallback search
+// Function to update UI
 window.updatePlanUI = function(isPro) {
-  // 1. Target by IDs/Classes
   let badges = Array.from(document.querySelectorAll('#user-plan-badge, #plan-badge, .plan-badge-tag'));
 
-  // 2. Fallback: Search all spans/divs if no badges found by ID/class
   if (badges.length === 0) {
     badges = Array.from(document.querySelectorAll('span, div')).filter(el => {
       const txt = el.textContent.trim();
@@ -1604,7 +1568,6 @@ window.updatePlanUI = function(isPro) {
     });
   }
 
-  // Update every badge found
   badges.forEach(badge => {
     if (isPro) {
       badge.innerText = "Pro (30d left)";
@@ -1615,51 +1578,22 @@ window.updatePlanUI = function(isPro) {
     }
   });
 
-  // Update Settings Page text
   const planDesc = document.getElementById('settings-plan-desc');
   if (planDesc) {
     planDesc.innerText = isPro ? "Pro Membership Active (30 days remaining)" : "Free Plan (Receipt & Payment only)";
   }
 
-  // Update Upgrade Button visibility
   const upgradeBtn = document.getElementById('settings-upgrade-btn');
   if (upgradeBtn) {
     upgradeBtn.style.display = isPro ? "none" : "block";
   }
 };
 
-// Safe Auto-Run Helper
-function applySavedPlanState() {
+// AUTO-RUN ON PAGE LOAD
+document.addEventListener('DOMContentLoaded', () => {
   const isPro = localStorage.getItem('isProUser') === 'true';
   window.updatePlanUI(isPro);
-}
-
-// Trigger across all lifecycle events to ensure execution after DOM loads
-applySavedPlanState();
-document.addEventListener('DOMContentLoaded', applySavedPlanState);
-window.addEventListener('load', applySavedPlanState);
-  // Track authentication state
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      console.log("Logged in user:", user);
-      
-      const authOverlay = document.getElementById('auth-overlay');
-      if (authOverlay) authOverlay.classList.add('hidden');
-
-      // Update Header Greeting Name
-      const userHeader = document.getElementById('user-header-name');
-      if (userHeader) userHeader.innerText = user.displayName || 'Aditya';
-
-      // Sync Pro Plan Status
-      const isProUser = localStorage.getItem('isProUser') === 'true';
-      window.updatePlanUI(isProUser);
-    }
-  });
-
-  // Automatically check Pro status when page loads
-  if (localStorage.getItem('isProUser') === 'true') {
-    window.updatePlanUI(true);
-  }
+});
 </script>
 
 </body>
