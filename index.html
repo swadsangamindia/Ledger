@@ -1584,7 +1584,7 @@ if (authForm) {
       alert("Sign-in failed: " + error.message);
     }
   };
-// Updates UI based strictly on whether user is Pro or Free
+// Function to update UI with NEW glowing yellow badge color for Pro
 window.updatePlanUI = function(isPro) {
   const topBadge = document.getElementById('user-plan-badge') || document.getElementById('plan-badge');
   const planDesc = document.getElementById('settings-plan-desc');
@@ -1593,27 +1593,30 @@ window.updatePlanUI = function(isPro) {
   if (isPro) {
     if (topBadge) {
       topBadge.innerText = "Pro (30d left)";
-      topBadge.className = "text-[10px] bg-amber-400/20 text-amber-300 font-bold px-2.5 py-1 rounded-full border border-amber-400/30 shadow-sm";
+      // CHANGED: text-amber-300 (gold/amber text), bg-amber-400/10 (very transparent background), border-amber-300/20 (subtle gold border)
+      topBadge.className = "text-[10px] bg-amber-400/10 text-amber-300 font-bold px-2.5 py-1 rounded-full border border-amber-300/20 shadow-inner";
     }
     if (planDesc) {
       planDesc.innerText = "Pro Membership Active (30 days remaining)";
     }
     if (upgradeBtn) {
-      upgradeBtn.style.display = "none"; // Hide button if already upgraded
+      upgradeBtn.style.display = "none";
     }
   } else {
     if (topBadge) {
       topBadge.innerText = "Free Plan";
+      // Standard Free Plan colors (Slate)
       topBadge.className = "text-[10px] bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-full border border-slate-200";
     }
     if (planDesc) {
       planDesc.innerText = "Free Plan (Receipt & Payment only)";
     }
     if (upgradeBtn) {
-      upgradeBtn.style.display = "block"; // Show upgrade button for free users
+      upgradeBtn.style.display = "block";
     }
   }
 };
+
 
 
   // Track authentication state
