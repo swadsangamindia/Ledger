@@ -1581,14 +1581,14 @@ if (authForm) {
 
   // 2. FIREBASE SETUP (With safety checks)
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY", // <--- Put your actual Firebase API Key here!
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-
+  apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
+  authDomain: "ledger-expenses.firebaseapp.com",
+  projectId: "ledger-expenses",
+  storageBucket: "ledger-expenses.firebasestorage.app",
+  messagingSenderId: "746540126053",
+  appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
+};
+  
   try {
     const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
     const auth = getAuth(app);
