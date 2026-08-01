@@ -1461,28 +1461,27 @@ if (authForm) {
     saveAndRender();
   // Combine all Firebase Auth & Sign-in logic here
 </script>
-
 <!-- Firebase Google Login Script -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-  // Your Firebase configuration
+  // Your Firebase configuration (keep your actual keys here)
   const firebaseConfig = {
-  apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
-  authDomain: "ledger-expenses.firebaseapp.com",
-  projectId: "ledger-expenses",
-  storageBucket: "ledger-expenses.firebasestorage.app",
-  messagingSenderId: "746540126053",
-  appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
-};
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  // Attach Google Sign-In function directly to window so HTML button can trigger it
+  // Attach Google Sign-In function directly to window
   window.handleGoogleSignIn = window.loginWithGoogle = async function() {
     try {
       const result = await signInWithPopup(auth, provider);
@@ -1499,208 +1498,143 @@ if (authForm) {
     }
   };
 
-// Updates the badge to Pro when upgraded
-window.openUpgradeModal = function() {
-  const confirmUpgrade = confirm("Upgrade to Khata Bahi Pro for ₹99?");
-  if (confirmUpgrade) {
-    localStorage.setItem('isProUser', 'true');
-    
-    // Force update UI across the app
-    if (typeof updatePlanUI === 'function') {
-      updatePlanUI(true);
-    }
-    
-    // Fallback badge text change
-    const badge = document.getElementById('user-plan-badge') || document.querySelector('.bg-slate-100');
-    if (badge) {
-      badge.innerText = "Pro (30d left)";
-      badge.className = "text-[10px] bg-amber-400/20 text-amber-700 font-bold px-2 py-0.5 rounded-full border border-amber-300/40";
-    }
+  // Function to update both top badge & settings UI
+  window.updatePlanUI = function(isPro) {
+    const topBadge = document.getElementById('user-plan-badge') || 
+                     document.getElementById('plan-badge') ||
+                     Array.from(document.querySelectorAll('span, div')).find(el => el.textContent.trim() === 'Free Plan' || el.textContent.trim().startsWith('Pro'));
 
     const planDesc = document.getElementById('settings-plan-desc');
-    if (planDesc) planDesc.innerText = "Pro Plan Active";
 
-    alert("🎉 Welcome to Khata Bahi Pro!");
-  }
-};
+    if (isPro) {
+      if (topBadge) {
+        topBadge.innerText = "Pro (30d left)";
+        topBadge.className = "text-[10px] bg-amber-400/20 text-amber-700 font-bold px-2.5 py-1 rounded-full border border-amber-300/40 shadow-sm";
+      }
+      if (planDesc) {
+        planDesc.innerText = "Pro Membership Active (30 days remaining)";
+      }
+    } else {
+      if (topBadge) {
+        topBadge.innerText = "Free Plan";
+        topBadge.className = "text-[10px] bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-full border border-slate-200";
+      }
+      if (planDesc) {
+        planDesc.innerText = "Free Plan (Receipt & Payment only)";
+      }
+    }
+  };
 
-
-  
   // Track authentication state
-  // Update UI with Google User Data when logged in
   onAuthStateChanged(auth, (user) => {
     if (user) {
       console.log("Logged in user:", user);
-
-      // Hide auth overlay modal
+      
       const authOverlay = document.getElementById('auth-overlay');
       if (authOverlay) authOverlay.classList.add('hidden');
 
-      // Update Header Greeting
-      const headerName = document.querySelector('h1, .header-title'); 
-      // Update top header name if you have an ID like 'header-user-name'
+      // Update Header Greeting Name
       const userHeader = document.getElementById('user-header-name');
       if (userHeader) userHeader.innerText = user.displayName || 'Aditya';
-// Default user plan state (defaults to false / Free)
-let isProUser = localStorage.getItem('isProUser') === 'true';
 
-function updatePlanUI(isPro) {
-  const badge = document.getElementById('user-plan-badge');
-  const planDesc = document.getElementById('settings-plan-desc');
-  
-  if (isPro) {
-    if (badge) {
-      badge.innerText = "Pro (30d left)";
-      badge.className = "text-[10px] bg-amber-400/20 text-amber-700 font-bold px-2 py-0.5 rounded-full border border-amber-300/40";
-    }
-    if (planDesc) planDesc.innerText = "Pro Plan Active";
-  } else {
-    if (badge) {
-      badge.innerText = "Free Plan";
-      badge.className = "text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-full border border-slate-200";
-    }
-    if (planDesc) planDesc.innerText = "Free Plan (Receipt & Payment only)";
-  }
-}
-
-// Inside your existing onAuthStateChanged listener:
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // Sync Pro status for the logged-in user
-    updatePlanUI(isProUser);
-  }
-});
-// Open UPI Modal
-window.openUpgradeModal = function() {
-  const modal = document.getElementById('upgrade-modal');
-  if (modal) {
-    modal.classList.remove('hidden');
-  }
-};
-
-window.closeUpgradeModal = function() {
-  const modal = document.getElementById('upgrade-modal');
-  if (modal) {
-    modal.classList.add('hidden');
-  }
-};
-
-window.submitUPIPayment = function() {
-  const txnInput = document.getElementById('upi-txn-id');
-  const txnId = txnInput ? txnInput.value.trim() : '';
-  
-  if (!txnId || txnId.length < 6) {
-    alert("Please enter a valid Transaction ID / UTR number.");
-    return;
-  }
-
-  localStorage.setItem('isProUser', 'true');
-  localStorage.setItem('proTxnId', txnId);
-
-  if (typeof updatePlanUI === 'function') {
-    updatePlanUI(true);
-  }
-
-  window.closeUpgradeModal();
-  alert("🎉 Payment submitted! Khata Bahi Pro has been activated.");
-};
-
-
-
-      
-    
-      // Update Profile View Elements
-      const profileName = document.getElementById('profile-display-name');
-      const profileEmail = document.getElementById('profile-display-email');
-      const profileImg = document.getElementById('profile-avatar-img');
-      const profileInitial = document.getElementById('profile-avatar-initial');
-      const nameInput = document.getElementById('business-name-input');
-      const emailInput = document.getElementById('business-email-input');
-
-      if (profileName) profileName.innerText = user.displayName || 'User';
-      if (profileEmail) profileEmail.innerText = user.email || '';
-      if (nameInput && !nameInput.value) nameInput.value = user.displayName || '';
-      if (emailInput && !emailInput.value) emailInput.value = user.email || '';
-
-      // Update Google Avatar Photo
-      if (user.photoURL && profileImg) {
-        profileImg.src = user.photoURL;
-        profileImg.classList.remove('hidden');
-        if (profileInitial) profileInitial.classList.add('hidden');
-      }
+      // Sync Pro Plan Status
+      const isProUser = localStorage.getItem('isProUser') === 'true';
+      window.updatePlanUI(isProUser);
     }
   });
 
-  <!-- UPI PAYMENT MODAL -->
-<div id="upgrade-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-  <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 text-slate-800 relative">
-    
-    <!-- Close Button -->
-    <button onclick="closeUpgradeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold text-lg">✕</button>
-    
-    <div class="text-center space-y-2 mb-6">
-      <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-xl font-bold">👑</div>
-      <h3 class="text-xl font-bold text-slate-900">Upgrade to Khata Bahi Pro</h3>
-      <p class="text-xs text-slate-500">Pay ₹99 via UPI to unlock all premium features</p>
-    </div>
+  // Automatically check Pro status when page loads
+  if (localStorage.getItem('isProUser') === 'true') {
+    window.updatePlanUI(true);
+  }
+</script>
+<!-- Firebase Google Login Script -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    <!-- Payment Details -->
-    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-3 mb-6 text-center">
-      <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Pay via UPI ID</p>
-      <div class="bg-white px-3 py-2 rounded-xl border border-slate-200 font-mono text-sm text-slate-800 font-bold select-all flex justify-between items-center">
-        <span>yourupiid@upi</span>
-        <span class="text-[10px] text-amber-600 font-normal">Copy</span>
-      </div>
-      <p class="text-[11px] text-slate-400">Or scan UPI QR code in any UPI app (GPay, PhonePe, Paytm)</p>
-    </div>
+  // Your Firebase configuration (keep your actual keys here)
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
 
-    <!-- Form Inputs -->
-    <div class="space-y-4">
-      <div>
-        <label class="block text-xs font-semibold text-slate-700 mb-1">Enter Transaction ID / UTR Number</label>
-        <input type="text" id="upi-txn-id" placeholder="e.g. 423189028172" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
-      </div>
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
 
-      <button onclick="submitUPIPayment()" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 rounded-xl text-sm transition-all shadow-md">
-        Verify & Activate Pro
-      </button>
-    </div>
+  // Attach Google Sign-In function directly to window
+  window.handleGoogleSignIn = window.loginWithGoogle = async function() {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      console.log("Logged in successfully:", result.user);
 
-  </div>
-</div>
+      // Hide auth overlay modal
+      const authOverlay = document.getElementById('auth-overlay');
+      if (authOverlay) {
+        authOverlay.classList.add('hidden');
+      }
+    } catch (error) {
+      console.error("Sign-in Error:", error);
+      alert("Sign-in failed: " + error.message);
+    }
+  };
 
   // Function to update both top badge & settings UI
-window.updatePlanUI = function(isPro) {
-  const topBadge = document.getElementById('user-plan-badge') || 
-                   document.getElementById('plan-badge') ||
-                   Array.from(document.querySelectorAll('span, div')).find(el => el.textContent.trim() === 'Free Plan' || el.textContent.trim().startsWith('Pro'));
+  window.updatePlanUI = function(isPro) {
+    const topBadge = document.getElementById('user-plan-badge') || 
+                     document.getElementById('plan-badge') ||
+                     Array.from(document.querySelectorAll('span, div')).find(el => el.textContent.trim() === 'Free Plan' || el.textContent.trim().startsWith('Pro'));
 
-  const planDesc = document.getElementById('settings-plan-desc');
+    const planDesc = document.getElementById('settings-plan-desc');
 
-  if (isPro) {
-    if (topBadge) {
-      topBadge.innerText = "Pro (30d left)";
-      topBadge.className = "text-[10px] bg-amber-400/20 text-amber-700 font-bold px-2.5 py-1 rounded-full border border-amber-300/40 shadow-sm";
+    if (isPro) {
+      if (topBadge) {
+        topBadge.innerText = "Pro (30d left)";
+        topBadge.className = "text-[10px] bg-amber-400/20 text-amber-700 font-bold px-2.5 py-1 rounded-full border border-amber-300/40 shadow-sm";
+      }
+      if (planDesc) {
+        planDesc.innerText = "Pro Membership Active (30 days remaining)";
+      }
+    } else {
+      if (topBadge) {
+        topBadge.innerText = "Free Plan";
+        topBadge.className = "text-[10px] bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-full border border-slate-200";
+      }
+      if (planDesc) {
+        planDesc.innerText = "Free Plan (Receipt & Payment only)";
+      }
     }
-    if (planDesc) {
-      planDesc.innerText = "Pro Membership Active (30 days remaining)";
+  };
+
+  // Track authentication state
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log("Logged in user:", user);
+      
+      const authOverlay = document.getElementById('auth-overlay');
+      if (authOverlay) authOverlay.classList.add('hidden');
+
+      // Update Header Greeting Name
+      const userHeader = document.getElementById('user-header-name');
+      if (userHeader) userHeader.innerText = user.displayName || 'Aditya';
+
+      // Sync Pro Plan Status
+      const isProUser = localStorage.getItem('isProUser') === 'true';
+      window.updatePlanUI(isProUser);
     }
-  } else {
-    if (topBadge) {
-      topBadge.innerText = "Free Plan";
-      topBadge.className = "text-[10px] bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-full border border-slate-200";
-    }
-    if (planDesc) {
-      planDesc.innerText = "Free Plan (Receipt & Payment only)";
-    }
+  });
+
+  // Automatically check Pro status when page loads
+  if (localStorage.getItem('isProUser') === 'true') {
+    window.updatePlanUI(true);
   }
-};
-
-// Automatically run when page loads
-if (localStorage.getItem('isProUser') === 'true') {
-  window.updatePlanUI(true);
-}
-
 </script>
+
 </body>
 </html>
