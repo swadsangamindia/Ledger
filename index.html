@@ -1482,21 +1482,11 @@ if (authForm) {
   const provider = new GoogleAuthProvider();
 
   // Attach Google Sign-In function directly to window
-  window.handleGoogleSignIn = window.loginWithGoogle = async function() {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      console.log("Logged in successfully:", result.user);
+// Attach Google Sign-In function directly to window
+window.handleGoogleSignIn = window.loginWithGoogle = function() {
+  signInWithRedirect(auth, provider);
+};
 
-      // Hide auth overlay modal
-      const authOverlay = document.getElementById('auth-overlay');
-      if (authOverlay) {
-        authOverlay.classList.add('hidden');
-      }
-    } catch (error) {
-      console.error("Sign-in Error:", error);
-      alert("Sign-in failed: " + error.message);
-    }
-  };
 
   // Function to update both top badge & settings UI
   window.updatePlanUI = function(isPro) {
