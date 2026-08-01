@@ -4,15 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Khata Bahi - Digital Hisab, Ledger & PDF Tools</title>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8403484408535539"
-     crossorigin="anonymous"></script>
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Google Fonts: Quicksand & Jakarta -->
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
   
   <!-- UTILITY LIBRARIES -->
@@ -21,8 +20,9 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
-  <!-- Google AdSense Code -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsense.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <!-- Google AdSense Code (Replace ca-pub-XXXXXXXXXXXXXXXX with real ID when approved) -->
+ <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8403484408535539"
+     crossorigin="anonymous"></script>
 
   <!-- PWA Manifest & Theme -->
   <link rel="manifest" href="manifest.json">
@@ -40,7 +40,6 @@
     }
     .heading-font { font-family: 'Quicksand', sans-serif; }
     
-    /* Translucent Glass Cards */
     .glass-card {
       background: rgba(255, 255, 255, 0.65) !important;
       backdrop-filter: blur(18px);
@@ -49,7 +48,6 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     }
     
-    /* Transparent Glass Sidebar */
     .glass-sidebar {
       background: rgba(15, 17, 30, 0.45) !important;
       backdrop-filter: blur(25px);
@@ -74,30 +72,26 @@
 <body class="text-slate-800 flex flex-col md:flex-row h-screen overflow-hidden">
 
   <!-- GOOGLE AUTH OVERLAY MODAL -->
-<div id="auth-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 z-50">
-  <div class="glass-card rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-white text-center">
-    
-    <!-- Header Icon -->
-    <div class="bg-indigo-600 text-white p-3.5 rounded-2xl w-fit mx-auto mb-3 shadow-lg shadow-indigo-500/30">
-      <i data-lucide="book-open" class="w-8 h-8"></i>
+  <div id="auth-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 z-50">
+    <div class="glass-card rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-white text-center">
+      <div class="bg-indigo-600 text-white p-3.5 rounded-2xl w-fit mx-auto mb-3 shadow-lg shadow-indigo-500/30">
+        <i data-lucide="book-open" class="w-8 h-8"></i>
+      </div>
+      
+      <h2 class="text-2xl font-bold text-slate-900 heading-font">Welcome to Khata Bahi 🌸</h2>
+      <p class="text-xs text-slate-600 mt-1 mb-6 font-medium">Sign in with Google to manage your ledger</p>
+
+      <button id="google-signin-btn" onclick="handleGoogleSignIn()" class="w-full bg-white hover:bg-slate-50 text-slate-700 font-bold py-3.5 px-4 rounded-xl border border-slate-200 transition shadow-md flex items-center justify-center gap-3 active:scale-95">
+        <svg class="w-5 h-5" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        Sign in with Google
+      </button>
     </div>
-    
-    <h2 class="text-2xl font-bold text-slate-900 heading-font">Welcome to Khata Bahi 🌸</h2>
-    <p class="text-xs text-slate-600 mt-1 mb-6 font-medium">Sign in with Google to manage your ledger</p>
-
-    <!-- Google Sign-In Button -->
-    <button id="google-signin-btn" onclick="handleGoogleSignIn()" class="w-full bg-white hover:bg-slate-50 text-slate-700 font-bold py-3.5 px-4 rounded-xl border border-slate-200 transition shadow-md flex items-center justify-center gap-3 active:scale-95">
-      <svg class="w-5 h-5" viewBox="0 0 24 24">
-        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-      </svg>
-      Sign in with Google
-    </button>
-
   </div>
-</div>
 
   <!-- DESKTOP SIDEBAR -->
   <aside class="hidden md:flex w-64 glass-sidebar text-white flex-col justify-between p-5 shrink-0 z-20">
@@ -108,7 +102,7 @@
         </div>
         <div>
           <h1 class="text-white font-extrabold text-xl heading-font leading-none drop-shadow">Khata Bahi</h1>
-          <span class="text-[11px] text-amber-200 font-bold flex items-center gap-1 mt-1 bg-amber-400/20 px-2.5 py-0.5 rounded-full border border-amber-300/40 w-fit backdrop-blur-sm" id="sidebar-plan-badge">
+          <span class="plan-badge-tag text-[11px] text-amber-200 font-bold flex items-center gap-1 mt-1 bg-amber-400/20 px-2.5 py-0.5 rounded-full border border-amber-300/40 w-fit backdrop-blur-sm" id="sidebar-plan-badge">
             <i data-lucide="crown" class="w-3 h-3 text-amber-300"></i> Free Plan
           </span>
         </div>
@@ -174,9 +168,9 @@
       <span class="font-bold text-base heading-font text-white">Khata Bahi</span>
     </div>
     <div class="flex items-center gap-2">
-<span id="user-plan-badge" class="plan-badge-tag text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-full border border-slate-200">
-  Free Plan
-</span>
+      <span id="user-plan-badge" class="plan-badge-tag text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-full border border-slate-200">
+        Free Plan
+      </span>
 
       <div onclick="switchTab('profile')" class="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white flex items-center justify-center font-bold text-xs cursor-pointer shadow-md border border-white/40 overflow-hidden" id="mobile-header-avatar">
         A
@@ -190,7 +184,7 @@
     <!-- Top Header -->
     <header class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6 md:mb-8">
       <div>
-       <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 heading-font drop-shadow-sm" id="welcome-heading">Hello, <span id="user-header-name">User</span> 👋</h1>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 heading-font drop-shadow-sm" id="welcome-heading">Hello, <span id="user-header-name">User</span> 👋</h1>
         <p class="text-xs md:text-sm text-slate-700 font-bold drop-shadow-sm" id="header-subtitle">Digital Khata Bahi Overview</p>
       </div>
       <div class="flex items-center gap-2 sm:gap-3">
@@ -416,133 +410,86 @@
       </div>
     </div>
 
- <!-- Business Profile Settings View -->
-<!-- Business Profile Settings View -->
-<div id="view-profile" class="tab-view hidden bg-white/80 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-lg border border-white/40 space-y-6">
-  
-  <h3 class="text-xl font-bold text-slate-800">Business Profile Settings</h3>
+    <!-- 6. PROFILE VIEW -->
+    <div id="view-profile" class="tab-view hidden bg-white/80 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-lg border border-white/40 space-y-6">
+      <h3 class="text-xl font-bold text-slate-800">Business Profile Settings</h3>
 
-  <!-- User Avatar & Details -->
-  <div class="flex items-center gap-4 pb-4 border-b border-slate-200/60">
-    <div class="relative w-14 h-14 rounded-full bg-purple-600 text-white font-bold text-2xl flex items-center justify-center overflow-hidden shadow-sm shrink-0">
-      <span id="profile-avatar-initial">B</span>
-      <img id="profile-avatar-img" class="absolute inset-0 w-full h-full object-cover hidden" alt="Profile Picture" />
-    </div>
-    <div>
-      <h4 id="profile-display-name" class="font-bold text-slate-800 text-base md:text-lg">User</h4>
-      <p id="profile-display-email" class="text-xs md:text-sm text-slate-500"></p>
-    </div>
-  </div>
+      <div class="flex items-center gap-4 pb-4 border-b border-slate-200/60">
+        <div class="relative w-14 h-14 rounded-full bg-purple-600 text-white font-bold text-2xl flex items-center justify-center overflow-hidden shadow-sm shrink-0">
+          <span id="profile-avatar-large">A</span>
+        </div>
+        <div>
+          <h4 id="profile-display-name" class="font-bold text-slate-800 text-base md:text-lg">User</h4>
+          <p id="profile-display-email" class="text-xs md:text-sm text-slate-500"></p>
+        </div>
+      </div>
 
-  <!-- Profile Form Inputs -->
-  <div class="space-y-5">
-    <div>
-      <label class="block text-xs font-semibold text-slate-600 mb-1.5">Business Name</label>
-      <input type="text" id="business-name-input" class="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500 text-slate-800" placeholder="Enter Business Name" />
-    </div>
+      <div class="space-y-5">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5">Business / User Name</label>
+          <input type="text" id="profile-name-input" class="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500 text-slate-800" placeholder="Enter Business Name" />
+        </div>
 
-    <div>
-      <label class="block text-xs font-semibold text-slate-600 mb-1.5">Email</label>
-      <input type="email" id="business-email-input" class="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500 text-slate-800" placeholder="Enter Email" />
-    </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5">Email</label>
+          <input type="email" id="profile-email-input" class="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500 text-slate-800" placeholder="Enter Email" />
+        </div>
 
-    <div>
-      <label class="block text-xs font-semibold text-slate-600 mb-1.5">Currency Symbol</label>
-      <input type="text" id="business-currency-input" value="₹" class="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500 text-slate-800" />
-    </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5">Currency Symbol</label>
+          <input type="text" id="profile-currency-input" value="₹" class="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500 text-slate-800" />
+        </div>
 
-    <button id="save-profile-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-xl shadow-md transition-all cursor-pointer">
-      Save Changes
-    </button>
-  </div>
-  </div>
-    <!-- View: All Entries -->
-<div id="view-all-entries" class="tab-view hidden space-y-6">
-  <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 shadow-lg border border-white/40">
-    <h3 class="text-xl font-bold text-slate-800">All Entries</h3>
-    <p class="text-slate-600 mt-2">View and manage all your Khata Bahi transactions here.</p>
-  </div>
-</div>
-
-<!-- View: All Utility Tools -->
-<div id="view-all-utility-tools" class="tab-view hidden space-y-6">
-  <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 shadow-lg border border-white/40">
-    <h3 class="text-xl font-bold text-slate-800">Utility Tools</h3>
-    <p class="text-slate-600 mt-2">Access business tools and calculators here.</p>
-  </div>
-</div>
-
-<!-- View: Categories -->
-<div id="view-categories" class="tab-view hidden space-y-6">
-  <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 shadow-lg border border-white/40">
-    <h3 class="text-xl font-bold text-slate-800">Categories</h3>
-    <p class="text-slate-600 mt-2">Manage your entry categories here.</p>
-  </div>
-</div>
-
-<!-- View: Reports -->
-<div id="view-reports" class="tab-view hidden space-y-6">
-  <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 shadow-lg border border-white/40">
-    <h3 class="text-xl font-bold text-slate-800">Reports</h3>
-    <p class="text-slate-600 mt-2">Download and view analytical financial reports.</p>
-  </div>
-</div>
-
-
-    
-<!-- 7. SETTINGS VIEW -->
-<div id="view-settings" class="tab-view hidden space-y-6">
-  <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-lg border border-white/40 space-y-6 max-w-2xl">
-    <div>
-      <h3 class="text-xl font-bold text-slate-800">Settings</h3>
-      <p class="text-xs md:text-sm text-slate-500">System preferences and app settings.</p>
-    </div>
-    
-<!-- Membership Plan Status -->
-<div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-3">
-  <div>
-    <h4 class="font-bold text-slate-800 text-sm">Account Plan</h4>
-    <p id="settings-plan-desc" class="text-xs text-slate-500">Free Plan (Receipt & Payment only)</p>
-  </div>
-  <button id="settings-upgrade-btn" onclick="openUpgradeModal()" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm">
-    <i data-lucide="crown" class="w-4 h-4"></i> Upgrade Pro (₹99)
-  </button>
-</div>
-
-
-    <!-- App Data Management -->
-    <div class="space-y-3 pt-2">
-      <h4 class="font-bold text-slate-800 text-sm">Data & Backup</h4>
-      <div class="flex gap-3">
-        <button onclick="exportData()" class="px-4 py-2.5 rounded-xl bg-purple-50 text-purple-700 font-semibold text-xs border border-purple-200 hover:bg-purple-100 transition-all">
-          Export Backup (CSV)
-        </button>
-        <button onclick="clearAllData()" class="px-4 py-2.5 rounded-xl bg-red-50 text-red-600 font-semibold text-xs border border-red-200 hover:bg-red-100 transition-all">
-          Clear Local Cache
+        <button onclick="saveProfileChanges()" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-xl shadow-md transition-all cursor-pointer">
+          Save Changes
         </button>
       </div>
     </div>
-        <!-- ABOUT SECTION FOR GOOGLE ADSENSE -->
-    <div class="mt-6 pt-6 border-t border-slate-200 text-slate-600">
-      <h3 class="font-bold text-slate-800 text-sm mb-1">About Khata Bahi</h3>
-      <p class="text-xs mb-3 leading-relaxed">
-        Khata Bahi is a digital bookkeeping and ledger app designed to help small business owners, freelancers, and individuals track daily cash in and cash out records securely.
-      </p>
-      <h4 class="font-semibold text-xs text-slate-700 mb-1">Key Features:</h4>
-      <ul class="list-disc list-inside text-[11px] text-slate-500 space-y-1 mb-4">
-        <li>Real-time net balance and transaction ledger tracking</li>
-        <li>Export backup financial data to CSV files</li>
-        <li>Calculators and utility business tools</li>
-      </ul>
-      <div class="text-[11px] text-slate-400 pt-2 border-t border-slate-100">
-        © 2026 Khata Bahi · <a href="#" class="underline hover:text-slate-600">Privacy Policy</a> · <a href="#" class="underline hover:text-slate-600">Terms & Conditions</a>
+
+    <!-- 7. SETTINGS VIEW -->
+    <div id="view-settings" class="tab-view hidden space-y-6">
+      <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-lg border border-white/40 space-y-6 max-w-2xl">
+        <div>
+          <h3 class="text-xl font-bold text-slate-800">Settings</h3>
+          <p class="text-xs md:text-sm text-slate-500">System preferences and app settings.</p>
+        </div>
+        
+        <!-- Membership Plan Status -->
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-3">
+          <div>
+            <h4 class="font-bold text-slate-800 text-sm">Account Plan</h4>
+            <p id="settings-plan-desc" class="text-xs text-slate-500">Free Plan (Receipt & Payment only)</p>
+          </div>
+          <button id="settings-upgrade-btn" onclick="openUpgradeModal()" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm">
+            <i data-lucide="crown" class="w-4 h-4"></i> Upgrade Pro (₹99)
+          </button>
+        </div>
+
+        <!-- Data Management -->
+        <div class="space-y-3 pt-2">
+          <h4 class="font-bold text-slate-800 text-sm">Data & Backup</h4>
+          <div class="flex gap-3">
+            <button onclick="exportData()" class="px-4 py-2.5 rounded-xl bg-purple-50 text-purple-700 font-semibold text-xs border border-purple-200 hover:bg-purple-100 transition-all">
+              Export Backup (CSV)
+            </button>
+            <button onclick="clearAllData()" class="px-4 py-2.5 rounded-xl bg-red-50 text-red-600 font-semibold text-xs border border-red-200 hover:bg-red-100 transition-all">
+              Clear Local Cache
+            </button>
+          </div>
+        </div>
+
+        <!-- ABOUT SECTION -->
+        <div class="mt-6 pt-6 border-t border-slate-200 text-slate-600">
+          <h3 class="font-bold text-slate-800 text-sm mb-1">About Khata Bahi</h3>
+          <p class="text-xs mb-3 leading-relaxed">
+            Khata Bahi is a digital bookkeeping and ledger app designed to help small business owners, freelancers, and individuals track daily cash in and cash out records securely.
+          </p>
+          <div class="text-[11px] text-slate-400 pt-2 border-t border-slate-100">
+            © 2026 Khata Bahi · <a href="#" class="underline hover:text-slate-600">Privacy Policy</a> · <a href="#" class="underline hover:text-slate-600">Terms & Conditions</a>
+          </div>
+        </div>
       </div>
     </div>
-
-  </div>
-</div>
-
-
 
     <!-- FLOATING ACTION BUTTON -->
     <button onclick="openModal()" class="fixed bottom-20 md:bottom-8 right-5 md:right-8 bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 text-white p-4 rounded-full shadow-2xl shadow-purple-500/40 transition transform hover:scale-110 active:scale-95 z-30 flex items-center justify-center border border-white">
@@ -667,10 +614,9 @@
     </div>
   </div>
 
-  <!-- UPGRADE TO PRO MODAL (DIRECT UPI PAYMENT) -->
+  <!-- UPGRADE TO PRO MODAL -->
   <div id="upgrade-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
     <div class="glass-card bg-white/95 rounded-3xl max-w-sm w-full p-6 shadow-2xl relative border border-white space-y-4">
-      
       <div class="flex justify-between items-center">
         <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 border border-amber-300">
           <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-600"></i> PRO MEMBERSHIP
@@ -688,20 +634,16 @@
         </div>
       </div>
 
-      <!-- DYNAMIC UPI QR CODE & DIRECT APP LINK -->
       <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center space-y-3">
         <p class="text-xs font-bold text-slate-700">Scan or Tap to Pay via UPI</p>
-        
         <div class="flex justify-center">
           <img id="upi-qr-code" src="" alt="UPI QR Code" class="w-36 h-36 rounded-xl border border-slate-200 shadow-sm bg-white p-1" />
         </div>
-
         <a id="upi-pay-link" href="#" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm">
           <i data-lucide="smartphone" class="w-4 h-4"></i> Pay ₹99 via Any UPI App
         </a>
       </div>
 
-      <!-- TRANSACTION ID VERIFICATION -->
       <div class="space-y-1.5 pt-1">
         <label class="block text-[11px] font-semibold text-slate-600">Enter UPI Ref / UTR No. after paying:</label>
         <div class="flex gap-2">
@@ -710,18 +652,16 @@
         </div>
       </div>
 
-      <!-- ACCESS CODE PROMO -->
       <div class="pt-2 border-t border-slate-100">
         <div class="flex gap-2">
           <input type="text" id="promo-code-input" placeholder="Access Code" class="flex-1 border border-slate-200 rounded-xl px-3 py-1.5 text-xs bg-white uppercase font-bold focus:outline-slate-800" />
           <button onclick="applyPromoCode()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition">Unlock</button>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- HIDDEN TEMPLATE FOR INVOICE PDF GENERATION -->
+  <!-- HIDDEN PDF TEMPLATE -->
   <div class="hidden">
     <div id="invoice-pdf-template" class="p-8 bg-white text-slate-800 space-y-6 w-[650px] font-sans">
       <div class="flex justify-between items-start border-b border-slate-200 pb-4">
@@ -777,13 +717,12 @@
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
     }
 
-    // ⚙️ CONFIGURATION: SET YOUR UPI ID HERE
     const UPI_ID = "swadsangamindia@upi"; 
     const RECEIVER_NAME = "Swad Sangam Khata Bahi";
     const PRO_PRICE = 99;
 
     let transactions = JSON.parse(localStorage.getItem('ledger_transactions')) || [];
-    let currentUser = JSON.parse(localStorage.getItem('ledger_user')) || null;
+    let currentUser = JSON.parse(localStorage.getItem('ledger_user')) || { name: 'Aditya', email: 'aditya@example.com', currency: '₹' };
 
     let isProUser = JSON.parse(localStorage.getItem('ledger_is_pro')) || false;
     let proExpiry = JSON.parse(localStorage.getItem('ledger_pro_expiry')) || null;
@@ -825,12 +764,7 @@
 
     function checkAuth() {
       checkProSubscriptionExpiry();
-      if (!currentUser) {
-        document.getElementById('auth-overlay').classList.remove('hidden');
-      } else {
-        document.getElementById('auth-overlay').classList.add('hidden');
-        renderProfileInfo();
-      }
+      renderProfileInfo();
       updateProStatusUI();
     }
 
@@ -839,75 +773,66 @@
       const planDesc = document.getElementById('settings-plan-desc');
       const reportPlan = document.getElementById('report-plan-type');
       const proFields = document.getElementById('pro-fields-container');
-      
-      const mobileUpgradeBtn = document.getElementById('mobile-upgrade-btn');
       const settingsUpgradeBtn = document.getElementById('settings-upgrade-btn');
 
       const remainingDays = getProDaysRemaining();
 
       if (isProUser && remainingDays > 0) {
-        if (mobileUpgradeBtn) mobileUpgradeBtn.classList.add('hidden');
         if (settingsUpgradeBtn) settingsUpgradeBtn.classList.add('hidden');
-
         if(planBadge) planBadge.innerHTML = `<i data-lucide="crown" class="w-3 h-3 text-amber-300"></i> Pro (${remainingDays}d left)`;
         if(planDesc) planDesc.innerText = `Pro Membership Active (${remainingDays} days remaining)`;
         if(reportPlan) reportPlan.innerText = `Pro Tier ⭐ (${remainingDays}d left)`;
         if(proFields) proFields.classList.remove('hidden');
       } else {
-        if (mobileUpgradeBtn) mobileUpgradeBtn.classList.remove('hidden');
         if (settingsUpgradeBtn) settingsUpgradeBtn.classList.remove('hidden');
-
         if(planBadge) planBadge.innerHTML = `<i data-lucide="shield" class="w-3 h-3"></i> Free Plan`;
         if(planDesc) planDesc.innerText = `Free Plan (Receipt & Payment only)`;
         if(reportPlan) reportPlan.innerText = `Free Tier`;
         if(proFields) proFields.classList.add('hidden');
       }
+      if (window.updatePlanUI) window.updatePlanUI(isProUser);
       lucide.createIcons();
     }
-
-  // ✅ Safe check so it won't crash if 'auth-form' isn't on the page
-const authForm = document.getElementById('auth-form');
-if (authForm) {
-  authForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    currentUser = {
-      name: document.getElementById('auth-name')?.value || 'aditya',
-      email: document.getElementById('auth-email')?.value || 'aditya@example.com',
-      currency: '₹'
-    };
-    localStorage.setItem('ledger_user', JSON.stringify(currentUser));
-    checkAuth();
-    saveAndRender();
-  });
-}
 
     function logout() {
       if (confirm('Switching profiles will clear local user login session. Continue?')) {
         localStorage.removeItem('ledger_user');
         currentUser = null;
-        checkAuth();
+        document.getElementById('auth-overlay').classList.remove('hidden');
       }
     }
 
     function renderProfileInfo() {
       if (!currentUser) return;
-      const name = currentUser.name || 'aditya';
+      const name = currentUser.name || 'Aditya';
       const firstInitial = name.charAt(0).toUpperCase();
 
       document.getElementById('welcome-heading').innerText = `Hello, ${name} 👋`;
       document.getElementById('sidebar-user-name').innerText = name;
-      document.getElementById('sidebar-user-email').innerText = currentUser.email;
+      document.getElementById('sidebar-user-email').innerText = currentUser.email || '';
       document.getElementById('sidebar-initial-avatar').innerText = firstInitial;
       document.getElementById('header-avatar').innerText = firstInitial;
       document.getElementById('mobile-header-avatar').innerText = firstInitial;
       document.getElementById('profile-avatar-large').innerText = firstInitial;
 
       document.getElementById('profile-display-name').innerText = name;
-      document.getElementById('profile-display-email').innerText = currentUser.email;
+      document.getElementById('profile-display-email').innerText = currentUser.email || '';
 
       document.getElementById('profile-name-input').value = name;
-      document.getElementById('profile-email-input').value = currentUser.email;
+      document.getElementById('profile-email-input').value = currentUser.email || '';
       document.getElementById('profile-currency-input').value = currentUser.currency || '₹';
+    }
+
+    function saveProfileChanges() {
+      currentUser = {
+        name: document.getElementById('profile-name-input').value || 'Aditya',
+        email: document.getElementById('profile-email-input').value || '',
+        currency: document.getElementById('profile-currency-input').value || '₹'
+      };
+      localStorage.setItem('ledger_user', JSON.stringify(currentUser));
+      renderProfileInfo();
+      saveAndRender();
+      alert('Profile details saved successfully!');
     }
 
     function toggleVoucherFields() {
@@ -946,7 +871,9 @@ if (authForm) {
       document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('nav-active'));
 
-      document.getElementById(`view-${tab}`).classList.remove('hidden');
+      const targetView = document.getElementById(`view-${tab}`);
+      if(targetView) targetView.classList.remove('hidden');
+      
       const activeNavBtn = document.getElementById(`nav-${tab}`);
       if(activeNavBtn) activeNavBtn.classList.add('nav-active');
 
@@ -1175,51 +1102,34 @@ if (authForm) {
     }
 
     /* ---------------- CONVERSION UTILITIES ENGINE ---------------- */
-
-    // 1. Image to PDF
     function convertImageToPDF() {
       const fileInput = document.getElementById('img-file-input');
-      if (!fileInput.files || !fileInput.files.length) {
-        return alert('Please select an image file first!');
-      }
+      if (!fileInput.files || !fileInput.files.length) return alert('Please select an image file first!');
 
       const file = fileInput.files[0];
       const reader = new FileReader();
-
       reader.onload = function(e) {
         try {
           const imgData = e.target.result;
           const jsPDF = window.jspdf.jsPDF;
-          const doc = new jsPDF({
-            orientation: 'p',
-            unit: 'mm',
-            format: 'a4'
-          });
-
+          const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
           const imgProps = doc.getImageProperties(imgData);
           const pdfWidth = doc.internal.pageSize.getWidth();
           const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
           doc.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
           doc.save(`Image_Converted_${Date.now()}.pdf`);
-        } catch (err) {
-          alert('Error generating PDF: ' + err.message);
-        }
+        } catch (err) { alert('Error generating PDF: ' + err.message); }
       };
-
       reader.readAsDataURL(file);
     }
 
-    // 2. Excel to PDF
     function convertExcelToPDF() {
       const fileInput = document.getElementById('excel-file-input');
-      if (!fileInput.files || !fileInput.files.length) {
-        return alert('Please select an Excel file (.xlsx or .xls) first!');
-      }
+      if (!fileInput.files || !fileInput.files.length) return alert('Please select an Excel file (.xlsx or .xls) first!');
 
       const file = fileInput.files[0];
       const reader = new FileReader();
-
       reader.onload = function(e) {
         try {
           const data = new Uint8Array(e.target.result);
@@ -1228,37 +1138,20 @@ if (authForm) {
           const htmlTable = XLSX.utils.sheet_to_html(firstSheet);
 
           const tempContainer = document.createElement('div');
-          tempContainer.innerHTML = `
-            <div style="padding: 20px; font-family: sans-serif;">
-              <h2 style="color: #4f46e5; margin-bottom: 10px;">Khata Bahi - Excel Document Export</h2>
-              ${htmlTable}
-            </div>
-          `;
+          tempContainer.innerHTML = `<div style="padding: 20px; font-family: sans-serif;"><h2 style="color: #4f46e5; margin-bottom: 10px;">Khata Bahi - Excel Export</h2>${htmlTable}</div>`;
 
-          html2pdf().from(tempContainer).set({
-            margin: 10,
-            filename: `Excel_Export_${Date.now()}.pdf`,
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-          }).save();
-        } catch (err) {
-          alert('Error parsing Excel sheet: ' + err.message);
-        }
+          html2pdf().from(tempContainer).set({ margin: 10, filename: `Excel_Export_${Date.now()}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } }).save();
+        } catch (err) { alert('Error parsing Excel sheet: ' + err.message); }
       };
-
       reader.readAsArrayBuffer(file);
     }
 
-    // 3. PDF to Excel
     async function convertPdfToExcel() {
       const fileInput = document.getElementById('pdf-to-excel-input');
-      if (!fileInput.files || !fileInput.files.length) {
-        return alert('Please select a PDF file first!');
-      }
+      if (!fileInput.files || !fileInput.files.length) return alert('Please select a PDF file first!');
 
       const file = fileInput.files[0];
       const reader = new FileReader();
-
       reader.onload = async function() {
         try {
           const typedarray = new Uint8Array(this.result);
@@ -1269,14 +1162,10 @@ if (authForm) {
             const page = await pdf.getPage(i);
             const textContent = await page.getTextContent();
             let pageText = textContent.items.map(item => item.str);
-            
             let row = [];
             pageText.forEach((text, index) => {
               row.push(text);
-              if ((index + 1) % 4 === 0) {
-                extractedRows.push([...row]);
-                row = [];
-              }
+              if ((index + 1) % 4 === 0) { extractedRows.push([...row]); row = []; }
             });
             if (row.length > 0) extractedRows.push(row);
           }
@@ -1285,30 +1174,22 @@ if (authForm) {
           const wb = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, "PDF_Export");
           XLSX.writeFile(wb, `PDF_Converted_${Date.now()}.xlsx`);
-        } catch (err) {
-          alert('Error converting PDF to Excel: ' + err.message);
-        }
+        } catch (err) { alert('Error converting PDF to Excel: ' + err.message); }
       };
-
       reader.readAsArrayBuffer(file);
     }
 
-    // 4. PDF to Image
     async function convertPdfToImage() {
       const fileInput = document.getElementById('pdf-to-img-input');
-      if (!fileInput.files || !fileInput.files.length) {
-        return alert('Please select a PDF file first!');
-      }
+      if (!fileInput.files || !fileInput.files.length) return alert('Please select a PDF file first!');
 
       const file = fileInput.files[0];
       const reader = new FileReader();
-
       reader.onload = async function() {
         try {
           const typedarray = new Uint8Array(this.result);
           const pdf = await pdfjsLib.getDocument(typedarray).promise;
           const page = await pdf.getPage(1);
-
           const viewport = page.getViewport({ scale: 1.5 });
           const canvas = document.createElement('canvas');
           const context = canvas.getContext('2d');
@@ -1322,11 +1203,8 @@ if (authForm) {
           a.href = imageURL;
           a.download = `PDF_Page1_${Date.now()}.png`;
           a.click();
-        } catch (err) {
-          alert('Error rendering PDF to Image: ' + err.message);
-        }
+        } catch (err) { alert('Error rendering PDF to Image: ' + err.message); }
       };
-
       reader.readAsArrayBuffer(file);
     }
 
@@ -1345,7 +1223,7 @@ if (authForm) {
       if (utr.length >= 8) {
         activate30DaysPro(`UPI Ref: ${utr}`);
       } else {
-        alert("Please enter a valid 12-digit UTR/Transaction Reference Number.");
+        alert("Please enter a valid UTR/Transaction Reference Number.");
       }
     }
 
@@ -1354,7 +1232,7 @@ if (authForm) {
       if (inputCode === 'ADITYAMODEL' || inputCode === 'PRO2026') {
         activate30DaysPro('Access Code Applied');
       } else {
-        alert('Invalid access code! Please enter a valid code or pay via UPI.');
+        alert('Invalid access code!');
       }
     }
 
@@ -1367,6 +1245,7 @@ if (authForm) {
 
       localStorage.setItem('ledger_is_pro', JSON.stringify(true));
       localStorage.setItem('ledger_pro_expiry', JSON.stringify(expiryTimestamp));
+      localStorage.setItem('isProUser', 'true');
 
       updateProStatusUI();
       closeUpgradeModal();
@@ -1430,10 +1309,7 @@ if (authForm) {
     }
 
     function exportData() {
-      if (transactions.length === 0) {
-        alert("No entries to export!");
-        return;
-      }
+      if (transactions.length === 0) return alert("No entries to export!");
 
       let csvContent = "Date (DD-MM-YYYY),Voucher Type,Party Name,Description,Quantity,Rate per Unit,GST Rate,GST Amount,Total Amount,Payment Mode\n";
 
@@ -1454,20 +1330,19 @@ if (authForm) {
 
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
-    // Initialize
     setupUpiPaymentLinks();
     checkAuth();
     initCharts();
     saveAndRender();
-  // Combine all Firebase Auth & Sign-in logic here
-</script>
-<!-- Firebase Google Login Script -->
-<script type="module">
-  import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithRedirect, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  </script>
 
-  // PASTE YOUR REAL FIREBASE KEYS HERE:
-  const firebaseConfig = {
+  <!-- FIREBASE & AUTH MODULE -->
+  <script type="module">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithRedirect, signInWithPopup, getRedirectResult, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    // Single Firebase Configuration
+    const firebaseConfig = {
   apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
   authDomain: "ledger-expenses.firebaseapp.com",
   projectId: "ledger-expenses",
@@ -1476,144 +1351,76 @@ if (authForm) {
   appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
 };
 
-  // Prevent duplicate app initialization
-  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
-
-  // Google Sign-In Function
-  window.handleGoogleSignIn = window.loginWithGoogle = function() {
-    signInWithRedirect(auth, provider);
-  };
-
-
-
-  // Function to update both top badge & settings UI
-  window.updatePlanUI = function(isPro) {
-    const topBadge = document.getElementById('user-plan-badge') || 
-                     document.getElementById('plan-badge') ||
-                     Array.from(document.querySelectorAll('span, div')).find(el => el.textContent.trim() === 'Free Plan' || el.textContent.trim().startsWith('Pro'));
-
-    const planDesc = document.getElementById('settings-plan-desc');
-
-    if (isPro) {
-      if (topBadge) {
-        topBadge.innerText = "Pro (30d left)";
-        topBadge.className = "text-[10px] bg-amber-400/20 text-amber-700 font-bold px-2.5 py-1 rounded-full border border-amber-300/40 shadow-sm";
-      }
-      if (planDesc) {
-        planDesc.innerText = "Pro Membership Active (30 days remaining)";
-      }
-    } else {
-      if (topBadge) {
-        topBadge.innerText = "Free Plan";
-        topBadge.className = "text-[10px] bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-full border border-slate-200";
-      }
-      if (planDesc) {
-        planDesc.innerText = "Free Plan (Receipt & Payment only)";
-      }
-    }
-  };
-
-  // Track authentication state
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      console.log("Logged in user:", user);
-      
-      const authOverlay = document.getElementById('auth-overlay');
-      if (authOverlay) authOverlay.classList.add('hidden');
-
-      // Update Header Greeting Name
-      const userHeader = document.getElementById('user-header-name');
-      if (userHeader) userHeader.innerText = user.displayName || 'Aditya';
-
-      // Sync Pro Plan Status
-      const isProUser = localStorage.getItem('isProUser') === 'true';
-      window.updatePlanUI(isProUser);
-    }
-  });
-
-  // Automatically check Pro status when page loads
-  if (localStorage.getItem('isProUser') === 'true') {
-    window.updatePlanUI(true);
-  }
-</script>
-<!-- Clean, Fail-Proof App Script -->
-<script type="module">
-  import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithRedirect, signInWithPopup, getRedirectResult, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-  // 1. SAFE PLAN UI UPDATER (Runs regardless of Firebase)
-  window.updatePlanUI = function(isPro) {
-    // Find all badge tags on screen (Sidebar, Top Bar, Settings)
-    const allBadges = document.querySelectorAll('#user-plan-badge, #plan-badge, .plan-badge-tag');
-    
-    allBadges.forEach(badge => {
-      if (isPro) {
-        badge.innerText = "Pro (30d left)";
-        badge.style.color = "#fde047"; // Bright Yellow/Gold Text
-        badge.style.backgroundColor = "rgba(251, 191, 36, 0.15)"; // Soft Transparent Amber
-        badge.style.borderColor = "rgba(251, 191, 36, 0.3)";
-      } else {
-        badge.innerText = "Free Plan";
-        badge.style.color = "#475569";
-        badge.style.backgroundColor = "#f1f5f9";
-        badge.style.borderColor = "#e2e8f0";
-      }
-    });
-
-    // Settings text update
-    const planDesc = document.getElementById('settings-plan-desc');
-    if (planDesc) {
-      planDesc.innerText = isPro ? "Pro Membership Active (30 days remaining)" : "Free Plan (Receipt & Payment only)";
-    }
-
-    // Upgrade button toggle
-    const upgradeBtn = document.getElementById('settings-upgrade-btn');
-    if (upgradeBtn) {
-      upgradeBtn.style.display = isPro ? "none" : "block";
-    }
-  };
-
-  // Run Plan UI update immediately when page loads
-  const currentProStatus = localStorage.getItem('isProUser') === 'true';
-  window.updatePlanUI(currentProStatus);
-
-  // 2. FIREBASE SETUP (With safety checks)
-  const firebaseConfig = {
-  apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
-  authDomain: "ledger-expenses.firebaseapp.com",
-  projectId: "ledger-expenses",
-  storageBucket: "ledger-expenses.firebasestorage.app",
-  messagingSenderId: "746540126053",
-  appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
-};
-  
-  try {
     const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // Google Login Function
+    // Google Sign-In Function (Mobile redirect + Desktop Popup)
     window.handleGoogleSignIn = window.loginWithGoogle = async function() {
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      if (isMobile) {
-        await signInWithRedirect(auth, provider);
-      } else {
-        await signInWithPopup(auth, provider);
+      try {
+        if (isMobile) {
+          await signInWithRedirect(auth, provider);
+        } else {
+          const res = await signInWithPopup(auth, provider);
+          if (res.user) handleAuthUser(res.user);
+        }
+      } catch (err) {
+        console.error("Login failed:", err);
       }
     };
 
+    // Global Plan Badge Updater
+    window.updatePlanUI = function(isPro) {
+      const allBadges = document.querySelectorAll('#user-plan-badge, #plan-badge, #sidebar-plan-badge, .plan-badge-tag');
+      
+      allBadges.forEach(badge => {
+        if (isPro) {
+          badge.innerText = "Pro (30d left)";
+          badge.style.color = "#fde047";
+          badge.style.backgroundColor = "rgba(251, 191, 36, 0.15)";
+          badge.style.borderColor = "rgba(251, 191, 36, 0.3)";
+        } else {
+          badge.innerText = "Free Plan";
+          badge.style.color = "#475569";
+          badge.style.backgroundColor = "#f1f5f9";
+          badge.style.borderColor = "#e2e8f0";
+        }
+      });
+
+      const planDesc = document.getElementById('settings-plan-desc');
+      if (planDesc) {
+        planDesc.innerText = isPro ? "Pro Membership Active (30 days remaining)" : "Free Plan (Receipt & Payment only)";
+      }
+    };
+
+    function handleAuthUser(user) {
+      const authOverlay = document.getElementById('auth-overlay');
+      if (authOverlay) authOverlay.classList.add('hidden');
+
+      const currentUser = {
+        name: user.displayName || 'Aditya',
+        email: user.email || 'aditya@example.com',
+        currency: '₹'
+      };
+
+      localStorage.setItem('ledger_user', JSON.stringify(currentUser));
+      if (typeof renderProfileInfo === 'function') renderProfileInfo();
+    }
+
+    // Check Redirect status on load
+    getRedirectResult(auth).then((result) => {
+      if (result?.user) handleAuthUser(result.user);
+    }).catch(console.error);
+
+    // Auth state observer
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        const authOverlay = document.getElementById('auth-overlay');
-        if (authOverlay) authOverlay.classList.add('hidden');
+        handleAuthUser(user);
       }
+      const isPro = localStorage.getItem('isProUser') === 'true' || localStorage.getItem('ledger_is_pro') === 'true';
+      window.updatePlanUI(isPro);
     });
-  } catch (err) {
-    console.warn("Firebase initialized with missing keys:", err.message);
-  }
-</script>
-
+  </script>
 </body>
 </html>
