@@ -1584,33 +1584,37 @@ if (authForm) {
       alert("Sign-in failed: " + error.message);
     }
   };
+// Updates UI based strictly on whether user is Pro or Free
+window.updatePlanUI = function(isPro) {
+  const topBadge = document.getElementById('user-plan-badge') || document.getElementById('plan-badge');
+  const planDesc = document.getElementById('settings-plan-desc');
+  const upgradeBtn = document.getElementById('settings-upgrade-btn');
 
-  // Function to update both top badge & settings UI
-  window.updatePlanUI = function(isPro) {
-    const topBadge = document.getElementById('user-plan-badge') || 
-                     document.getElementById('plan-badge') ||
-                     Array.from(document.querySelectorAll('span, div')).find(el => el.textContent.trim() === 'Free Plan' || el.textContent.trim().startsWith('Pro'));
-
-    const planDesc = document.getElementById('settings-plan-desc');
-
-    if (isPro) {
-      if (topBadge) {
-        topBadge.innerText = "Pro (30d left)";
-        topBadge.className = "text-[10px] bg-amber-400/20 text-amber-700 font-bold px-2.5 py-1 rounded-full border border-amber-300/40 shadow-sm";
-      }
-      if (planDesc) {
-        planDesc.innerText = "Pro Membership Active (30 days remaining)";
-      }
-    } else {
-      if (topBadge) {
-        topBadge.innerText = "Free Plan";
-        topBadge.className = "text-[10px] bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-full border border-slate-200";
-      }
-      if (planDesc) {
-        planDesc.innerText = "Free Plan (Receipt & Payment only)";
-      }
+  if (isPro) {
+    if (topBadge) {
+      topBadge.innerText = "Pro (30d left)";
+      topBadge.className = "text-[10px] bg-amber-400/20 text-amber-300 font-bold px-2.5 py-1 rounded-full border border-amber-400/30 shadow-sm";
     }
-  };
+    if (planDesc) {
+      planDesc.innerText = "Pro Membership Active (30 days remaining)";
+    }
+    if (upgradeBtn) {
+      upgradeBtn.style.display = "none"; // Hide button if already upgraded
+    }
+  } else {
+    if (topBadge) {
+      topBadge.innerText = "Free Plan";
+      topBadge.className = "text-[10px] bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-full border border-slate-200";
+    }
+    if (planDesc) {
+      planDesc.innerText = "Free Plan (Receipt & Payment only)";
+    }
+    if (upgradeBtn) {
+      upgradeBtn.style.display = "block"; // Show upgrade button for free users
+    }
+  }
+};
+
 
   // Track authentication state
   onAuthStateChanged(auth, (user) => {
