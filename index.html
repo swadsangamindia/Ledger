@@ -1463,28 +1463,28 @@ if (authForm) {
 </script>
 <!-- Firebase Google Login Script -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithRedirect, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithRedirect, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-  // Your Firebase configuration (keep your actual keys here)
+  // PASTE YOUR REAL FIREBASE KEYS HERE:
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
+  apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
+  authDomain: "ledger-expenses.firebaseapp.com",
+  projectId: "ledger-expenses",
+  storageBucket: "ledger-expenses.firebasestorage.app",
+  messagingSenderId: "746540126053",
+  appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
+};
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
+  // Prevent duplicate app initialization
+  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
   // Google Sign-In Function
-window.handleGoogleSignIn = window.loginWithGoogle = function() {
-  signInWithRedirect(auth, provider);
-};
+  window.handleGoogleSignIn = window.loginWithGoogle = function() {
+    signInWithRedirect(auth, provider);
+  };
 
 
 
