@@ -1669,6 +1669,38 @@ window.submitUPIPayment = function() {
   </div>
 </div>
 
+  // Function to update both top badge & settings UI
+window.updatePlanUI = function(isPro) {
+  const topBadge = document.getElementById('user-plan-badge') || 
+                   document.getElementById('plan-badge') ||
+                   Array.from(document.querySelectorAll('span, div')).find(el => el.textContent.trim() === 'Free Plan' || el.textContent.trim().startsWith('Pro'));
+
+  const planDesc = document.getElementById('settings-plan-desc');
+
+  if (isPro) {
+    if (topBadge) {
+      topBadge.innerText = "Pro (30d left)";
+      topBadge.className = "text-[10px] bg-amber-400/20 text-amber-700 font-bold px-2.5 py-1 rounded-full border border-amber-300/40 shadow-sm";
+    }
+    if (planDesc) {
+      planDesc.innerText = "Pro Membership Active (30 days remaining)";
+    }
+  } else {
+    if (topBadge) {
+      topBadge.innerText = "Free Plan";
+      topBadge.className = "text-[10px] bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-full border border-slate-200";
+    }
+    if (planDesc) {
+      planDesc.innerText = "Free Plan (Receipt & Payment only)";
+    }
+  }
+};
+
+// Automatically run when page loads
+if (localStorage.getItem('isProUser') === 'true') {
+  window.updatePlanUI(true);
+}
+
 </script>
 </body>
 </html>
