@@ -1570,28 +1570,47 @@ onAuthStateChanged(auth, (user) => {
     updatePlanUI(isProUser);
   }
 });
-// Upgrade Modal Controls
+// Open UPI Modal
 window.openUpgradeModal = function() {
   const modal = document.getElementById('upgrade-modal');
   if (modal) {
     modal.classList.remove('hidden');
   } else {
-    // Direct fallback if modal element isn't in HTML yet
-    const confirmUpgrade = confirm("Upgrade to Khata Bahi Pro for ₹99?");
-    if (confirmUpgrade) {
-      localStorage.setItem('isProUser', 'true');
-      if (typeof updatePlanUI === 'function') {
-        updatePlanUI(true);
-      }
-      alert("🎉 Welcome to Khata Bahi Pro!");
-    }
+    alert("Upgrade modal not found. Please refresh.");
   }
 };
 
+// Close UPI Modal
 window.closeUpgradeModal = function() {
   const modal = document.getElementById('upgrade-modal');
-  if (modal) modal.classList.add('hidden');
+  if (modal) {
+    modal.classList.add('hidden');
+  }
 };
+
+// Handle Transaction Verification
+window.submitUPIPayment = function() {
+  const txnInput = document.getElementById('upi-txn-id');
+  const txnId = txnInput ? txnInput.value.trim() : '';
+  
+  if (!txnId || txnId.length < 6) {
+    alert("Please enter a valid Transaction ID / UTR number.");
+    return;
+  }
+
+  // Save Pro Status
+  localStorage.setItem('isProUser', 'true');
+  localStorage.setItem('proTxnId', txnId);
+
+  // Update Badge & UI
+  if (typeof updatePlanUI === 'function') {
+    updatePlanUI(true);
+  }
+
+  window.closeUpgradeModal();
+  alert("🎉 Payment submitted! Khata Bahi Pro has been activated.");
+};
+
 
       
     
