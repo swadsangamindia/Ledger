@@ -1591,33 +1591,53 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-  
-// Function to update ALL plan badges (Sidebar + Header + Settings)
+  // Universal update function with text-fallback search
 window.updatePlanUI = function(isPro) {
-  // Select all potential badge elements on the page
-  const badges = document.querySelectorAll('#user-plan-badge, #plan-badge, .plan-badge-tag');
-  const planDesc = document.getElementById('settings-plan-desc');
-  const upgradeBtn = document.getElementById('settings-upgrade-btn');
+  // 1. Target by IDs/Classes
+  let badges = Array.from(document.querySelectorAll('#user-plan-badge, #plan-badge, .plan-badge-tag'));
 
+  // 2. Fallback: Search all spans/divs if no badges found by ID/class
+  if (badges.length === 0) {
+    badges = Array.from(document.querySelectorAll('span, div')).filter(el => {
+      const txt = el.textContent.trim();
+      return txt === 'Free Plan' || txt.startsWith('Pro (');
+    });
+  }
+
+  // Update every badge found
   badges.forEach(badge => {
     if (isPro) {
       badge.innerText = "Pro (30d left)";
-      badge.className = "text-[10px] bg-amber-400/20 text-amber-300 font-bold px-2.5 py-1 rounded-full border border-amber-300/30 shadow-sm inline-block";
+      badge.className = "plan-badge-tag text-[10px] bg-amber-400/20 text-amber-300 font-bold px-2.5 py-1 rounded-full border border-amber-300/30 shadow-sm inline-block";
     } else {
       badge.innerText = "Free Plan";
-      badge.className = "text-[10px] bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-full border border-slate-200 inline-block";
+      badge.className = "plan-badge-tag text-[10px] bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-full border border-slate-200 inline-block";
     }
   });
 
+  // Update Settings Page text
+  const planDesc = document.getElementById('settings-plan-desc');
   if (planDesc) {
     planDesc.innerText = isPro ? "Pro Membership Active (30 days remaining)" : "Free Plan (Receipt & Payment only)";
   }
 
+  // Update Upgrade Button visibility
+  const upgradeBtn = document.getElementById('settings-upgrade-btn');
   if (upgradeBtn) {
     upgradeBtn.style.display = isPro ? "none" : "block";
   }
 };
 
+// Safe Auto-Run Helper
+function applySavedPlanState() {
+  const isPro = localStorage.getItem('isProUser') === 'true';
+  window.updatePlanUI(isPro);
+}
+
+// Trigger across all lifecycle events to ensure execution after DOM loads
+applySavedPlanState();
+document.addEventListener('DOMContentLoaded', applySavedPlanState);
+window.addEventListener('load', applySavedPlanState);
   // Track authentication state
   onAuthStateChanged(auth, (user) => {
     if (user) {
