@@ -1575,12 +1575,9 @@ window.openUpgradeModal = function() {
   const modal = document.getElementById('upgrade-modal');
   if (modal) {
     modal.classList.remove('hidden');
-  } else {
-    alert("Upgrade modal not found. Please refresh.");
   }
 };
 
-// Close UPI Modal
 window.closeUpgradeModal = function() {
   const modal = document.getElementById('upgrade-modal');
   if (modal) {
@@ -1588,7 +1585,6 @@ window.closeUpgradeModal = function() {
   }
 };
 
-// Handle Transaction Verification
 window.submitUPIPayment = function() {
   const txnInput = document.getElementById('upi-txn-id');
   const txnId = txnInput ? txnInput.value.trim() : '';
@@ -1598,11 +1594,9 @@ window.submitUPIPayment = function() {
     return;
   }
 
-  // Save Pro Status
   localStorage.setItem('isProUser', 'true');
   localStorage.setItem('proTxnId', txnId);
 
-  // Update Badge & UI
   if (typeof updatePlanUI === 'function') {
     updatePlanUI(true);
   }
@@ -1610,6 +1604,7 @@ window.submitUPIPayment = function() {
   window.closeUpgradeModal();
   alert("🎉 Payment submitted! Khata Bahi Pro has been activated.");
 };
+
 
 
       
