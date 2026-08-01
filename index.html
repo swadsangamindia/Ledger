@@ -1538,12 +1538,19 @@ if (authForm) {
     window.updatePlanUI(true);
   }
 </script>
-<!-- Firebase Google Login Script -->
+<!-- Complete Firebase Auth & Pro Plan Script -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { 
+    getAuth, 
+    GoogleAuthProvider, 
+    signInWithRedirect, 
+    signInWithPopup, 
+    getRedirectResult, 
+    onAuthStateChanged 
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-  // Your Firebase configuration (keep your actual keys here)
+  // 1. Firebase Configuration (Replace with your actual keys from Firebase Console)
   const firebaseConfig = {
   apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
   authDomain: "ledger-expenses.firebaseapp.com",
@@ -1553,48 +1560,110 @@ if (authForm) {
   appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
 };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
+  // 2. Safe Firebase Initialization
+  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
-// Function to update UI
-window.updatePlanUI = function(isPro) {
-  let badges = Array.from(document.querySelectorAll('#user-plan-badge, #plan-badge, .plan-badge-tag'));
 
-  if (badges.length === 0) {
-    badges = Array.from(document.querySelectorAll('span, div')).filter(el => {
-      const txt = el.textContent.trim();
-      return txt === 'Free Plan' || txt.startsWith('Pro (');
+  // 3. Universal Plan Badge Updater
+  window.updatePlanUI = function(isPro) {
+    // Find all plan badges on the page (Sidebar, Top Navigation, Settings)
+    let badges = Array.from(document.querySelectorAll('#user-plan-badge, #plan-badge, .plan-badge-tag'));
+
+    // Fallback search if badges lack specific IDs or classes
+    if (badges.length === 0) {
+      badges = Array.from(document.querySelectorAll('span, div')).filter(el => {
+        const txt = el.textContent.trim();
+        return txt === 'Free Plan' || txt.startsWith('Pro (');
+      });
+    }
+
+    // Apply proper styling to each badge found
+    badges.forEach(badge => {
+      if (isPro) {
+        badge.innerText = "Pro (30d left)";
+        badge.className = "plan-badge-tag text-[10px] bg-amber-400/20 text-amber-300 font-bold px-2.5 py-1 rounded-full border border-amber-300/30 shadow-sm inline-block";
+      } else {
+        badge.innerText = "Free Plan";
+        badge.className = "plan-badge-tag text-[10px] bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-full border border-slate-200 inline-block";
+      }
     });
+
+    // Update Settings Page Text
+    const planDesc = document.getElementById('settings-plan-desc');
+    if (planDesc) {
+      planDesc.innerText = isPro ? "Pro Membership Active (30 days remaining)" : "Free Plan (Receipt & Payment only)";
+    }
+
+    // Hide or Show Upgrade Button
+    const upgradeBtn = document.getElementById('settings-upgrade-btn');
+    if (upgradeBtn) {
+      upgradeBtn.style.display = isPro ? "none" : "block";
+    }
+  };
+
+  // 4. Google Sign-In Function (Handles both Mobile Redirect and Desktop Popup)
+  window.handleGoogleSignIn = window.loginWithGoogle = async function() {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    try {
+      if (isMobile) {
+        // Use redirect on phones to prevent Chrome popup blocking
+        await signInWithRedirect(auth, provider);
+      } else {
+        // Use popup on desktops
+        const result = await signInWithPopup(auth, provider);
+        console.log("Logged in:", result.user);
+        hideAuthOverlay();
+      }
+    } catch (error) {
+      console.error("Sign-in error:", error);
+      alert("Sign-in failed: " + error.message);
+    }
+  };
+
+  // Helper function to hide login popup overlay
+  function hideAuthOverlay() {
+    const authOverlay = document.getElementById('auth-overlay');
+    if (authOverlay) {
+      authOverlay.classList.add('hidden');
+    }
   }
 
-  badges.forEach(badge => {
-    if (isPro) {
-      badge.innerText = "Pro (30d left)";
-      badge.className = "plan-badge-tag text-[10px] bg-amber-400/20 text-amber-300 font-bold px-2.5 py-1 rounded-full border border-amber-300/30 shadow-sm inline-block";
-    } else {
-      badge.innerText = "Free Plan";
-      badge.className = "plan-badge-tag text-[10px] bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-full border border-slate-200 inline-block";
+  // 5. Check Mobile Redirect Results on Page Load
+  getRedirectResult(auth)
+    .then((result) => {
+      if (result && result.user) {
+        console.log("Redirect login successful:", result.user);
+        hideAuthOverlay();
+      }
+    })
+    .catch((error) => {
+      console.error("Redirect Error:", error);
+    });
+
+  // 6. Listen for Authentication Changes & Sync User State
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      hideAuthOverlay();
+
+      // Update Header Greeting Name
+      const userHeader = document.getElementById('user-header-name');
+      if (userHeader) {
+        userHeader.innerText = user.displayName || 'Aditya';
+      }
     }
+
+    // Sync Plan UI State from LocalStorage
+    const isPro = localStorage.getItem('isProUser') === 'true';
+    window.updatePlanUI(isPro);
   });
 
-  const planDesc = document.getElementById('settings-plan-desc');
-  if (planDesc) {
-    planDesc.innerText = isPro ? "Pro Membership Active (30 days remaining)" : "Free Plan (Receipt & Payment only)";
-  }
-
-  const upgradeBtn = document.getElementById('settings-upgrade-btn');
-  if (upgradeBtn) {
-    upgradeBtn.style.display = isPro ? "none" : "block";
-  }
-};
-
-// AUTO-RUN ON PAGE LOAD
-document.addEventListener('DOMContentLoaded', () => {
-  const isPro = localStorage.getItem('isProUser') === 'true';
-  window.updatePlanUI(isPro);
-});
+  // Initial load check
+  document.addEventListener('DOMContentLoaded', () => {
+    const isPro = localStorage.getItem('isProUser') === 'true';
+    window.updatePlanUI(isPro);
+  });
 </script>
-
 </body>
 </html>
