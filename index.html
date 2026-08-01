@@ -1499,26 +1499,31 @@ if (authForm) {
     }
   };
 
-  // Updates the badge to Pro when upgraded
+// Updates the badge to Pro when upgraded
 window.openUpgradeModal = function() {
   const confirmUpgrade = confirm("Upgrade to Khata Bahi Pro for ₹99?");
   if (confirmUpgrade) {
     localStorage.setItem('isProUser', 'true');
     
-    // Update top badge
-    const badge = document.getElementById('user-plan-badge');
+    // Force update UI across the app
+    if (typeof updatePlanUI === 'function') {
+      updatePlanUI(true);
+    }
+    
+    // Fallback badge text change
+    const badge = document.getElementById('user-plan-badge') || document.querySelector('.bg-slate-100');
     if (badge) {
       badge.innerText = "Pro (30d left)";
       badge.className = "text-[10px] bg-amber-400/20 text-amber-700 font-bold px-2 py-0.5 rounded-full border border-amber-300/40";
     }
 
-    // Update settings text
     const planDesc = document.getElementById('settings-plan-desc');
     if (planDesc) planDesc.innerText = "Pro Plan Active";
 
     alert("🎉 Welcome to Khata Bahi Pro!");
   }
 };
+
 
   
   // Track authentication state
