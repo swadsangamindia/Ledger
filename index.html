@@ -1526,7 +1526,31 @@ onAuthStateChanged(auth, (user) => {
     updatePlanUI(isProUser);
   }
 });
+// Upgrade Modal Controls
+window.openUpgradeModal = function() {
+  const modal = document.getElementById('upgrade-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+  } else {
+    // Direct fallback if modal element isn't in HTML yet
+    const confirmUpgrade = confirm("Upgrade to Khata Bahi Pro for ₹99?");
+    if (confirmUpgrade) {
+      localStorage.setItem('isProUser', 'true');
+      if (typeof updatePlanUI === 'function') {
+        updatePlanUI(true);
+      }
+      alert("🎉 Welcome to Khata Bahi Pro!");
+    }
+  }
+};
 
+window.closeUpgradeModal = function() {
+  const modal = document.getElementById('upgrade-modal');
+  if (modal) modal.classList.add('hidden');
+};
+
+      
+    
       // Update Profile View Elements
       const profileName = document.getElementById('profile-display-name');
       const profileEmail = document.getElementById('profile-display-email');
