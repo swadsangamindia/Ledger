@@ -1568,22 +1568,40 @@ if (authForm) {
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  // Attach Google Sign-In function directly to window
-  window.handleGoogleSignIn = window.loginWithGoogle = async function() {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      console.log("Logged in successfully:", result.user);
+// Google Sign-In Function
+window.handleGoogleSignIn = window.loginWithGoogle = async function() {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    console.log("Logged in successfully:", result.user);
 
-      // Hide auth overlay modal
-      const authOverlay = document.getElementById('auth-overlay');
-      if (authOverlay) {
-        authOverlay.classList.add('hidden');
-      }
-    } catch (error) {
-      console.error("Sign-in Error:", error);
-      alert("Sign-in failed: " + error.message);
+    // Hide the login overlay modal immediately
+    const authOverlay = document.getElementById('auth-overlay');
+    if (authOverlay) {
+      authOverlay.classList.add('hidden');
     }
-  };
+  } catch (error) {
+    console.error("Sign-in Error:", error);
+    alert("Sign-in failed: " + error.message);
+  }
+};
+
+// Automatically hide modal whenever Firebase detects a logged-in user
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const authOverlay = document.getElementById('auth-overlay');
+    if (authOverlay) {
+      authOverlay.classList.add('hidden');
+    }
+
+    // Update greeting name on header
+    const userHeader = document.getElementById('user-header-name');
+    if (userHeader) {
+      userHeader.innerText = user.displayName || 'Aditya';
+    }
+  }
+});
+
+  
 // Function to update UI with NEW glowing yellow badge color for Pro
 window.updatePlanUI = function(isPro) {
   const topBadge = document.getElementById('user-plan-badge') || document.getElementById('plan-badge');
