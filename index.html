@@ -1336,91 +1336,62 @@
     saveAndRender();
   </script>
 
-  <!-- FIREBASE & AUTH MODULE -->
   <script type="module">
-    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithRedirect, signInWithPopup, getRedirectResult, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    // Single Firebase Configuration
-    const firebaseConfig = {
-  apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
-  authDomain: "ledger-expenses.firebaseapp.com",
-  projectId: "ledger-expenses",
-  storageBucket: "ledger-expenses.firebasestorage.app",
-  messagingSenderId: "746540126053",
-  appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
-};
+  // Firebase Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
+    authDomain: "ledger-expenses.firebaseapp.com",
+    projectId: "ledger-expenses",
+    storageBucket: "ledger-expenses.firebasestorage.app",
+    messagingSenderId: "746540126053",
+    appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
+  };
 
-    const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
+  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
 
-    // Google Sign-In Function (Mobile redirect + Desktop Popup)
-    window.handleGoogleSignIn = window.loginWithGoogle = async function() {
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      try {
-        if (isMobile) {
-          await signInWithRedirect(auth, provider);
-        } else {
-          const res = await signInWithPopup(auth, provider);
-          if (res.user) handleAuthUser(res.user);
-        }
-      } catch (err) {
-        console.error("Login failed:", err);
-      }
+  // Handle Logged In User
+  function handleAuthUser(user) {
+    const authOverlay = document.getElementById('auth-overlay');
+    if (authOverlay) authOverlay.classList.add('hidden');
+
+    const currentUser = {
+      name: user.displayName || 'Aditya',
+      email: user.email || 'aditya@example.com',
+      currency: '₹'
     };
 
-    // Global Plan Badge Updater
-    window.updatePlanUI = function(isPro) {
-      const allBadges = document.querySelectorAll('#user-plan-badge, #plan-badge, #sidebar-plan-badge, .plan-badge-tag');
-      
-      allBadges.forEach(badge => {
-        if (isPro) {
-          badge.innerText = "Pro (30d left)";
-          badge.style.color = "#fde047";
-          badge.style.backgroundColor = "rgba(251, 191, 36, 0.15)";
-          badge.style.borderColor = "rgba(251, 191, 36, 0.3)";
-        } else {
-          badge.innerText = "Free Plan";
-          badge.style.color = "#475569";
-          badge.style.backgroundColor = "#f1f5f9";
-          badge.style.borderColor = "#e2e8f0";
-        }
-      });
+    localStorage.setItem('ledger_user', JSON.stringify(currentUser));
+    if (typeof renderProfileInfo === 'function') renderProfileInfo();
+  }
 
-      const planDesc = document.getElementById('settings-plan-desc');
-      if (planDesc) {
-        planDesc.innerText = isPro ? "Pro Membership Active (30 days remaining)" : "Free Plan (Receipt & Payment only)";
+  // Google Sign-In (Uses Pop-up everywhere for fail-proof login)
+  window.handleGoogleSignIn = window.loginWithGoogle = async function() {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      if (result.user) {
+        handleAuthUser(result.user);
       }
-    };
-
-    function handleAuthUser(user) {
-      const authOverlay = document.getElementById('auth-overlay');
-      if (authOverlay) authOverlay.classList.add('hidden');
-
-      const currentUser = {
-        name: user.displayName || 'Aditya',
-        email: user.email || 'aditya@example.com',
-        currency: '₹'
-      };
-
-      localStorage.setItem('ledger_user', JSON.stringify(currentUser));
-      if (typeof renderProfileInfo === 'function') renderProfileInfo();
+    } catch (error) {
+      console.error("Login Error:", error);
+      alert("Sign in failed: " + error.message);
     }
+  };
 
-    // Check Redirect status on load
-    getRedirectResult(auth).then((result) => {
-      if (result?.user) handleAuthUser(result.user);
-    }).catch(console.error);
+  // Check login status automatically on page load
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      handleAuthUser(user);
+    }
+    const isPro = localStorage.getItem('isProUser') === 'true' || localStorage.getItem('ledger_is_pro') === 'true';
+    if (window.updatePlanUI) window.updatePlanUI(isPro);
+  });
+</script>
 
-    // Auth state observer
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        handleAuthUser(user);
-      }
-      const isPro = localStorage.getItem('isProUser') === 'true' || localStorage.getItem('ledger_is_pro') === 'true';
-      window.updatePlanUI(isPro);
-    });
-  </script>
+
 </body>
 </html>
