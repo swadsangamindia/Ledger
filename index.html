@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Khata Bahi - Digital Hisab, Ledger & PDF Tools</title>
+  <title>Khata Bahi - Digital Hisab, Ledger, GST & PDF Tools</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -20,9 +20,8 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
-  <!-- Google AdSense Code (Replace ca-pub-XXXXXXXXXXXXXXXX with real ID when approved) -->
- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8403484408535539"
-     crossorigin="anonymous"></script>
+  <!-- Google AdSense Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8403484408535539" crossorigin="anonymous"></script>
 
   <!-- PWA Manifest & Theme -->
   <link rel="manifest" href="manifest.json">
@@ -32,7 +31,7 @@
     body { 
       font-family: 'Plus Jakarta Sans', sans-serif; 
       background-color: #dbeafe;
-      background-image: url('bg.jpg'), url('bg.png'), url('https://images.wallpapersden.com/image/download/anime-landscape-scenery_bGltaGmUmZqaraWkpJRmbmdlrWZlbWU.jpg');
+      background-image: url('https://images.wallpapersden.com/image/download/anime-landscape-scenery_bGltaGmUmZqaraWkpJRmbmdlrWZlbWU.jpg');
       background-repeat: no-repeat;
       background-position: center center;
       background-size: cover;
@@ -41,7 +40,7 @@
     .heading-font { font-family: 'Quicksand', sans-serif; }
     
     .glass-card {
-      background: rgba(255, 255, 255, 0.65) !important;
+      background: rgba(255, 255, 255, 0.75) !important;
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       border: 1px solid rgba(255, 255, 255, 0.8);
@@ -49,14 +48,14 @@
     }
     
     .glass-sidebar {
-      background: rgba(15, 17, 30, 0.45) !important;
+      background: rgba(15, 17, 30, 0.55) !important;
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
       border-right: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .glass-nav-mobile {
-      background: rgba(15, 17, 30, 0.75) !important;
+      background: rgba(15, 17, 30, 0.85) !important;
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
       border-top: 1px solid rgba(255, 255, 255, 0.2);
@@ -73,15 +72,15 @@
 
   <!-- GOOGLE AUTH OVERLAY MODAL -->
   <div id="auth-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 z-50">
-    <div class="glass-card rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-white text-center">
+    <div class="glass-card rounded-3xl max-w-md w-full p-6 shadow-2xl border border-white text-center max-h-[90vh] overflow-y-auto">
       <div class="bg-indigo-600 text-white p-3.5 rounded-2xl w-fit mx-auto mb-3 shadow-lg shadow-indigo-500/30">
         <i data-lucide="book-open" class="w-8 h-8"></i>
       </div>
       
       <h2 class="text-2xl font-bold text-slate-900 heading-font">Welcome to Khata Bahi 🌸</h2>
-      <p class="text-xs text-slate-600 mt-1 mb-6 font-medium">Sign in with Google to manage your ledger</p>
+      <p class="text-xs text-slate-600 mt-1 mb-5 font-medium">Digital Hisab, Ledger & Business Management</p>
 
-      <button id="google-signin-btn" onclick="handleGoogleSignIn()" class="w-full bg-white hover:bg-slate-50 text-slate-700 font-bold py-3.5 px-4 rounded-xl border border-slate-200 transition shadow-md flex items-center justify-center gap-3 active:scale-95">
+      <button id="google-signin-btn" onclick="handleGoogleSignIn()" class="w-full bg-white hover:bg-slate-50 text-slate-700 font-bold py-3.5 px-4 rounded-xl border border-slate-200 transition shadow-md flex items-center justify-center gap-3 active:scale-95 mb-4">
         <svg class="w-5 h-5" viewBox="0 0 24 24">
           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
           <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -90,6 +89,22 @@
         </svg>
         Sign in with Google
       </button>
+
+      <!-- PUBLIC LANDING TEXT FOR ADSENSE CRAWLERS -->
+      <div class="text-left bg-white/80 p-4 rounded-2xl border border-slate-200 text-xs text-slate-600 space-y-2 mt-4">
+        <h3 class="font-bold text-slate-800 text-sm">About Khata Bahi Digital App</h3>
+        <p>Khata Bahi is a free digital bookkeeping ledger engineered for small business owners, freelancers, and individuals. Manage cash flow, calculate GST taxes, track credit (Udhar), and generate digital PDF invoices seamlessly.</p>
+        <ul class="list-disc list-inside text-[11px] space-y-1 text-slate-500">
+          <li><strong>Digital Ledger:</strong> Record daily receipts, payments, and sales.</li>
+          <li><strong>PDF Tools:</strong> Convert PDF to Excel, Excel to PDF, and Images to PDF.</li>
+          <li><strong>GST Reports:</strong> Automated tax calculation and itemized exports.</li>
+        </ul>
+        <div class="pt-2 text-[10px] text-slate-400 flex gap-3 border-t border-slate-100">
+          <button onclick="openPolicyModal('privacy')" class="underline hover:text-slate-600">Privacy Policy</button>
+          <span>•</span>
+          <button onclick="openPolicyModal('terms')" class="underline hover:text-slate-600 font-bold">Terms of Use</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -127,6 +142,9 @@
         <button onclick="switchTab('reports')" id="nav-reports" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
           <i data-lucide="bar-chart-3" class="w-4 h-4"></i> Reports
         </button>
+        <button onclick="switchTab('guide')" id="nav-guide" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
+          <i data-lucide="file-text" class="w-4 h-4 text-emerald-300"></i> User Guide & FAQ
+        </button>
         <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
           <i data-lucide="user" class="w-4 h-4"></i> Profile
         </button>
@@ -152,7 +170,7 @@
           A
         </div>
         <div class="overflow-hidden">
-          <p class="text-xs font-bold text-white truncate drop-shadow" id="sidebar-user-name">aditya</p>
+          <p class="text-xs font-bold text-white truncate drop-shadow" id="sidebar-user-name">Aditya</p>
           <p class="text-[10px] text-indigo-200 truncate" id="sidebar-user-email">aditya@example.com</p>
         </div>
       </div>
@@ -410,7 +428,34 @@
       </div>
     </div>
 
-    <!-- 6. PROFILE VIEW -->
+    <!-- 6. USER GUIDE & FAQ VIEW (NEW TEXT CONTENT FOR ADSENSE) -->
+    <div id="view-guide" class="tab-view hidden space-y-6">
+      <div class="glass-card p-6 rounded-3xl space-y-6 max-w-4xl">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 heading-font">Khata Bahi User Guide & Documentation</h2>
+          <p class="text-xs text-slate-600 mt-1">Learn how to manage digital ledgers, calculate GST, and use PDF conversion utilities.</p>
+        </div>
+
+        <div class="space-y-4 text-xs text-slate-700 leading-relaxed border-t border-slate-200/80 pt-4">
+          <h3 class="font-bold text-sm text-indigo-700">1. What is Digital Khata Bahi?</h3>
+          <p>Digital Khata Bahi is a web-based financial ledger and bookkeeping manager designed for merchants, shopkeepers, and freelancers. It simplifies traditional paper ledger books (Bahikhata) by allowing users to record receipts, payments, sales invoices, and tax details digitally.</p>
+
+          <h3 class="font-bold text-sm text-indigo-700">2. How to Track Cash Flow & Udhar</h3>
+          <p>Click on the <strong>"+ Add Entry"</strong> button to record transactions. Select <em>Receipt</em> for cash received or <em>Payment</em> for money spent. You can assign customer or vendor party names to keep track of outstanding dues and credit accounts.</p>
+
+          <h3 class="font-bold text-sm text-indigo-700">3. Using Free Document Utilities</h3>
+          <p>Our utility tools run 100% locally inside your web browser using WebAssembly and client-side JavaScript libraries. No uploaded documents are stored on external servers, ensuring complete privacy when converting PDFs to Excel sheets or images to PDF format.</p>
+
+          <h3 class="font-bold text-sm text-indigo-700">4. Frequently Asked Questions (FAQ)</h3>
+          <div class="space-y-2 bg-white/80 p-4 rounded-2xl border border-slate-200">
+            <p><strong>Q: Is my ledger data safe?</strong><br>A: Yes! All data is saved directly in your device's browser local storage and remains completely private to you.</p>
+            <p><strong>Q: How do I export my data?</strong><br>A: Use the "Export CSV" button at the top of your dashboard to download a formatted spreadsheet backup at any time.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. PROFILE VIEW -->
     <div id="view-profile" class="tab-view hidden bg-white/80 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-lg border border-white/40 space-y-6">
       <h3 class="text-xl font-bold text-slate-800">Business Profile Settings</h3>
 
@@ -446,7 +491,7 @@
       </div>
     </div>
 
-    <!-- 7. SETTINGS VIEW -->
+    <!-- 8. SETTINGS VIEW -->
     <div id="view-settings" class="tab-view hidden space-y-6">
       <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-lg border border-white/40 space-y-6 max-w-2xl">
         <div>
@@ -478,14 +523,16 @@
           </div>
         </div>
 
-        <!-- ABOUT SECTION -->
+        <!-- ABOUT & POLICY SECTION FOR GOOGLE ADSENSE -->
         <div class="mt-6 pt-6 border-t border-slate-200 text-slate-600">
-          <h3 class="font-bold text-slate-800 text-sm mb-1">About Khata Bahi</h3>
+          <h3 class="font-bold text-slate-800 text-sm mb-1">About Khata Bahi Digital Services</h3>
           <p class="text-xs mb-3 leading-relaxed">
-            Khata Bahi is a digital bookkeeping and ledger app designed to help small business owners, freelancers, and individuals track daily cash in and cash out records securely.
+            Khata Bahi is a digital bookkeeping and ledger app designed to help small business owners, freelancers, and individuals track daily cash-in and cash-out records securely.
           </p>
-          <div class="text-[11px] text-slate-400 pt-2 border-t border-slate-100">
-            © 2026 Khata Bahi · <a href="#" class="underline hover:text-slate-600">Privacy Policy</a> · <a href="#" class="underline hover:text-slate-600">Terms & Conditions</a>
+          <div class="text-[11px] text-slate-500 flex gap-4 pt-2 border-t border-slate-100">
+            <span>© 2026 Khata Bahi</span>
+            <button onclick="openPolicyModal('privacy')" class="underline hover:text-slate-800">Privacy Policy</button>
+            <button onclick="openPolicyModal('terms')" class="underline hover:text-slate-800">Terms & Conditions</button>
           </div>
         </div>
       </div>
@@ -508,13 +555,24 @@
     <button onclick="switchTab('tools')" id="m-nav-tools" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
       <i data-lucide="wrench" class="w-5 h-5 text-purple-300"></i> Tools
     </button>
-    <button onclick="switchTab('categories')" id="m-nav-categories" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
-      <i data-lucide="shapes" class="w-5 h-5"></i> Categories
+    <button onclick="switchTab('guide')" id="m-nav-guide" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
+      <i data-lucide="file-text" class="w-5 h-5 text-emerald-300"></i> Guide
     </button>
     <button onclick="switchTab('settings')" id="m-nav-settings" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
       <i data-lucide="settings" class="w-5 h-5"></i> Settings
     </button>
   </nav>
+
+  <!-- POLICY MODAL (FOR ADSENSE COMPLIANCE) -->
+  <div id="policy-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div class="glass-card bg-white/95 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative border border-white space-y-4 max-h-[85vh] overflow-y-auto text-xs text-slate-700 leading-relaxed">
+      <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+        <h3 id="policy-title" class="text-base font-bold text-slate-900">Privacy Policy</h3>
+        <button onclick="closePolicyModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div id="policy-body" class="space-y-3"></div>
+    </div>
+  </div>
 
   <!-- ADD VOUCHER MODAL -->
   <div id="modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
@@ -1208,7 +1266,7 @@
       reader.readAsArrayBuffer(file);
     }
 
-    /* ---------------- MODALS & SUBSCRIPTION ---------------- */
+    /* ---------------- MODALS & POLICIES ---------------- */
     function openModal() { document.getElementById('modal').classList.remove('hidden'); calculateAmounts(); }
     function closeModal() { document.getElementById('modal').classList.add('hidden'); }
 
@@ -1217,6 +1275,33 @@
       document.getElementById('upgrade-modal').classList.remove('hidden'); 
     }
     function closeUpgradeModal() { document.getElementById('upgrade-modal').classList.add('hidden'); }
+
+    function openPolicyModal(type) {
+      const modal = document.getElementById('policy-modal');
+      const title = document.getElementById('policy-title');
+      const body = document.getElementById('policy-body');
+
+      if (type === 'privacy') {
+        title.innerText = "Privacy Policy";
+        body.innerHTML = `
+          <p>At Khata Bahi, accessible from swadsangamindia.github.io, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Khata Bahi and how we use it.</p>
+          <p><strong>Local Data Storage:</strong> All financial entries, custom profile details, and ledger records are saved locally inside your web browser's Local Storage. We do not transmit or store your personal transaction entries on remote servers.</p>
+
+          <p><strong>Google AdSense & Cookies:</strong> Khata Bahi uses Google AdSense to serve advertisements. Google uses cookies (such as the DoubleClick cookie) to serve ads to users based on their visit to our site and other sites on the Internet.</p>
+        `;
+      } else {
+        title.innerText = "Terms of Service";
+        body.innerHTML = `
+          <p>By accessing Khata Bahi, you agree to comply with these terms of service. Khata Bahi provides client-side digital bookkeeping tools, invoice exports, and file conversion utilities free of charge.</p>
+          <p><strong>User Data & Backup:</strong> Because all financial data lives strictly on your local browser device, users are responsible for using the 'Export CSV' tool to create personal backups. Khata Bahi is not responsible for lost ledger records caused by clearing browser caches or device resets.</p>
+        `;
+      }
+      modal.classList.remove('hidden');
+    }
+
+    function closePolicyModal() {
+      document.getElementById('policy-modal').classList.add('hidden');
+    }
 
     function verifyUpiPayment() {
       const utr = document.getElementById('upi-utr-input').value.trim();
@@ -1336,62 +1421,77 @@
     saveAndRender();
   </script>
 
+  <!-- FIREBASE & AUTH MODULE -->
   <script type="module">
-  import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-  // Firebase Config
-  const firebaseConfig = {
-    apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
-    authDomain: "ledger-expenses.firebaseapp.com",
-    projectId: "ledger-expenses",
-    storageBucket: "ledger-expenses.firebasestorage.app",
-    messagingSenderId: "746540126053",
-    appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
-  };
-
-  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
-
-  // Handle Logged In User
-  function handleAuthUser(user) {
-    const authOverlay = document.getElementById('auth-overlay');
-    if (authOverlay) authOverlay.classList.add('hidden');
-
-    const currentUser = {
-      name: user.displayName || 'Aditya',
-      email: user.email || 'aditya@example.com',
-      currency: '₹'
+    const firebaseConfig = {
+      apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
+      authDomain: "ledger-expenses.firebaseapp.com",
+      projectId: "ledger-expenses",
+      storageBucket: "ledger-expenses.firebasestorage.app",
+      messagingSenderId: "746540126053",
+      appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
     };
 
-    localStorage.setItem('ledger_user', JSON.stringify(currentUser));
-    if (typeof renderProfileInfo === 'function') renderProfileInfo();
-  }
+    const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
-  // Google Sign-In (Uses Pop-up everywhere for fail-proof login)
-  window.handleGoogleSignIn = window.loginWithGoogle = async function() {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      if (result.user) {
-        handleAuthUser(result.user);
+    window.handleGoogleSignIn = window.loginWithGoogle = async function() {
+      try {
+        const result = await signInWithPopup(auth, provider);
+        if (result.user) handleAuthUser(result.user);
+      } catch (err) {
+        console.error("Login failed:", err);
       }
-    } catch (error) {
-      console.error("Login Error:", error);
-      alert("Sign in failed: " + error.message);
+    };
+
+    window.updatePlanUI = function(isPro) {
+      const allBadges = document.querySelectorAll('#user-plan-badge, #plan-badge, #sidebar-plan-badge, .plan-badge-tag');
+      
+      allBadges.forEach(badge => {
+        if (isPro) {
+          badge.innerText = "Pro (30d left)";
+          badge.style.color = "#fde047";
+          badge.style.backgroundColor = "rgba(251, 191, 36, 0.15)";
+          badge.style.borderColor = "rgba(251, 191, 36, 0.3)";
+        } else {
+          badge.innerText = "Free Plan";
+          badge.style.color = "#475569";
+          badge.style.backgroundColor = "#f1f5f9";
+          badge.style.borderColor = "#e2e8f0";
+        }
+      });
+
+      const planDesc = document.getElementById('settings-plan-desc');
+      if (planDesc) {
+        planDesc.innerText = isPro ? "Pro Membership Active (30 days remaining)" : "Free Plan (Receipt & Payment only)";
+      }
+    };
+
+    function handleAuthUser(user) {
+      const authOverlay = document.getElementById('auth-overlay');
+      if (authOverlay) authOverlay.classList.add('hidden');
+
+      const currentUser = {
+        name: user.displayName || 'Aditya',
+        email: user.email || 'aditya@example.com',
+        currency: '₹'
+      };
+
+      localStorage.setItem('ledger_user', JSON.stringify(currentUser));
+      if (typeof renderProfileInfo === 'function') renderProfileInfo();
     }
-  };
 
-  // Check login status automatically on page load
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      handleAuthUser(user);
-    }
-    const isPro = localStorage.getItem('isProUser') === 'true' || localStorage.getItem('ledger_is_pro') === 'true';
-    if (window.updatePlanUI) window.updatePlanUI(isPro);
-  });
-</script>
-
-
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        handleAuthUser(user);
+      }
+      const isPro = localStorage.getItem('isProUser') === 'true' || localStorage.getItem('ledger_is_pro') === 'true';
+      window.updatePlanUI(isPro);
+    });
+  </script>
 </body>
 </html>
