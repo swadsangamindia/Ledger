@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Khata Bahi - Digital Hisab, Ledger, GST & PDF Tools</title>
+  <title>Khata Bahi - Free Digital Ledger, GST Bookkeeping & PDF Utilities</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -40,15 +40,15 @@
     .heading-font { font-family: 'Quicksand', sans-serif; }
     
     .glass-card {
-      background: rgba(255, 255, 255, 0.75) !important;
+      background: rgba(255, 255, 255, 0.85) !important;
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.9);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     }
     
     .glass-sidebar {
-      background: rgba(15, 17, 30, 0.55) !important;
+      background: rgba(15, 17, 30, 0.65) !important;
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
       border-right: 1px solid rgba(255, 255, 255, 0.2);
@@ -70,44 +70,6 @@
 </head>
 <body class="text-slate-800 flex flex-col md:flex-row h-screen overflow-hidden">
 
-  <!-- GOOGLE AUTH OVERLAY MODAL -->
-  <div id="auth-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 z-50">
-    <div class="glass-card rounded-3xl max-w-md w-full p-6 shadow-2xl border border-white text-center max-h-[90vh] overflow-y-auto">
-      <div class="bg-indigo-600 text-white p-3.5 rounded-2xl w-fit mx-auto mb-3 shadow-lg shadow-indigo-500/30">
-        <i data-lucide="book-open" class="w-8 h-8"></i>
-      </div>
-      
-      <h2 class="text-2xl font-bold text-slate-900 heading-font">Welcome to Khata Bahi 🌸</h2>
-      <p class="text-xs text-slate-600 mt-1 mb-5 font-medium">Digital Hisab, Ledger & Business Management</p>
-
-      <button id="google-signin-btn" onclick="handleGoogleSignIn()" class="w-full bg-white hover:bg-slate-50 text-slate-700 font-bold py-3.5 px-4 rounded-xl border border-slate-200 transition shadow-md flex items-center justify-center gap-3 active:scale-95 mb-4">
-        <svg class="w-5 h-5" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-        </svg>
-        Sign in with Google
-      </button>
-
-      <!-- PUBLIC LANDING TEXT FOR ADSENSE CRAWLERS -->
-      <div class="text-left bg-white/80 p-4 rounded-2xl border border-slate-200 text-xs text-slate-600 space-y-2 mt-4">
-        <h3 class="font-bold text-slate-800 text-sm">About Khata Bahi Digital App</h3>
-        <p>Khata Bahi is a free digital bookkeeping ledger engineered for small business owners, freelancers, and individuals. Manage cash flow, calculate GST taxes, track credit (Udhar), and generate digital PDF invoices seamlessly.</p>
-        <ul class="list-disc list-inside text-[11px] space-y-1 text-slate-500">
-          <li><strong>Digital Ledger:</strong> Record daily receipts, payments, and sales.</li>
-          <li><strong>PDF Tools:</strong> Convert PDF to Excel, Excel to PDF, and Images to PDF.</li>
-          <li><strong>GST Reports:</strong> Automated tax calculation and itemized exports.</li>
-        </ul>
-        <div class="pt-2 text-[10px] text-slate-400 flex gap-3 border-t border-slate-100">
-          <button onclick="openPolicyModal('privacy')" class="underline hover:text-slate-600">Privacy Policy</button>
-          <span>•</span>
-          <button onclick="openPolicyModal('terms')" class="underline hover:text-slate-600 font-bold">Terms of Use</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- DESKTOP SIDEBAR -->
   <aside class="hidden md:flex w-64 glass-sidebar text-white flex-col justify-between p-5 shrink-0 z-20">
     <div>
@@ -124,7 +86,10 @@
       </div>
 
       <nav class="space-y-1.5">
-        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn nav-active w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold transition text-xs">
+        <button onclick="switchTab('about')" id="nav-about" class="nav-btn nav-active w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold transition text-xs">
+          <i data-lucide="home" class="w-4 h-4"></i> Home & Features
+        </button>
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
           <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
         </button>
         <button onclick="openModal()" class="w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
@@ -139,14 +104,8 @@
         <button onclick="switchTab('categories')" id="nav-categories" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
           <i data-lucide="shapes" class="w-4 h-4"></i> Categories
         </button>
-        <button onclick="switchTab('reports')" id="nav-reports" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
-          <i data-lucide="bar-chart-3" class="w-4 h-4"></i> Reports
-        </button>
         <button onclick="switchTab('guide')" id="nav-guide" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
           <i data-lucide="file-text" class="w-4 h-4 text-emerald-300"></i> User Guide & FAQ
-        </button>
-        <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
-          <i data-lucide="user" class="w-4 h-4"></i> Profile
         </button>
         <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn w-full flex items-center gap-3 px-4 py-3 hover:text-white hover:bg-white/20 rounded-2xl transition text-slate-100 font-bold text-xs">
           <i data-lucide="settings" class="w-4 h-4"></i> Settings
@@ -161,19 +120,9 @@
         <p class="text-[10px] text-slate-300 mt-0.5">Receipts minus Payments</p>
       </div>
 
-      <button onclick="logout()" class="w-full flex items-center gap-2.5 px-3 py-2 text-rose-300 hover:bg-rose-500/20 rounded-xl transition text-xs font-bold">
-        <i data-lucide="log-out" class="w-4 h-4"></i> Switch Profile
+      <button onclick="handleGoogleSignIn()" class="w-full flex items-center justify-center gap-2.5 px-3 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition text-xs font-bold shadow-md">
+        <i data-lucide="user-check" class="w-4 h-4"></i> Sign In with Google
       </button>
-
-      <div class="mt-3 pt-3 border-t border-white/20 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-indigo-950/80 border border-white/30 flex items-center justify-center font-bold text-white text-sm shrink-0" id="sidebar-initial-avatar">
-          A
-        </div>
-        <div class="overflow-hidden">
-          <p class="text-xs font-bold text-white truncate drop-shadow" id="sidebar-user-name">Aditya</p>
-          <p class="text-[10px] text-indigo-200 truncate" id="sidebar-user-email">aditya@example.com</p>
-        </div>
-      </div>
     </div>
   </aside>
 
@@ -186,13 +135,9 @@
       <span class="font-bold text-base heading-font text-white">Khata Bahi</span>
     </div>
     <div class="flex items-center gap-2">
-      <span id="user-plan-badge" class="plan-badge-tag text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-full border border-slate-200">
-        Free Plan
-      </span>
-
-      <div onclick="switchTab('profile')" class="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white flex items-center justify-center font-bold text-xs cursor-pointer shadow-md border border-white/40 overflow-hidden" id="mobile-header-avatar">
-        A
-      </div>
+      <button onclick="handleGoogleSignIn()" class="text-[11px] bg-indigo-600 text-white font-bold px-3 py-1 rounded-full shadow-sm">
+        Sign In
+      </button>
     </div>
   </div>
 
@@ -202,8 +147,8 @@
     <!-- Top Header -->
     <header class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6 md:mb-8">
       <div>
-        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 heading-font drop-shadow-sm" id="welcome-heading">Hello, <span id="user-header-name">User</span> 👋</h1>
-        <p class="text-xs md:text-sm text-slate-700 font-bold drop-shadow-sm" id="header-subtitle">Digital Khata Bahi Overview</p>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 heading-font drop-shadow-sm" id="welcome-heading">Welcome to Khata Bahi 🌸</h1>
+        <p class="text-xs md:text-sm text-slate-700 font-bold drop-shadow-sm" id="header-subtitle">Digital Bookkeeping & Business Ledger Solution</p>
       </div>
       <div class="flex items-center gap-2 sm:gap-3">
         <button onclick="exportData()" class="flex-1 sm:flex-none glass-card hover:bg-white text-slate-800 px-4 py-2.5 rounded-2xl text-xs md:text-sm font-bold flex items-center justify-center gap-2 transition">
@@ -212,14 +157,63 @@
         <button onclick="openModal()" class="flex-1 sm:flex-none bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2.5 rounded-2xl text-xs md:text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/25 transition">
           <i data-lucide="plus" class="w-4 h-4"></i> Add Entry
         </button>
-        <div onclick="switchTab('profile')" class="hidden md:flex w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-white items-center justify-center cursor-pointer font-bold border-2 border-white shadow-md overflow-hidden shrink-0" id="header-avatar">
-          A
-        </div>
       </div>
     </header>
 
+    <!-- 0. PUBLIC ABOUT & LANDING PAGE (PRIMARY ADSENSE PUBLISHER CONTENT) -->
+    <div id="view-about" class="tab-view space-y-6">
+      <section class="glass-card p-6 md:p-8 rounded-3xl space-y-6">
+        <div class="max-w-3xl">
+          <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Simple & Secure Ledger</span>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 heading-font mt-3">Smart Digital Bookkeeping for Small Businesses & Shopkeepers</h2>
+          <p class="text-xs md:text-sm text-slate-600 mt-2 leading-relaxed">
+            Khata Bahi is a free digital bookkeeping solution engineered to help shopkeepers, small business owners, traders, and freelancers replace traditional paper credit notebooks (Bahi Khata). Maintain your daily cash-in (Jama) and cash-out (Udhar) entries, compute automated GST tax obligations, generate printable invoices, and export financial summaries.
+          </p>
+          <div class="mt-4 flex gap-3">
+            <button onclick="handleGoogleSignIn()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs shadow-md transition flex items-center gap-2">
+              <i data-lucide="log-in" class="w-4 h-4"></i> Sign In to Sync Data
+            </button>
+            <button onclick="switchTab('dashboard')" class="bg-white hover:bg-slate-50 text-slate-800 font-bold px-5 py-2.5 rounded-xl text-xs border border-slate-200 transition">
+              Open Ledger Dashboard
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-slate-200/80">
+          <div class="bg-white/80 p-4 rounded-2xl border border-slate-200/60">
+            <div class="bg-emerald-100 text-emerald-700 p-2.5 rounded-xl w-fit mb-2"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
+            <h3 class="font-bold text-slate-800 text-sm">100% Offline & Private</h3>
+            <p class="text-xs text-slate-500 mt-1">Your transaction history stays stored safely inside your local device storage. We never store personal balances on external servers without your permission.</p>
+          </div>
+          <div class="bg-white/80 p-4 rounded-2xl border border-slate-200/60">
+            <div class="bg-indigo-100 text-indigo-700 p-2.5 rounded-xl w-fit mb-2"><i data-lucide="calculator" class="w-5 h-5"></i></div>
+            <h3 class="font-bold text-slate-800 text-sm">GST & Invoice Billing</h3>
+            <p class="text-xs text-slate-500 mt-1">Calculate tax rates automatically (5%, 12%, 18%, 28%) and generate professional tax invoices ready for PDF printing or sharing.</p>
+          </div>
+          <div class="bg-white/80 p-4 rounded-2xl border border-slate-200/60">
+            <div class="bg-purple-100 text-purple-700 p-2.5 rounded-xl w-fit mb-2"><i data-lucide="file-spreadsheet" class="w-5 h-5"></i></div>
+            <h3 class="font-bold text-slate-800 text-sm">Free Document Tools</h3>
+            <p class="text-xs text-slate-500 mt-1">Access utility tools to convert PDF files into Excel sheets, convert images to PDF format, and parse spreadsheets client-side.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- READABLE ARTICLE SECTION FOR ADSENSE CRAWLERS -->
+      <section class="glass-card p-6 md:p-8 rounded-3xl space-y-4">
+        <h3 class="text-lg font-bold text-slate-900 heading-font">Why Shift from Paper Registers to Digital Khata Bahi?</h3>
+        <div class="text-xs text-slate-600 leading-relaxed space-y-3">
+          <p>
+            Managing financial records on traditional paper ledgers poses risks of physical damage, mathematical errors, and loss of credit history. With <strong>Khata Bahi</strong>, business owners gain real-time visibility into net daily cash flow, incoming receipts, and pending credit receivables.
+          </p>
+          <p>
+            Whether you run a Kirana shop, retail outlet, service center, or work as an independent consultant, maintaining accurate ledger entries ensures smoother tax filing, better cash management, and organized financial reports.
+          </p>
+        </div>
+      </section>
+    </div>
+
     <!-- 1. DASHBOARD VIEW -->
-    <div id="view-dashboard" class="tab-view space-y-6 md:space-y-8">
+    <div id="view-dashboard" class="tab-view hidden space-y-6 md:space-y-8">
       <section class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
         <div class="glass-card p-4 rounded-3xl flex flex-col justify-between relative overflow-hidden">
           <div class="flex justify-between items-start">
@@ -406,29 +400,7 @@
       <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6" id="categories-grid"></section>
     </div>
 
-    <!-- 5. REPORTS VIEW -->
-    <div id="view-reports" class="tab-view hidden space-y-6">
-      <div class="glass-card p-5 md:p-6 rounded-3xl">
-        <h3 class="font-bold text-slate-800 text-base md:text-lg heading-font mb-1">Financial Summary</h3>
-        <p class="text-xs text-slate-500 mb-6">Automated ledger calculation</p>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          <div class="p-4 bg-white/90 rounded-2xl border border-slate-100">
-            <span class="text-xs text-slate-500 font-medium">Total Entries Count</span>
-            <h4 id="report-total-count" class="text-base md:text-lg font-bold text-slate-800 mt-1">0</h4>
-          </div>
-          <div class="p-4 bg-white/90 rounded-2xl border border-slate-100">
-            <span class="text-xs text-slate-500 font-medium">Plan Type</span>
-            <h4 id="report-plan-type" class="text-base md:text-lg font-bold text-indigo-600 mt-1">Free Tier</h4>
-          </div>
-          <div class="p-4 bg-white/90 rounded-2xl border border-slate-100">
-            <span class="text-xs text-slate-500 font-medium">Total GST Amount</span>
-            <h4 id="report-gst-amount" class="text-base md:text-lg font-bold text-amber-600 mt-1">₹0.00</h4>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 6. USER GUIDE & FAQ VIEW (NEW TEXT CONTENT FOR ADSENSE) -->
+    <!-- 5. USER GUIDE & FAQ VIEW -->
     <div id="view-guide" class="tab-view hidden space-y-6">
       <div class="glass-card p-6 rounded-3xl space-y-6 max-w-4xl">
         <div>
@@ -455,43 +427,7 @@
       </div>
     </div>
 
-    <!-- 7. PROFILE VIEW -->
-    <div id="view-profile" class="tab-view hidden bg-white/80 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-lg border border-white/40 space-y-6">
-      <h3 class="text-xl font-bold text-slate-800">Business Profile Settings</h3>
-
-      <div class="flex items-center gap-4 pb-4 border-b border-slate-200/60">
-        <div class="relative w-14 h-14 rounded-full bg-purple-600 text-white font-bold text-2xl flex items-center justify-center overflow-hidden shadow-sm shrink-0">
-          <span id="profile-avatar-large">A</span>
-        </div>
-        <div>
-          <h4 id="profile-display-name" class="font-bold text-slate-800 text-base md:text-lg">User</h4>
-          <p id="profile-display-email" class="text-xs md:text-sm text-slate-500"></p>
-        </div>
-      </div>
-
-      <div class="space-y-5">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1.5">Business / User Name</label>
-          <input type="text" id="profile-name-input" class="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500 text-slate-800" placeholder="Enter Business Name" />
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1.5">Email</label>
-          <input type="email" id="profile-email-input" class="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500 text-slate-800" placeholder="Enter Email" />
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1.5">Currency Symbol</label>
-          <input type="text" id="profile-currency-input" value="₹" class="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500 text-slate-800" />
-        </div>
-
-        <button onclick="saveProfileChanges()" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-xl shadow-md transition-all cursor-pointer">
-          Save Changes
-        </button>
-      </div>
-    </div>
-
-    <!-- 8. SETTINGS VIEW -->
+    <!-- 6. SETTINGS VIEW -->
     <div id="view-settings" class="tab-view hidden space-y-6">
       <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-lg border border-white/40 space-y-6 max-w-2xl">
         <div>
@@ -499,7 +435,6 @@
           <p class="text-xs md:text-sm text-slate-500">System preferences and app settings.</p>
         </div>
         
-        <!-- Membership Plan Status -->
         <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-3">
           <div>
             <h4 class="font-bold text-slate-800 text-sm">Account Plan</h4>
@@ -510,7 +445,6 @@
           </button>
         </div>
 
-        <!-- Data Management -->
         <div class="space-y-3 pt-2">
           <h4 class="font-bold text-slate-800 text-sm">Data & Backup</h4>
           <div class="flex gap-3">
@@ -523,7 +457,6 @@
           </div>
         </div>
 
-        <!-- ABOUT & POLICY SECTION FOR GOOGLE ADSENSE -->
         <div class="mt-6 pt-6 border-t border-slate-200 text-slate-600">
           <h3 class="font-bold text-slate-800 text-sm mb-1">About Khata Bahi Digital Services</h3>
           <p class="text-xs mb-3 leading-relaxed">
@@ -546,11 +479,11 @@
 
   <!-- MOBILE BOTTOM NAVIGATION BAR -->
   <nav class="md:hidden fixed bottom-0 left-0 right-0 glass-nav-mobile text-white flex justify-around items-center p-2 z-40">
-    <button onclick="switchTab('dashboard')" id="m-nav-dashboard" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-indigo-300 font-bold">
-      <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+    <button onclick="switchTab('about')" id="m-nav-about" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-indigo-300 font-bold">
+      <i data-lucide="home" class="w-5 h-5"></i> Home
     </button>
-    <button onclick="switchTab('transactions')" id="m-nav-transactions" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
-      <i data-lucide="list-todo" class="w-5 h-5"></i> Entries
+    <button onclick="switchTab('dashboard')" id="m-nav-dashboard" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
+      <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Ledger
     </button>
     <button onclick="switchTab('tools')" id="m-nav-tools" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
       <i data-lucide="wrench" class="w-5 h-5 text-purple-300"></i> Tools
@@ -563,7 +496,7 @@
     </button>
   </nav>
 
-  <!-- POLICY MODAL (FOR ADSENSE COMPLIANCE) -->
+  <!-- POLICY MODAL -->
   <div id="policy-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
     <div class="glass-card bg-white/95 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative border border-white space-y-4 max-h-[85vh] overflow-y-auto text-xs text-slate-700 leading-relaxed">
       <div class="flex justify-between items-center border-b border-slate-200 pb-2">
@@ -719,54 +652,6 @@
     </div>
   </div>
 
-  <!-- HIDDEN PDF TEMPLATE -->
-  <div class="hidden">
-    <div id="invoice-pdf-template" class="p-8 bg-white text-slate-800 space-y-6 w-[650px] font-sans">
-      <div class="flex justify-between items-start border-b border-slate-200 pb-4">
-        <div>
-          <h2 class="text-2xl font-extrabold text-indigo-600">TAX INVOICE</h2>
-          <p class="text-xs text-slate-500">Khata Bahi Digital Services</p>
-        </div>
-        <div class="text-right text-xs text-slate-600 leading-relaxed">
-          <p>Date: <span id="pdf-inv-date">--</span></p>
-          <p>Invoice #: <span id="pdf-inv-num">KB-1001</span></p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-2 gap-4 text-xs bg-slate-50 p-4 rounded-xl">
-        <div>
-          <p class="text-slate-400 font-semibold uppercase text-[10px]">Billed To / Party:</p>
-          <p class="font-bold text-slate-800 text-sm mt-0.5" id="pdf-party-name">Rahul Verma</p>
-        </div>
-        <div>
-          <p class="text-slate-400 font-semibold uppercase text-[10px]">Voucher Type:</p>
-          <p class="font-bold text-slate-800 text-sm mt-0.5" id="pdf-entry-type">Receipt</p>
-        </div>
-      </div>
-
-      <table class="w-full text-left text-xs border-collapse">
-        <thead>
-          <tr class="bg-slate-100 border-b border-slate-200 text-slate-700">
-            <th class="p-2.5 font-bold">Particulars / Description</th>
-            <th class="p-2.5 font-bold text-center">GST Rate</th>
-            <th class="p-2.5 font-bold text-right">Total Amount</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100">
-          <tr>
-            <td class="p-2.5 font-medium" id="pdf-desc">Payment Received</td>
-            <td class="p-2.5 text-center font-medium" id="pdf-gst">0%</td>
-            <td class="p-2.5 text-right font-bold" id="pdf-amount">₹0.00</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="pt-6 border-t border-slate-200 text-center text-[10px] text-slate-400">
-        Thank you for your business! Generated digitally via Khata Bahi.
-      </div>
-    </div>
-  </div>
-
   <!-- APPLICATION LOGIC -->
   <script>
     lucide.createIcons();
@@ -820,16 +705,9 @@
       return Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
     }
 
-    function checkAuth() {
-      checkProSubscriptionExpiry();
-      renderProfileInfo();
-      updateProStatusUI();
-    }
-
     function updateProStatusUI() {
       const planBadge = document.getElementById('sidebar-plan-badge');
       const planDesc = document.getElementById('settings-plan-desc');
-      const reportPlan = document.getElementById('report-plan-type');
       const proFields = document.getElementById('pro-fields-container');
       const settingsUpgradeBtn = document.getElementById('settings-upgrade-btn');
 
@@ -839,58 +717,15 @@
         if (settingsUpgradeBtn) settingsUpgradeBtn.classList.add('hidden');
         if(planBadge) planBadge.innerHTML = `<i data-lucide="crown" class="w-3 h-3 text-amber-300"></i> Pro (${remainingDays}d left)`;
         if(planDesc) planDesc.innerText = `Pro Membership Active (${remainingDays} days remaining)`;
-        if(reportPlan) reportPlan.innerText = `Pro Tier ⭐ (${remainingDays}d left)`;
         if(proFields) proFields.classList.remove('hidden');
       } else {
         if (settingsUpgradeBtn) settingsUpgradeBtn.classList.remove('hidden');
         if(planBadge) planBadge.innerHTML = `<i data-lucide="shield" class="w-3 h-3"></i> Free Plan`;
         if(planDesc) planDesc.innerText = `Free Plan (Receipt & Payment only)`;
-        if(reportPlan) reportPlan.innerText = `Free Tier`;
         if(proFields) proFields.classList.add('hidden');
       }
       if (window.updatePlanUI) window.updatePlanUI(isProUser);
       lucide.createIcons();
-    }
-
-    function logout() {
-      if (confirm('Switching profiles will clear local user login session. Continue?')) {
-        localStorage.removeItem('ledger_user');
-        currentUser = null;
-        document.getElementById('auth-overlay').classList.remove('hidden');
-      }
-    }
-
-    function renderProfileInfo() {
-      if (!currentUser) return;
-      const name = currentUser.name || 'Aditya';
-      const firstInitial = name.charAt(0).toUpperCase();
-
-      document.getElementById('welcome-heading').innerText = `Hello, ${name} 👋`;
-      document.getElementById('sidebar-user-name').innerText = name;
-      document.getElementById('sidebar-user-email').innerText = currentUser.email || '';
-      document.getElementById('sidebar-initial-avatar').innerText = firstInitial;
-      document.getElementById('header-avatar').innerText = firstInitial;
-      document.getElementById('mobile-header-avatar').innerText = firstInitial;
-      document.getElementById('profile-avatar-large').innerText = firstInitial;
-
-      document.getElementById('profile-display-name').innerText = name;
-      document.getElementById('profile-display-email').innerText = currentUser.email || '';
-
-      document.getElementById('profile-name-input').value = name;
-      document.getElementById('profile-email-input').value = currentUser.email || '';
-      document.getElementById('profile-currency-input').value = currentUser.currency || '₹';
-    }
-
-    function saveProfileChanges() {
-      currentUser = {
-        name: document.getElementById('profile-name-input').value || 'Aditya',
-        email: document.getElementById('profile-email-input').value || '',
-        currency: document.getElementById('profile-currency-input').value || '₹'
-      };
-      localStorage.setItem('ledger_user', JSON.stringify(currentUser));
-      renderProfileInfo();
-      saveAndRender();
-      alert('Profile details saved successfully!');
     }
 
     function toggleVoucherFields() {
@@ -946,7 +781,6 @@
       }
 
       if(tab === 'categories') renderCategories();
-      if(tab === 'reports') renderReports();
     }
 
     function saveAndRender() {
@@ -1028,7 +862,6 @@
             ${curr}${(item.totalAmount || item.amount).toLocaleString('en-IN', {minimumFractionDigits: 2})}
           </td>
           <td class="py-3.5 text-right flex items-center justify-end gap-2">
-            <button onclick="generateInvoicePDF(${item.id})" title="Print PDF Invoice" class="text-indigo-600 bg-indigo-50 p-1.5 rounded-lg transition hover:bg-indigo-100"><i data-lucide="file-text" class="w-4 h-4"></i></button>
             <button onclick="deleteTransaction(${item.id})" title="Delete" class="text-rose-400 hover:text-rose-600 p-1.5 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
           </td>
         `;
@@ -1074,40 +907,11 @@
       });
     }
 
-    function renderReports() {
-      const curr = currentUser ? currentUser.currency : '₹';
-      const totalGst = transactions.reduce((acc, t) => acc + (t.gstAmount || 0), 0);
-
-      document.getElementById('report-total-count').innerText = transactions.length;
-      document.getElementById('report-gst-amount').innerText = `${curr}${totalGst.toLocaleString('en-IN')}`;
-    }
-
     function deleteTransaction(id) {
       if(confirm('Delete this entry from your history?')) {
         transactions = transactions.filter(t => t.id !== id);
         saveAndRender();
       }
-    }
-
-    function generateInvoicePDF(id) {
-      const item = transactions.find(t => t.id === id);
-      if (!item) return;
-
-      document.getElementById('pdf-inv-date').innerText = formatDateToDDMMYYYY(item.date);
-      document.getElementById('pdf-inv-num').innerText = `KB-${item.id.toString().slice(-4)}`;
-      document.getElementById('pdf-party-name').innerText = item.partyName || 'General Customer';
-      document.getElementById('pdf-entry-type').innerText = item.type.toUpperCase();
-      document.getElementById('pdf-desc').innerText = item.description;
-      document.getElementById('pdf-gst').innerText = `${item.gstRate || 0}%`;
-      document.getElementById('pdf-amount').innerText = `₹${(item.totalAmount || item.amount).toLocaleString('en-IN')}`;
-
-      const element = document.getElementById('invoice-pdf-template');
-      html2pdf().set({
-        margin: 10,
-        filename: `Invoice_${item.partyName || 'Entry'}_${item.id}.pdf`,
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      }).from(element).save();
     }
 
     function initCharts() {
@@ -1159,7 +963,7 @@
       }
     }
 
-    /* ---------------- CONVERSION UTILITIES ENGINE ---------------- */
+    /* ---------------- CONVERSION UTILITIES ---------------- */
     function convertImageToPDF() {
       const fileInput = document.getElementById('img-file-input');
       if (!fileInput.files || !fileInput.files.length) return alert('Please select an image file first!');
@@ -1284,31 +1088,28 @@
       if (type === 'privacy') {
         title.innerText = "Privacy Policy";
         body.innerHTML = `
-          <p>At Khata Bahi, accessible from swadsangamindia.github.io, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Khata Bahi and how we use it.</p>
-          <p><strong>Local Data Storage:</strong> All financial entries, custom profile details, and ledger records are saved locally inside your web browser's Local Storage. We do not transmit or store your personal transaction entries on remote servers.</p>
-
-          <p><strong>Google AdSense & Cookies:</strong> Khata Bahi uses Google AdSense to serve advertisements. Google uses cookies (such as the DoubleClick cookie) to serve ads to users based on their visit to our site and other sites on the Internet.</p>
+          <p>At Khata Bahi, accessible from swadsangamindia.github.io, one of our main priorities is visitor privacy. This document outlines how information is collected and used.</p>
+          <p><strong>Local Storage:</strong> All entries and ledger calculations stay inside your local browser. We do not store personal financial logs on remote servers.</p>
+          <p><strong>Google AdSense:</strong> We use Google AdSense to serve ads. Google uses cookies (DoubleCLick) to display relevant advertisements to visitors based on website visits.</p>
         `;
       } else {
         title.innerText = "Terms of Service";
         body.innerHTML = `
-          <p>By accessing Khata Bahi, you agree to comply with these terms of service. Khata Bahi provides client-side digital bookkeeping tools, invoice exports, and file conversion utilities free of charge.</p>
-          <p><strong>User Data & Backup:</strong> Because all financial data lives strictly on your local browser device, users are responsible for using the 'Export CSV' tool to create personal backups. Khata Bahi is not responsible for lost ledger records caused by clearing browser caches or device resets.</p>
+          <p>By using Khata Bahi, you agree to comply with our terms. We offer free digital bookkeeping tools, calculations, and PDF conversion utilities.</p>
+          <p><strong>Data Backup Responsibility:</strong> Because data lives locally on your browser device, users should utilize the 'Export CSV' option to keep offsite backups.</p>
         `;
       }
       modal.classList.remove('hidden');
     }
 
-    function closePolicyModal() {
-      document.getElementById('policy-modal').classList.add('hidden');
-    }
+    function closePolicyModal() { document.getElementById('policy-modal').classList.add('hidden'); }
 
     function verifyUpiPayment() {
       const utr = document.getElementById('upi-utr-input').value.trim();
       if (utr.length >= 8) {
         activate30DaysPro(`UPI Ref: ${utr}`);
       } else {
-        alert("Please enter a valid UTR/Transaction Reference Number.");
+        alert("Please enter a valid UTR Number.");
       }
     }
 
@@ -1416,12 +1217,13 @@
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
     setupUpiPaymentLinks();
-    checkAuth();
+    checkProSubscriptionExpiry();
+    updateProStatusUI();
     initCharts();
     saveAndRender();
   </script>
 
-  <!-- FIREBASE & AUTH MODULE -->
+  <!-- FIREBASE MODULE -->
   <script type="module">
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -1472,9 +1274,6 @@
     };
 
     function handleAuthUser(user) {
-      const authOverlay = document.getElementById('auth-overlay');
-      if (authOverlay) authOverlay.classList.add('hidden');
-
       const currentUser = {
         name: user.displayName || 'Aditya',
         email: user.email || 'aditya@example.com',
@@ -1482,7 +1281,11 @@
       };
 
       localStorage.setItem('ledger_user', JSON.stringify(currentUser));
-      if (typeof renderProfileInfo === 'function') renderProfileInfo();
+      const welcomeH = document.getElementById('welcome-heading');
+      if(welcomeH) welcomeH.innerText = `Hello, ${currentUser.name} 👋`;
+      
+      // Auto-switch to Dashboard upon login
+      if(typeof switchTab === 'function') switchTab('dashboard');
     }
 
     onAuthStateChanged(auth, (user) => {
