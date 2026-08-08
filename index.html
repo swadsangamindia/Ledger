@@ -35,7 +35,6 @@
     }
     .heading-font { font-family: 'Quicksand', sans-serif; }
     
-    /* Solid High-Contrast Cards for Crystal Clear Text */
     .glass-card {
       background: #ffffff !important;
       border: 1px solid #e2e8f0;
@@ -136,6 +135,9 @@
       <select id="mobile-company-selector" onchange="switchActiveCompanyMobile()" class="bg-slate-800 text-white font-bold text-[11px] rounded-lg p-1.5 border border-slate-600">
         <!-- Dynamically populated -->
       </select>
+      <button onclick="openAddCompanyModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold px-2.5 py-1.5 rounded-lg flex items-center gap-1 shadow-sm">
+        <i data-lucide="plus" class="w-3 h-3"></i> New
+      </button>
     </div>
   </div>
 
@@ -439,10 +441,29 @@
 
     <!-- 5. COMPANY SETTINGS VIEW -->
     <div id="view-settings" class="tab-view hidden space-y-6">
+      
+      <!-- ALL CREATED COMPANIES MANAGEMENT CARD -->
+      <div class="glass-card p-6 md:p-8 rounded-3xl space-y-4 max-w-2xl">
+        <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+          <div>
+            <h3 class="text-lg font-bold text-slate-900 heading-font">Your Created Companies</h3>
+            <p class="text-xs text-slate-500">Tap any company below to select and start working on its ledger</p>
+          </div>
+          <button onclick="openAddCompanyModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs flex items-center gap-1 transition shadow-sm">
+            <i data-lucide="plus" class="w-4 h-4"></i> Add New Company
+          </button>
+        </div>
+
+        <div id="company-list-container" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+          <!-- Dynamically populated company cards -->
+        </div>
+      </div>
+
+      <!-- EDIT ACTIVE COMPANY DETAILS FORM -->
       <div class="glass-card p-6 md:p-8 rounded-3xl space-y-6 max-w-2xl">
         <div>
-          <h3 class="text-xl font-bold text-slate-900 heading-font">Active Company Details & Invoice Branding</h3>
-          <p class="text-xs text-slate-600 mt-1">These details will be printed on all invoices issued under <span class="font-bold text-indigo-600" id="settings-current-company-title">Active Company</span>.</p>
+          <h3 class="text-xl font-bold text-slate-900 heading-font">Active Company Invoice Details</h3>
+          <p class="text-xs text-slate-600 mt-1">Editing details for: <span class="font-extrabold text-indigo-600" id="settings-current-company-title">Active Company</span></p>
         </div>
 
         <form id="company-profile-form" onsubmit="saveCompanyDetails(event)" class="space-y-4 text-xs">
@@ -467,7 +488,7 @@
             <textarea id="set-company-address" rows="2" class="w-full p-3 border border-slate-300 rounded-xl bg-slate-50 font-semibold text-slate-800 focus:outline-indigo-600" placeholder="Street Address, City, State, Pin Code"></textarea>
           </div>
 
-          <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl transition shadow-md">Save & Update Company Details</button>
+          <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl transition shadow-md">Save Changes to Active Company</button>
         </form>
 
         <div class="pt-4 border-t border-slate-200">
@@ -761,16 +782,16 @@
       const desktopSel = document.getElementById('company-selector');
       const mobileSel = document.getElementById('mobile-company-selector');
 
-      if (!desktopSel || !mobileSel) return;
+      if (desktopSel && mobileSel) {
+        desktopSel.innerHTML = '';
+        mobileSel.innerHTML = '';
 
-      desktopSel.innerHTML = '';
-      mobileSel.innerHTML = '';
-
-      companies.forEach(c => {
-        const selected = c.id === activeCompanyId ? 'selected' : '';
-        desktopSel.innerHTML += `<option value="${c.id}" ${selected}>${c.name}</option>`;
-        mobileSel.innerHTML += `<option value="${c.id}" ${selected}>${c.name}</option>`;
-      });
+        companies.forEach(c => {
+          const selected = c.id === activeCompanyId ? 'selected' : '';
+          desktopSel.innerHTML += `<option value="${c.id}" ${selected}>${c.name}</option>`;
+          mobileSel.innerHTML += `<option value="${c.id}" ${selected}>${c.name}</option>`;
+        });
+      }
 
       const activeComp = getActiveCompany();
       const currentCompDisplay = document.getElementById('current-company-display');
@@ -785,6 +806,34 @@
       document.getElementById('set-company-gstin').value = activeComp.gstin || '';
       document.getElementById('set-company-phone').value = activeComp.phone || '';
       document.getElementById('set-company-address').value = activeComp.address || '';
+
+      renderCompanyCardsList();
+    }
+
+    function renderCompanyCardsList() {
+      const container = document.getElementById('company-list-container');
+      if (!container) return;
+
+      container.innerHTML = '';
+      companies.forEach(c => {
+        const isActive = c.id === activeCompanyId;
+        container.innerHTML += `
+          <div onclick="selectCompanyById('${c.id}')" class="p-3 rounded-2xl border transition cursor-pointer flex justify-between items-center ${isActive ? 'bg-indigo-50 border-indigo-500 shadow-sm' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}">
+            <div>
+              <p class="font-bold text-xs text-slate-800">${c.name} ${isActive ? '<span class="text-[10px] bg-indigo-600 text-white px-2 py-0.5 rounded-full ml-1 font-bold">Active</span>' : ''}</p>
+              <p class="text-[10px] text-slate-500 mt-0.5">${c.address || 'No address set'} ${c.gstin ? '• GST: ' + c.gstin : ''}</p>
+            </div>
+            <i data-lucide="${isActive ? 'check-circle-2' : 'circle'}" class="w-4 h-4 ${isActive ? 'text-indigo-600' : 'text-slate-400'}"></i>
+          </div>
+        `;
+      });
+      lucide.createIcons();
+    }
+
+    function selectCompanyById(id) {
+      activeCompanyId = id;
+      localStorage.setItem('ledger_active_company_id', activeCompanyId);
+      loadCompanyTransactions();
     }
 
     function getActiveCompany() {
@@ -824,8 +873,8 @@
       const newComp = {
         id: `c_${Date.now()}`,
         name: nameInput,
-        address: '',
-        gstin: '',
+        address: 'Delhi, India',
+        gstin: 'N/A',
         phone: ''
       };
 
@@ -838,7 +887,7 @@
       closeAddCompanyModal();
       document.getElementById('new-company-name-input').value = '';
       loadCompanyTransactions();
-      alert(`Company "${newComp.name}" created and set as active!`);
+      alert(`Company "${newComp.name}" created! Switch anytime from the top company dropdown.`);
     }
 
     function saveCompanyDetails(e) {
@@ -850,10 +899,9 @@
       activeComp.phone = document.getElementById('set-company-phone').value.trim();
       activeComp.address = document.getElementById('set-company-address').value.trim();
 
-      // Save into companies list
       localStorage.setItem('ledger_companies', JSON.stringify(companies));
       renderCompanySelectors();
-      alert(`Company details for "${activeComp.name}" updated successfully!`);
+      alert(`Updated profile details for "${activeComp.name}"!`);
     }
 
     function setupUpiPaymentLinks() {
