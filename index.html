@@ -126,7 +126,7 @@
     </div>
   </aside>
 
-  <!-- MOBILE HEADER -->
+  <!-- MOBILE HEADER (SIGN-IN BUTTON REMOVED) -->
   <div class="md:hidden glass-sidebar text-white p-4 flex justify-between items-center shrink-0 border-b border-white/20 z-20">
     <div class="flex items-center gap-2">
       <div class="bg-indigo-600 p-2 rounded-xl text-white">
@@ -135,9 +135,9 @@
       <span class="font-bold text-base heading-font text-white">Khata Bahi</span>
     </div>
     <div class="flex items-center gap-2">
-      <button onclick="handleGoogleSignIn()" class="text-[11px] bg-indigo-600 text-white font-bold px-3 py-1 rounded-full shadow-sm">
-        Sign In
-      </button>
+      <span id="user-plan-badge" class="plan-badge-tag text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-full border border-slate-200">
+        Free Plan
+      </span>
     </div>
   </div>
 
@@ -160,7 +160,7 @@
       </div>
     </header>
 
-    <!-- 0. PUBLIC ABOUT & LANDING PAGE (PRIMARY ADSENSE PUBLISHER CONTENT) -->
+    <!-- 0. PUBLIC ABOUT & LANDING PAGE -->
     <div id="view-about" class="tab-view space-y-6">
       <section class="glass-card p-6 md:p-8 rounded-3xl space-y-6">
         <div class="max-w-3xl">
@@ -183,31 +183,18 @@
           <div class="bg-white/80 p-4 rounded-2xl border border-slate-200/60">
             <div class="bg-emerald-100 text-emerald-700 p-2.5 rounded-xl w-fit mb-2"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
             <h3 class="font-bold text-slate-800 text-sm">100% Offline & Private</h3>
-            <p class="text-xs text-slate-500 mt-1">Your transaction history stays stored safely inside your local device storage. We never store personal balances on external servers without your permission.</p>
+            <p class="text-xs text-slate-500 mt-1">Your transaction history stays stored safely inside your local device storage.</p>
           </div>
           <div class="bg-white/80 p-4 rounded-2xl border border-slate-200/60">
             <div class="bg-indigo-100 text-indigo-700 p-2.5 rounded-xl w-fit mb-2"><i data-lucide="calculator" class="w-5 h-5"></i></div>
             <h3 class="font-bold text-slate-800 text-sm">GST & Invoice Billing</h3>
-            <p class="text-xs text-slate-500 mt-1">Calculate tax rates automatically (5%, 12%, 18%, 28%) and generate professional tax invoices ready for PDF printing or sharing.</p>
+            <p class="text-xs text-slate-500 mt-1">Calculate tax rates automatically and generate professional tax invoices ready for PDF printing.</p>
           </div>
           <div class="bg-white/80 p-4 rounded-2xl border border-slate-200/60">
             <div class="bg-purple-100 text-purple-700 p-2.5 rounded-xl w-fit mb-2"><i data-lucide="file-spreadsheet" class="w-5 h-5"></i></div>
             <h3 class="font-bold text-slate-800 text-sm">Free Document Tools</h3>
-            <p class="text-xs text-slate-500 mt-1">Access utility tools to convert PDF files into Excel sheets, convert images to PDF format, and parse spreadsheets client-side.</p>
+            <p class="text-xs text-slate-500 mt-1">Access utility tools to convert PDF files into Excel sheets and images to PDF format.</p>
           </div>
-        </div>
-      </section>
-
-      <!-- READABLE ARTICLE SECTION FOR ADSENSE CRAWLERS -->
-      <section class="glass-card p-6 md:p-8 rounded-3xl space-y-4">
-        <h3 class="text-lg font-bold text-slate-900 heading-font">Why Shift from Paper Registers to Digital Khata Bahi?</h3>
-        <div class="text-xs text-slate-600 leading-relaxed space-y-3">
-          <p>
-            Managing financial records on traditional paper ledgers poses risks of physical damage, mathematical errors, and loss of credit history. With <strong>Khata Bahi</strong>, business owners gain real-time visibility into net daily cash flow, incoming receipts, and pending credit receivables.
-          </p>
-          <p>
-            Whether you run a Kirana shop, retail outlet, service center, or work as an independent consultant, maintaining accurate ledger entries ensures smoother tax filing, better cash management, and organized financial reports.
-          </p>
         </div>
       </section>
     </div>
@@ -288,12 +275,13 @@
           <table class="w-full text-left text-xs min-w-[650px]">
             <thead>
               <tr class="text-slate-500 border-b border-slate-200/80">
-                <th class="pb-3 font-semibold">Date (DD-MM-YYYY)</th>
+                <th class="pb-3 font-semibold">Date</th>
                 <th class="pb-3 font-semibold">Type</th>
                 <th class="pb-3 font-semibold">Party Name</th>
                 <th class="pb-3 font-semibold">Description</th>
                 <th class="pb-3 font-semibold">GST</th>
                 <th class="pb-3 font-semibold">Amount</th>
+                <th class="pb-3 font-semibold text-right">Action</th>
               </tr>
             </thead>
             <tbody id="dashboard-recent-rows" class="divide-y divide-slate-100 font-semibold text-slate-800"></tbody>
@@ -313,7 +301,7 @@
           <table class="w-full text-left text-xs min-w-[750px]">
             <thead>
               <tr class="text-slate-500 border-b border-slate-200/80">
-                <th class="pb-3 font-semibold">Date (DD-MM-YYYY)</th>
+                <th class="pb-3 font-semibold">Date</th>
                 <th class="pb-3 font-semibold">Type</th>
                 <th class="pb-3 font-semibold">Party Name</th>
                 <th class="pb-3 font-semibold">Description</th>
@@ -364,34 +352,6 @@
             <i data-lucide="file-down" class="w-4 h-4"></i> Convert & Download PDF
           </button>
         </div>
-
-        <div class="glass-card p-5 rounded-3xl space-y-4">
-          <div class="flex items-center gap-3">
-            <div class="bg-emerald-100 text-emerald-600 p-3 rounded-2xl"><i data-lucide="file-type" class="w-6 h-6"></i></div>
-            <div>
-              <h3 class="font-bold text-slate-800 text-sm">Excel to PDF Converter</h3>
-              <p class="text-xs text-slate-500">Parse .XLSX sheets and export formatted PDF documents</p>
-            </div>
-          </div>
-          <input type="file" id="excel-file-input" accept=".xlsx, .xls, .csv" class="w-full text-xs border border-slate-200 rounded-xl p-2.5 bg-white/90 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-emerald-600 file:text-white file:font-semibold" />
-          <button onclick="convertExcelToPDF()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
-            <i data-lucide="file-down" class="w-4 h-4"></i> Export Excel to PDF
-          </button>
-        </div>
-
-        <div class="glass-card p-5 rounded-3xl space-y-4">
-          <div class="flex items-center gap-3">
-            <div class="bg-rose-100 text-rose-600 p-3 rounded-2xl"><i data-lucide="file-image" class="w-6 h-6"></i></div>
-            <div>
-              <h3 class="font-bold text-slate-800 text-sm">PDF to Image Converter</h3>
-              <p class="text-xs text-slate-500">Extract PDF pages into PNG images</p>
-            </div>
-          </div>
-          <input type="file" id="pdf-to-img-input" accept=".pdf" class="w-full text-xs border border-slate-200 rounded-xl p-2.5 bg-white/90 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-rose-600 file:text-white file:font-semibold" />
-          <button onclick="convertPdfToImage()" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
-            <i data-lucide="image" class="w-4 h-4"></i> Convert PDF to PNG Image
-          </button>
-        </div>
       </div>
     </div>
 
@@ -410,19 +370,7 @@
 
         <div class="space-y-4 text-xs text-slate-700 leading-relaxed border-t border-slate-200/80 pt-4">
           <h3 class="font-bold text-sm text-indigo-700">1. What is Digital Khata Bahi?</h3>
-          <p>Digital Khata Bahi is a web-based financial ledger and bookkeeping manager designed for merchants, shopkeepers, and freelancers. It simplifies traditional paper ledger books (Bahikhata) by allowing users to record receipts, payments, sales invoices, and tax details digitally.</p>
-
-          <h3 class="font-bold text-sm text-indigo-700">2. How to Track Cash Flow & Udhar</h3>
-          <p>Click on the <strong>"+ Add Entry"</strong> button to record transactions. Select <em>Receipt</em> for cash received or <em>Payment</em> for money spent. You can assign customer or vendor party names to keep track of outstanding dues and credit accounts.</p>
-
-          <h3 class="font-bold text-sm text-indigo-700">3. Using Free Document Utilities</h3>
-          <p>Our utility tools run 100% locally inside your web browser using WebAssembly and client-side JavaScript libraries. No uploaded documents are stored on external servers, ensuring complete privacy when converting PDFs to Excel sheets or images to PDF format.</p>
-
-          <h3 class="font-bold text-sm text-indigo-700">4. Frequently Asked Questions (FAQ)</h3>
-          <div class="space-y-2 bg-white/80 p-4 rounded-2xl border border-slate-200">
-            <p><strong>Q: Is my ledger data safe?</strong><br>A: Yes! All data is saved directly in your device's browser local storage and remains completely private to you.</p>
-            <p><strong>Q: How do I export my data?</strong><br>A: Use the "Export CSV" button at the top of your dashboard to download a formatted spreadsheet backup at any time.</p>
-          </div>
+          <p>Digital Khata Bahi is a web-based financial ledger and bookkeeping manager designed for merchants, shopkeepers, and freelancers.</p>
         </div>
       </div>
     </div>
@@ -456,18 +404,6 @@
             </button>
           </div>
         </div>
-
-        <div class="mt-6 pt-6 border-t border-slate-200 text-slate-600">
-          <h3 class="font-bold text-slate-800 text-sm mb-1">About Khata Bahi Digital Services</h3>
-          <p class="text-xs mb-3 leading-relaxed">
-            Khata Bahi is a digital bookkeeping and ledger app designed to help small business owners, freelancers, and individuals track daily cash-in and cash-out records securely.
-          </p>
-          <div class="text-[11px] text-slate-500 flex gap-4 pt-2 border-t border-slate-100">
-            <span>© 2026 Khata Bahi</span>
-            <button onclick="openPolicyModal('privacy')" class="underline hover:text-slate-800">Privacy Policy</button>
-            <button onclick="openPolicyModal('terms')" class="underline hover:text-slate-800">Terms & Conditions</button>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -495,17 +431,6 @@
       <i data-lucide="settings" class="w-5 h-5"></i> Settings
     </button>
   </nav>
-
-  <!-- POLICY MODAL -->
-  <div id="policy-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-    <div class="glass-card bg-white/95 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative border border-white space-y-4 max-h-[85vh] overflow-y-auto text-xs text-slate-700 leading-relaxed">
-      <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-        <h3 id="policy-title" class="text-base font-bold text-slate-900">Privacy Policy</h3>
-        <button onclick="closePolicyModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-      <div id="policy-body" class="space-y-3"></div>
-    </div>
-  </div>
 
   <!-- ADD VOUCHER MODAL -->
   <div id="modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
@@ -642,12 +567,80 @@
           <button onclick="verifyUpiPayment()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition">Submit</button>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="pt-2 border-t border-slate-100">
-        <div class="flex gap-2">
-          <input type="text" id="promo-code-input" placeholder="Access Code" class="flex-1 border border-slate-200 rounded-xl px-3 py-1.5 text-xs bg-white uppercase font-bold focus:outline-slate-800" />
-          <button onclick="applyPromoCode()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition">Unlock</button>
+  <!-- STYLED TAX INVOICE TEMPLATE (HIDDEN PRINT CONTAINER) -->
+  <div style="display: none;">
+    <div id="invoice-pdf-template" style="width: 700px; padding: 32px; background: #ffffff; color: #1e293b; font-family: 'Plus Jakarta Sans', sans-serif;">
+      
+      <!-- INVOICE HEADER -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 24px;">
+        <div>
+          <h1 style="font-size: 26px; font-weight: 800; color: #4f46e5; margin: 0; letter-spacing: -0.5px;">TAX INVOICE</h1>
+          <p style="font-size: 12px; color: #64748b; margin-top: 4px; font-weight: 600;">Khata Bahi Digital Services</p>
         </div>
+        <div style="text-align: right; font-size: 12px; color: #475569; line-height: 1.6;">
+          <p style="margin: 0;"><strong>Invoice No:</strong> <span id="pdf-inv-num">KB-1001</span></p>
+          <p style="margin: 0;"><strong>Date:</strong> <span id="pdf-inv-date">05-08-2026</span></p>
+        </div>
+      </div>
+
+      <!-- BILLING DETAILS -->
+      <div style="display: flex; gap: 16px; margin-bottom: 28px;">
+        <div style="flex: 1; background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+          <p style="font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin: 0 0 4px 0;">Billed To / Customer:</p>
+          <p style="font-size: 15px; font-weight: 800; color: #0f172a; margin: 0;" id="pdf-party-name">Rahul Verma</p>
+        </div>
+        <div style="flex: 1; background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0;">
+          <p style="font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin: 0 0 4px 0;">Transaction Type:</p>
+          <p style="font-size: 15px; font-weight: 800; color: #4f46e5; margin: 0; text-transform: uppercase;" id="pdf-entry-type">RECEIPT</p>
+        </div>
+      </div>
+
+      <!-- ITEM TABLE -->
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 28px; font-size: 12px;">
+        <thead>
+          <tr style="background: #4f46e5; color: #ffffff; text-align: left;">
+            <th style="padding: 12px; border-radius: 8px 0 0 8px; font-weight: 700;">Particulars / Description</th>
+            <th style="padding: 12px; text-align: center; font-weight: 700;">Qty</th>
+            <th style="padding: 12px; text-align: right; font-weight: 700;">Rate</th>
+            <th style="padding: 12px; text-align: center; font-weight: 700;">GST Rate</th>
+            <th style="padding: 12px; text-align: right; border-radius: 0 8px 8px 0; font-weight: 700;">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 14px 12px; font-weight: 600; color: #1e293b;" id="pdf-desc">Payment Received</td>
+            <td style="padding: 14px 12px; text-align: center; color: #64748b;" id="pdf-qty">1</td>
+            <td style="padding: 14px 12px; text-align: right; color: #64748b;" id="pdf-rate">₹0.00</td>
+            <td style="padding: 14px 12px; text-align: center; color: #64748b;" id="pdf-gst-rate">0%</td>
+            <td style="padding: 14px 12px; text-align: right; font-weight: 800; color: #0f172a;" id="pdf-amount">₹0.00</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- SUMMARY BOX -->
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 32px;">
+        <div style="width: 250px; background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 12px; line-height: 1.8;">
+          <div style="display: flex; justify-content: space-between; color: #64748b;">
+            <span>Subtotal:</span>
+            <span id="pdf-subtotal">₹0.00</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; color: #4f46e5; font-weight: 600;">
+            <span>GST Amount:</span>
+            <span id="pdf-gst-val">+₹0.00</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 800; color: #0f172a; border-top: 2px solid #cbd5e1; margin-top: 6px; padding-top: 6px;">
+            <span>Grand Total:</span>
+            <span id="pdf-grand-total">₹0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; text-align: center; font-size: 10px; color: #94a3b8;">
+        <p style="margin: 0;">This is a computer-generated tax invoice created via Khata Bahi Digital Services.</p>
       </div>
     </div>
   </div>
@@ -815,7 +808,7 @@
       const curr = currentUser ? currentUser.currency : '₹';
 
       if (transactions.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-500 font-semibold">No entries recorded yet. Tap "+ Add Entry" to begin!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-500 font-semibold">No entries recorded yet. Tap "+ Add Entry" to begin!</td></tr>`;
         return;
       }
 
@@ -832,9 +825,13 @@
           <td class="py-3.5 font-extrabold ${isPositive ? 'text-emerald-600' : 'text-rose-500'}">
             ${isPositive ? '+' : '-'}${curr}${(item.totalAmount || item.amount).toLocaleString('en-IN', {minimumFractionDigits: 2})}
           </td>
+          <td class="py-3.5 text-right">
+            <button onclick="generateInvoicePDF(${item.id})" title="Print Invoice" class="text-indigo-600 bg-indigo-50 p-1.5 rounded-lg hover:bg-indigo-100 transition"><i data-lucide="file-text" class="w-4 h-4"></i></button>
+          </td>
         `;
         tbody.appendChild(tr);
       });
+      lucide.createIcons();
     }
 
     function renderFullTable(data = transactions) {
@@ -862,12 +859,51 @@
             ${curr}${(item.totalAmount || item.amount).toLocaleString('en-IN', {minimumFractionDigits: 2})}
           </td>
           <td class="py-3.5 text-right flex items-center justify-end gap-2">
+            <button onclick="generateInvoicePDF(${item.id})" title="Print Invoice" class="text-indigo-600 bg-indigo-50 p-1.5 rounded-lg hover:bg-indigo-100 transition"><i data-lucide="file-text" class="w-4 h-4"></i></button>
             <button onclick="deleteTransaction(${item.id})" title="Delete" class="text-rose-400 hover:text-rose-600 p-1.5 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
           </td>
         `;
         tbody.appendChild(tr);
       });
       lucide.createIcons();
+    }
+
+    /* INVOICE PDF GENERATOR FUNCTION */
+    function generateInvoicePDF(id) {
+      const item = transactions.find(t => t.id === id);
+      if (!item) return alert("Transaction record not found!");
+
+      const curr = currentUser ? currentUser.currency : '₹';
+      const qty = item.quantity || 1;
+      const rate = item.rate || item.amount;
+      const subtotal = item.subtotal || (qty * rate);
+      const gstVal = item.gstAmount || 0;
+      const grandTotal = item.totalAmount || item.amount;
+
+      document.getElementById('pdf-inv-num').innerText = `KB-${item.id.toString().slice(-5)}`;
+      document.getElementById('pdf-inv-date').innerText = formatDateToDDMMYYYY(item.date);
+      document.getElementById('pdf-party-name').innerText = item.partyName || 'General Customer';
+      document.getElementById('pdf-entry-type').innerText = item.type;
+      document.getElementById('pdf-desc').innerText = item.description;
+      document.getElementById('pdf-qty').innerText = qty;
+      document.getElementById('pdf-rate').innerText = `${curr}${rate.toFixed(2)}`;
+      document.getElementById('pdf-gst-rate').innerText = `${item.gstRate || 0}%`;
+      document.getElementById('pdf-amount').innerText = `${curr}${grandTotal.toFixed(2)}`;
+      document.getElementById('pdf-subtotal').innerText = `${curr}${subtotal.toFixed(2)}`;
+      document.getElementById('pdf-gst-val').innerText = `+${curr}${gstVal.toFixed(2)}`;
+      document.getElementById('pdf-grand-total').innerText = `${curr}${grandTotal.toFixed(2)}`;
+
+      const element = document.getElementById('invoice-pdf-template');
+      
+      const opt = {
+        margin:       10,
+        filename:     `Invoice_KB${item.id}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save();
     }
 
     function filterTransactions() {
@@ -986,28 +1022,6 @@
       reader.readAsDataURL(file);
     }
 
-    function convertExcelToPDF() {
-      const fileInput = document.getElementById('excel-file-input');
-      if (!fileInput.files || !fileInput.files.length) return alert('Please select an Excel file (.xlsx or .xls) first!');
-
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const data = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(data, { type: 'array' });
-          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-          const htmlTable = XLSX.utils.sheet_to_html(firstSheet);
-
-          const tempContainer = document.createElement('div');
-          tempContainer.innerHTML = `<div style="padding: 20px; font-family: sans-serif;"><h2 style="color: #4f46e5; margin-bottom: 10px;">Khata Bahi - Excel Export</h2>${htmlTable}</div>`;
-
-          html2pdf().from(tempContainer).set({ margin: 10, filename: `Excel_Export_${Date.now()}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } }).save();
-        } catch (err) { alert('Error parsing Excel sheet: ' + err.message); }
-      };
-      reader.readAsArrayBuffer(file);
-    }
-
     async function convertPdfToExcel() {
       const fileInput = document.getElementById('pdf-to-excel-input');
       if (!fileInput.files || !fileInput.files.length) return alert('Please select a PDF file first!');
@@ -1041,36 +1055,7 @@
       reader.readAsArrayBuffer(file);
     }
 
-    async function convertPdfToImage() {
-      const fileInput = document.getElementById('pdf-to-img-input');
-      if (!fileInput.files || !fileInput.files.length) return alert('Please select a PDF file first!');
-
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-      reader.onload = async function() {
-        try {
-          const typedarray = new Uint8Array(this.result);
-          const pdf = await pdfjsLib.getDocument(typedarray).promise;
-          const page = await pdf.getPage(1);
-          const viewport = page.getViewport({ scale: 1.5 });
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
-
-          await page.render({ canvasContext: context, viewport: viewport }).promise;
-
-          const imageURL = canvas.toDataURL("image/png");
-          const a = document.createElement('a');
-          a.href = imageURL;
-          a.download = `PDF_Page1_${Date.now()}.png`;
-          a.click();
-        } catch (err) { alert('Error rendering PDF to Image: ' + err.message); }
-      };
-      reader.readAsArrayBuffer(file);
-    }
-
-    /* ---------------- MODALS & POLICIES ---------------- */
+    /* ---------------- MODALS ---------------- */
     function openModal() { document.getElementById('modal').classList.remove('hidden'); calculateAmounts(); }
     function closeModal() { document.getElementById('modal').classList.add('hidden'); }
 
@@ -1080,45 +1065,12 @@
     }
     function closeUpgradeModal() { document.getElementById('upgrade-modal').classList.add('hidden'); }
 
-    function openPolicyModal(type) {
-      const modal = document.getElementById('policy-modal');
-      const title = document.getElementById('policy-title');
-      const body = document.getElementById('policy-body');
-
-      if (type === 'privacy') {
-        title.innerText = "Privacy Policy";
-        body.innerHTML = `
-          <p>At Khata Bahi, accessible from swadsangamindia.github.io, one of our main priorities is visitor privacy. This document outlines how information is collected and used.</p>
-          <p><strong>Local Storage:</strong> All entries and ledger calculations stay inside your local browser. We do not store personal financial logs on remote servers.</p>
-          <p><strong>Google AdSense:</strong> We use Google AdSense to serve ads. Google uses cookies (DoubleCLick) to display relevant advertisements to visitors based on website visits.</p>
-        `;
-      } else {
-        title.innerText = "Terms of Service";
-        body.innerHTML = `
-          <p>By using Khata Bahi, you agree to comply with our terms. We offer free digital bookkeeping tools, calculations, and PDF conversion utilities.</p>
-          <p><strong>Data Backup Responsibility:</strong> Because data lives locally on your browser device, users should utilize the 'Export CSV' option to keep offsite backups.</p>
-        `;
-      }
-      modal.classList.remove('hidden');
-    }
-
-    function closePolicyModal() { document.getElementById('policy-modal').classList.add('hidden'); }
-
     function verifyUpiPayment() {
       const utr = document.getElementById('upi-utr-input').value.trim();
       if (utr.length >= 8) {
         activate30DaysPro(`UPI Ref: ${utr}`);
       } else {
         alert("Please enter a valid UTR Number.");
-      }
-    }
-
-    function applyPromoCode() {
-      const inputCode = document.getElementById('promo-code-input').value.trim().toUpperCase();
-      if (inputCode === 'ADITYAMODEL' || inputCode === 'PRO2026') {
-        activate30DaysPro('Access Code Applied');
-      } else {
-        alert('Invalid access code!');
       }
     }
 
@@ -1284,7 +1236,6 @@
       const welcomeH = document.getElementById('welcome-heading');
       if(welcomeH) welcomeH.innerText = `Hello, ${currentUser.name} 👋`;
       
-      // Auto-switch to Dashboard upon login
       if(typeof switchTab === 'function') switchTab('dashboard');
     }
 
