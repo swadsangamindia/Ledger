@@ -794,6 +794,21 @@
 
     let lineChart, doughnutChart;
 
+    function resetLocalStateToDefault() {
+  companies = [
+    { id: `c_${Date.now()}`, name: 'My Main Shop', address: 'Delhi, India', gstin: 'N/A', phone: '' }
+  ];
+  activeCompanyId = companies[0].id;
+  transactions = [];
+
+  localStorage.setItem('ledger_companies', JSON.stringify(companies));
+  localStorage.setItem('ledger_active_company_id', activeCompanyId);
+  localStorage.setItem(`ledger_tx_${activeCompanyId}`, JSON.stringify(transactions));
+
+  renderCompanySelectors();
+  saveAndRender();
+}
+
     function renderCompanySelectors() {
       const desktopSel = document.getElementById('company-selector');
       const mobileSel = document.getElementById('mobile-company-selector');
@@ -1554,82 +1569,106 @@
     }
   };
 
-
   let unsubscribeSnapshot = null;
+  let previousUid = null;
 
-onAuthStateChanged(auth, (user) => {
-  const nameEl = document.getElementById('user-display-name');
-  const emailEl = document.getElementById('user-display-email');
-  const avatarEl = document.getElementById('user-avatar');
-  const authBtn = document.getElementById('auth-action-btn');
+  onAuthStateChanged(auth, (user) => {
+    const nameEl = document.getElementById('user-display-name');
+    const emailEl = document.getElementById('user-display-email');
+    const avatarEl = document.getElementById('user-avatar');
+    const authBtn = document.getElementById('auth-action-btn');
 
-  if (user) {
-    activeUid = user.uid;
-
-    if (nameEl) nameEl.innerText = user.displayName || "User";
-    if (emailEl) emailEl.innerText = user.email || "";
-    if (avatarEl) avatarEl.innerText = (user.displayName ? user.displayName[0] : 'U').toUpperCase();
-    
-    if (authBtn) {
-      authBtn.innerText = "Logout";
-      authBtn.className = "bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-sm";
-      authBtn.onclick = () => auth.signOut();
-    }
-
-    if (unsubscribeSnapshot) unsubscribeSnapshot();
-
-    unsubscribeSnapshot = onSnapshot(doc(db, "users", activeUid), (snap) => {
-      if (snap.exists()) {
-        const data = snap.data();
-        
-        isSyncingFromCloud = true; // Lock outgoing sync while applying incoming cloud updates
-
-        if (data.companies?.length) {
-          companies = data.companies;
-          localStorage.setItem('ledger_companies', JSON.stringify(companies));
+    if (user) {
+      // If logging into a different account, clear previous user's cached storage
+      if (previousUid && previousUid !== user.uid) {
+        localStorage.clear();
+        if (typeof resetLocalStateToDefault === 'function') {
+          resetLocalStateToDefault();
         }
-        if (data.activeCompanyId) {
-          activeCompanyId = data.activeCompanyId;
-          localStorage.setItem('ledger_active_company_id', activeCompanyId);
-        }
-        if (data.transactionsMap) {
-          Object.entries(data.transactionsMap).forEach(([id, txs]) => {
-            localStorage.setItem(`ledger_tx_${id}`, JSON.stringify(txs));
-          });
-        }
-        if (typeof loadCompanyTransactions === 'function') {
-          loadCompanyTransactions();
-        }
-
-        // Release the lock after local state updates complete
-        setTimeout(() => {
-          isSyncingFromCloud = false;
-        }, 300);
-
-      } else {
-        window.syncLedgerToCloud();
       }
-    }, (error) => {
-      console.error("Firestore Snapshot error:", error);
-    });
-  } else {
-    activeUid = null;
+      previousUid = user.uid;
+      activeUid = user.uid;
 
-    if (nameEl) nameEl.innerText = "Guest User";
-    if (emailEl) emailEl.innerText = "Not signed in";
-    if (avatarEl) avatarEl.innerText = "U";
-    if (authBtn) {
-      authBtn.innerText = "Sign In";
-      authBtn.className = "bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-sm";
-      authBtn.onclick = () => window.handleGoogleSignIn();
-    }
+      if (nameEl) nameEl.innerText = user.displayName || "User";
+      if (emailEl) emailEl.innerText = user.email || "";
+      if (avatarEl) avatarEl.innerText = (user.displayName ? user.displayName[0] : 'U').toUpperCase();
+      
+      if (authBtn) {
+        authBtn.innerText = "Logout";
+        authBtn.className = "bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-sm";
+        authBtn.onclick = async () => {
+          if (unsubscribeSnapshot) unsubscribeSnapshot();
+          await auth.signOut();
+          localStorage.clear();
+          location.reload();
+        };
+      }
 
-    if (unsubscribeSnapshot) {
-      unsubscribeSnapshot();
-      unsubscribeSnapshot = null;
+      if (unsubscribeSnapshot) unsubscribeSnapshot();
+
+      unsubscribeSnapshot = onSnapshot(doc(db, "users", activeUid), (snap) => {
+        if (snap.exists()) {
+          const data = snap.data();
+          isSyncingFromCloud = true;
+
+          if (data.companies && data.companies.length > 0) {
+            companies = data.companies;
+            localStorage.setItem('ledger_companies', JSON.stringify(companies));
+          }
+          if (data.activeCompanyId) {
+            activeCompanyId = data.activeCompanyId;
+            localStorage.setItem('ledger_active_company_id', activeCompanyId);
+          }
+          if (data.transactionsMap) {
+            Object.entries(data.transactionsMap).forEach(([id, txs]) => {
+              localStorage.setItem(`ledger_tx_${id}`, JSON.stringify(txs));
+            });
+          }
+          if (typeof loadCompanyTransactions === 'function') {
+            loadCompanyTransactions();
+          }
+
+          setTimeout(() => {
+            isSyncingFromCloud = false;
+          }, 300);
+
+        } else {
+          // New user: Start clean, do NOT push previous local storage data
+          companies = [
+            { id: `c_${Date.now()}`, name: `${user.displayName ? user.displayName.split(' ')[0] : 'My'} Shop`, address: 'Delhi, India', gstin: 'N/A', phone: '' }
+          ];
+          activeCompanyId = companies[0].id;
+          transactions = [];
+          
+          localStorage.setItem('ledger_companies', JSON.stringify(companies));
+          localStorage.setItem('ledger_active_company_id', activeCompanyId);
+          localStorage.setItem(`ledger_tx_${activeCompanyId}`, JSON.stringify(transactions));
+          
+          renderCompanySelectors();
+          saveAndRender();
+        }
+      }, (error) => {
+        console.error("Firestore Snapshot error:", error);
+      });
+    } else {
+      activeUid = null;
+      previousUid = null;
+
+      if (nameEl) nameEl.innerText = "Guest User";
+      if (emailEl) emailEl.innerText = "Not signed in";
+      if (avatarEl) avatarEl.innerText = "U";
+      if (authBtn) {
+        authBtn.innerText = "Sign In";
+        authBtn.className = "bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-sm";
+        authBtn.onclick = () => window.handleGoogleSignIn();
+      }
+
+      if (unsubscribeSnapshot) {
+        unsubscribeSnapshot();
+        unsubscribeSnapshot = null;
+      }
     }
-  }
-});
+  });
 </script>
 </body>
 </html>
