@@ -441,7 +441,23 @@
 
     <!-- 5. COMPANY SETTINGS VIEW -->
     <div id="view-settings" class="tab-view hidden space-y-6">
-      
+
+            <!-- USER ACCOUNT PROFILE CARD -->
+      <div class="glass-card p-5 md:p-6 rounded-3xl max-w-2xl flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold text-base shadow-md" id="user-avatar">
+            U
+          </div>
+          <div>
+            <h4 class="font-extrabold text-sm text-slate-900" id="user-display-name">Guest User</h4>
+            <p class="text-[11px] text-slate-500 font-medium" id="user-display-email">Not signed in</p>
+          </div>
+        </div>
+        <button id="auth-action-btn" onclick="handleGoogleSignIn()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-sm">
+          Sign In
+        </button>
+      </div>
+
       <!-- ALL CREATED COMPANIES MANAGEMENT CARD -->
       <div class="glass-card p-6 md:p-8 rounded-3xl space-y-4 max-w-2xl">
         <div class="flex justify-between items-center border-b border-slate-200 pb-3">
