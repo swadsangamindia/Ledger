@@ -810,7 +810,7 @@
       renderCompanyCardsList();
     }
 
-    function renderCompanyCardsList() {
+        function renderCompanyCardsList() {
       const container = document.getElementById('company-list-container');
       if (!container) return;
 
@@ -818,17 +818,50 @@
       companies.forEach(c => {
         const isActive = c.id === activeCompanyId;
         container.innerHTML += `
-          <div onclick="selectCompanyById('${c.id}')" class="p-3 rounded-2xl border transition cursor-pointer flex justify-between items-center ${isActive ? 'bg-indigo-50 border-indigo-500 shadow-sm' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}">
-            <div>
+          <div class="p-3 rounded-2xl border transition flex justify-between items-center ${isActive ? 'bg-indigo-50 border-indigo-500 shadow-sm' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}">
+            <div onclick="selectCompanyById('${c.id}')" class="flex-1 cursor-pointer">
               <p class="font-bold text-xs text-slate-800">${c.name} ${isActive ? '<span class="text-[10px] bg-indigo-600 text-white px-2 py-0.5 rounded-full ml-1 font-bold">Active</span>' : ''}</p>
               <p class="text-[10px] text-slate-500 mt-0.5">${c.address || 'No address set'} ${c.gstin ? '• GST: ' + c.gstin : ''}</p>
             </div>
-            <i data-lucide="${isActive ? 'check-circle-2' : 'circle'}" class="w-4 h-4 ${isActive ? 'text-indigo-600' : 'text-slate-400'}"></i>
+            <div class="flex items-center gap-2">
+              <div onclick="selectCompanyById('${c.id}')" class="cursor-pointer">
+                <i data-lucide="${isActive ? 'check-circle-2' : 'circle'}" class="w-4 h-4 ${isActive ? 'text-indigo-600' : 'text-slate-400'}"></i>
+              </div>
+              ${companies.length > 1 ? `
+                <button onclick="deleteCompany('${c.id}', event)" title="Delete Business" class="text-rose-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              ` : ''}
+            </div>
           </div>
         `;
       });
       lucide.createIcons();
     }
+
+    function deleteCompany(id, event) {
+      if (event) event.stopPropagation();
+      if (companies.length <= 1) {
+        return alert("You must have at least one active business.");
+      }
+      
+      const compToDelete = companies.find(c => c.id === id);
+      if (!confirm(`Are you sure you want to delete "${compToDelete.name}" and all its records?`)) {
+        return;
+      }
+
+      companies = companies.filter(c => c.id !== id);
+      localStorage.removeItem(`ledger_tx_${id}`);
+      localStorage.setItem('ledger_companies', JSON.stringify(companies));
+
+      if (activeCompanyId === id) {
+        activeCompanyId = companies[0].id;
+        localStorage.setItem('ledger_active_company_id', activeCompanyId);
+      }
+
+      loadCompanyTransactions();
+    }
+
 
     function selectCompanyById(id) {
       activeCompanyId = id;
