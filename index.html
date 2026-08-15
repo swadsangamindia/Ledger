@@ -1534,8 +1534,7 @@
     }
   };
 
-  window.syncLedgerToCloud = async function() {
-    // Stop sync if not logged in OR if the update was triggered by an incoming cloud snapshot
+    window.syncLedgerToCloud = async function() {
     if (!activeUid || isSyncingFromCloud) return;
     try {
       const allTransactions = {};
@@ -1543,16 +1542,18 @@
         allTransactions[c.id] = JSON.parse(localStorage.getItem(`ledger_tx_${c.id}`)) || [];
       });
 
+      // Overwrite document directly so deleted companies are permanently removed from Firestore
       await setDoc(doc(db, "users", activeUid), {
         companies: companies,
         activeCompanyId: activeCompanyId,
         transactionsMap: allTransactions,
         updatedAt: new Date().toISOString()
-      }, { merge: true });
+      });
     } catch (err) {
       console.error("Cloud sync error:", err);
     }
   };
+
 
   let unsubscribeSnapshot = null;
 
