@@ -1446,71 +1446,84 @@
   </script>
 
   <!-- FIREBASE MODULE -->
-  <script type="module">
-    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+<script type="module">
+  import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
-      authDomain: "ledger-expenses.firebaseapp.com",
-      projectId: "ledger-expenses",
-      storageBucket: "ledger-expenses.firebasestorage.app",
-      messagingSenderId: "746540126053",
-      appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyAJikcV_COI0cq7JP68x2xlgmv8U7fgr3U",
+    authDomain: "ledger-expenses.firebaseapp.com",
+    projectId: "ledger-expenses",
+    storageBucket: "ledger-expenses.firebasestorage.app",
+    messagingSenderId: "746540126053",
+    appId: "1:746540126053:web:39cd4df8b8b35d49b89b8c"
+  };
 
-    const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
+  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
 
-    window.handleGoogleSignIn = window.loginWithGoogle = async function() {
-      try {
-        const result = await signInWithPopup(auth, provider);
-        if (result.user) handleAuthUser(result.user);
-      } catch (err) {
-        console.error("Login failed:", err);
-      }
-    };
+  let activeUid = null;
 
-    window.updatePlanUI = function(isPro) {
-      const allBadges = document.querySelectorAll('#user-plan-badge, #plan-badge, #sidebar-plan-badge, .plan-badge-tag');
-      
-      allBadges.forEach(badge => {
-        if (isPro) {
-          badge.innerText = "Pro (30d left)";
-          badge.style.color = "#fde047";
-          badge.style.backgroundColor = "rgba(251, 191, 36, 0.15)";
-          badge.style.borderColor = "rgba(251, 191, 36, 0.3)";
+  window.handleGoogleSignIn = window.loginWithGoogle = async function() {
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (err) {
+      console.error("Login failed:", err);
+    }
+  };
+
+  window.syncLedgerToCloud = async function() {
+    if (!activeUid) return;
+    try {
+      const allTransactions = {};
+      companies.forEach(c => {
+        allTransactions[c.id] = JSON.parse(localStorage.getItem(`ledger_tx_${c.id}`)) || [];
+      });
+
+      await setDoc(doc(db, "users", activeUid), {
+        companies: companies,
+        activeCompanyId: activeCompanyId,
+        transactionsMap: allTransactions,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+    } catch (err) {
+      console.error("Cloud sync error:", err);
+    }
+  };
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      activeUid = user.uid;
+      onSnapshot(doc(db, "users", activeUid), (snap) => {
+        if (snap.exists()) {
+          const data = snap.data();
+          if (data.companies?.length) {
+            companies = data.companies;
+            localStorage.setItem('ledger_companies', JSON.stringify(companies));
+          }
+          if (data.activeCompanyId) {
+            activeCompanyId = data.activeCompanyId;
+            localStorage.setItem('ledger_active_company_id', activeCompanyId);
+          }
+          if (data.transactionsMap) {
+            Object.entries(data.transactionsMap).forEach(([id, txs]) => {
+              localStorage.setItem(`ledger_tx_${id}`, JSON.stringify(txs));
+            });
+          }
+          if (typeof loadCompanyTransactions === 'function') {
+            loadCompanyTransactions();
+          }
         } else {
-          badge.innerText = "Free Plan";
-          badge.style.color = "#475569";
-          badge.style.backgroundColor = "#f1f5f9";
-          badge.style.borderColor = "#e2e8f0";
+          window.syncLedgerToCloud();
         }
       });
-    };
-
-    function handleAuthUser(user) {
-      const currentUser = {
-        name: user.displayName || 'Aditya',
-        email: user.email || 'aditya@example.com',
-        currency: '₹'
-      };
-
-      localStorage.setItem('ledger_user', JSON.stringify(currentUser));
-      const welcomeH = document.getElementById('welcome-heading');
-      if(welcomeH) welcomeH.innerText = `Hello, ${currentUser.name} 👋`;
-      
-      if(typeof switchTab === 'function') switchTab('dashboard');
+    } else {
+      activeUid = null;
     }
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        handleAuthUser(user);
-      }
-      const isPro = localStorage.getItem('isProUser') === 'true' || localStorage.getItem('ledger_is_pro') === 'true';
-      window.updatePlanUI(isPro);
-    });
-  </script>
+  });
+</script>
 </body>
 </html>
