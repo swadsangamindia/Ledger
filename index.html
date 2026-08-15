@@ -1004,12 +1004,16 @@
     }
 
     function saveAndRender() {
-      localStorage.setItem(`ledger_tx_${activeCompanyId}`, JSON.stringify(transactions));
-      renderKPIs();
-      renderDashboardRecent();
-      renderFullTable();
-      updateCharts();
-    }
+  localStorage.setItem(`ledger_tx_${activeCompanyId}`, JSON.stringify(transactions));
+  renderKPIs();
+  renderDashboardRecent();
+  renderFullTable();
+  updateCharts();
+
+  if (typeof window.syncLedgerToCloud === 'function') {
+    window.syncLedgerToCloud();
+  }
+}
 
     function renderKPIs() {
       const curr = currentUser ? currentUser.currency : '₹';
