@@ -1553,54 +1553,79 @@
 
   let unsubscribeSnapshot = null;
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      activeUid = user.uid;
+onAuthStateChanged(auth, (user) => {
+  const nameEl = document.getElementById('user-display-name');
+  const emailEl = document.getElementById('user-display-email');
+  const avatarEl = document.getElementById('user-avatar');
+  const authBtn = document.getElementById('auth-action-btn');
 
-      if (unsubscribeSnapshot) unsubscribeSnapshot();
+  if (user) {
+    activeUid = user.uid;
 
-      unsubscribeSnapshot = onSnapshot(doc(db, "users", activeUid), (snap) => {
-        if (snap.exists()) {
-          const data = snap.data();
-          
-          isSyncingFromCloud = true; // Lock outgoing sync while applying incoming cloud updates
-
-          if (data.companies?.length) {
-            companies = data.companies;
-            localStorage.setItem('ledger_companies', JSON.stringify(companies));
-          }
-          if (data.activeCompanyId) {
-            activeCompanyId = data.activeCompanyId;
-            localStorage.setItem('ledger_active_company_id', activeCompanyId);
-          }
-          if (data.transactionsMap) {
-            Object.entries(data.transactionsMap).forEach(([id, txs]) => {
-              localStorage.setItem(`ledger_tx_${id}`, JSON.stringify(txs));
-            });
-          }
-          if (typeof loadCompanyTransactions === 'function') {
-            loadCompanyTransactions();
-          }
-
-          // Release the lock after local state updates complete
-          setTimeout(() => {
-            isSyncingFromCloud = false;
-          }, 300);
-
-        } else {
-          window.syncLedgerToCloud();
-        }
-      }, (error) => {
-        console.error("Firestore Snapshot error:", error);
-      });
-    } else {
-      activeUid = null;
-      if (unsubscribeSnapshot) {
-        unsubscribeSnapshot();
-        unsubscribeSnapshot = null;
-      }
+    if (nameEl) nameEl.innerText = user.displayName || "User";
+    if (emailEl) emailEl.innerText = user.email || "";
+    if (avatarEl) avatarEl.innerText = (user.displayName ? user.displayName[0] : 'U').toUpperCase();
+    
+    if (authBtn) {
+      authBtn.innerText = "Logout";
+      authBtn.className = "bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-sm";
+      authBtn.onclick = () => auth.signOut();
     }
-  });
+
+    if (unsubscribeSnapshot) unsubscribeSnapshot();
+
+    unsubscribeSnapshot = onSnapshot(doc(db, "users", activeUid), (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        
+        isSyncingFromCloud = true; // Lock outgoing sync while applying incoming cloud updates
+
+        if (data.companies?.length) {
+          companies = data.companies;
+          localStorage.setItem('ledger_companies', JSON.stringify(companies));
+        }
+        if (data.activeCompanyId) {
+          activeCompanyId = data.activeCompanyId;
+          localStorage.setItem('ledger_active_company_id', activeCompanyId);
+        }
+        if (data.transactionsMap) {
+          Object.entries(data.transactionsMap).forEach(([id, txs]) => {
+            localStorage.setItem(`ledger_tx_${id}`, JSON.stringify(txs));
+          });
+        }
+        if (typeof loadCompanyTransactions === 'function') {
+          loadCompanyTransactions();
+        }
+
+        // Release the lock after local state updates complete
+        setTimeout(() => {
+          isSyncingFromCloud = false;
+        }, 300);
+
+      } else {
+        window.syncLedgerToCloud();
+      }
+    }, (error) => {
+      console.error("Firestore Snapshot error:", error);
+    });
+  } else {
+    activeUid = null;
+
+    if (nameEl) nameEl.innerText = "Guest User";
+    if (emailEl) emailEl.innerText = "Not signed in";
+    if (avatarEl) avatarEl.innerText = "U";
+    if (authBtn) {
+      authBtn.innerText = "Sign In";
+      authBtn.className = "bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-sm";
+      authBtn.onclick = () => window.handleGoogleSignIn();
+    }
+
+    if (unsubscribeSnapshot) {
+      unsubscribeSnapshot();
+      unsubscribeSnapshot = null;
+    }
+  }
+});
 </script>
 </body>
 </html>
