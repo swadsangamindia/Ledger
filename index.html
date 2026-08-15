@@ -856,27 +856,30 @@
     }
 
     function deleteCompany(id, event) {
-      if (event) event.stopPropagation();
-      if (companies.length <= 1) {
-        return alert("You must have at least one active business.");
-      }
-      
-      const compToDelete = companies.find(c => c.id === id);
-      if (!confirm(`Are you sure you want to delete "${compToDelete.name}" and all its records?`)) {
-        return;
-      }
+  if (event) event.stopPropagation();
+  if (companies.length <= 1) {
+    return alert("You must have at least one active business.");
+  }
+  
+  const compToDelete = companies.find(c => c.id === id);
+  if (!confirm(`Are you sure you want to delete "${compToDelete.name}" and all its records?`)) {
+    return;
+  }
 
-      companies = companies.filter(c => c.id !== id);
-      localStorage.removeItem(`ledger_tx_${id}`);
-      localStorage.setItem('ledger_companies', JSON.stringify(companies));
+  companies = companies.filter(c => c.id !== id);
+  localStorage.removeItem(`ledger_tx_${id}`);
+  localStorage.setItem('ledger_companies', JSON.stringify(companies));
 
-      if (activeCompanyId === id) {
-        activeCompanyId = companies[0].id;
-        localStorage.setItem('ledger_active_company_id', activeCompanyId);
-      }
+  if (activeCompanyId === id) {
+    activeCompanyId = companies[0].id;
+    localStorage.setItem('ledger_active_company_id', activeCompanyId);
+  }
 
-      loadCompanyTransactions();
-    }
+  loadCompanyTransactions();
+  if (typeof window.syncLedgerToCloud === 'function') {
+    window.syncLedgerToCloud();
+  }
+}
 
 
     function selectCompanyById(id) {
