@@ -1450,6 +1450,7 @@
   </script>
 
   <!-- FIREBASE MODULE -->
+  <!-- FIREBASE MODULE -->
 <script type="module">
   import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -1470,17 +1471,20 @@
   const provider = new GoogleAuthProvider();
 
   let activeUid = null;
+  let isSyncingFromCloud = false; // Flag to prevent infinite ping-pong loop
 
   window.handleGoogleSignIn = window.loginWithGoogle = async function() {
     try {
       await signInWithPopup(auth, provider);
     } catch (err) {
       console.error("Login failed:", err);
+      alert("Login Error: " + err.message);
     }
   };
 
   window.syncLedgerToCloud = async function() {
-    if (!activeUid) return;
+    // Stop sync if not logged in OR if the update was triggered by an incoming cloud snapshot
+    if (!activeUid || isSyncingFromCloud) return;
     try {
       const allTransactions = {};
       companies.forEach(c => {
@@ -1498,12 +1502,20 @@
     }
   };
 
+  let unsubscribeSnapshot = null;
+
   onAuthStateChanged(auth, (user) => {
     if (user) {
       activeUid = user.uid;
-      onSnapshot(doc(db, "users", activeUid), (snap) => {
+
+      if (unsubscribeSnapshot) unsubscribeSnapshot();
+
+      unsubscribeSnapshot = onSnapshot(doc(db, "users", activeUid), (snap) => {
         if (snap.exists()) {
           const data = snap.data();
+          
+          isSyncingFromCloud = true; // Lock outgoing sync while applying incoming cloud updates
+
           if (data.companies?.length) {
             companies = data.companies;
             localStorage.setItem('ledger_companies', JSON.stringify(companies));
@@ -1520,12 +1532,24 @@
           if (typeof loadCompanyTransactions === 'function') {
             loadCompanyTransactions();
           }
+
+          // Release the lock after local state updates complete
+          setTimeout(() => {
+            isSyncingFromCloud = false;
+          }, 300);
+
         } else {
           window.syncLedgerToCloud();
         }
+      }, (error) => {
+        console.error("Firestore Snapshot error:", error);
       });
     } else {
       activeUid = null;
+      if (unsubscribeSnapshot) {
+        unsubscribeSnapshot();
+        unsubscribeSnapshot = null;
+      }
     }
   });
 </script>
