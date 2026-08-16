@@ -515,39 +515,95 @@
           </button>
         </div>
       
-    <!-- Legal & Support Section inside Profile Tab -->
+<!-- ABOUT & SUPPORT (Self-Contained with Working Popup) -->
 <div style="background: #ffffff; border-radius: 16px; padding: 18px; margin-top: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #f1f5f9;">
   <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.5px;">About & Support</h4>
   
   <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
-    <button type="button" onclick="openLegalModal('about')" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; color: #1e293b; font-weight: 500; cursor: pointer; text-align: left;">
+    <button type="button" onclick="showLegalPopup('about')" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 12px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; color: #1e293b; font-weight: 500; cursor: pointer; text-align: left;">
       <span>🌸 About Khata Bahi</span>
       <span style="color: #94a3b8;">›</span>
     </button>
-    <button type="button" onclick="openLegalModal('faq')" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; color: #1e293b; font-weight: 500; cursor: pointer; text-align: left;">
+    <button type="button" onclick="showLegalPopup('faq')" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 12px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; color: #1e293b; font-weight: 500; cursor: pointer; text-align: left;">
       <span>❓ Frequently Asked Questions (FAQ)</span>
       <span style="color: #94a3b8;">›</span>
     </button>
-    <button type="button" onclick="openLegalModal('contact')" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; color: #1e293b; font-weight: 500; cursor: pointer; text-align: left;">
+    <button type="button" onclick="showLegalPopup('contact')" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 12px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; color: #1e293b; font-weight: 500; cursor: pointer; text-align: left;">
       <span>💬 Contact & Support</span>
       <span style="color: #94a3b8;">›</span>
     </button>
-    <button type="button" onclick="openLegalModal('privacy')" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; color: #1e293b; font-weight: 500; cursor: pointer; text-align: left;">
+    <button type="button" onclick="showLegalPopup('privacy')" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 12px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; color: #1e293b; font-weight: 500; cursor: pointer; text-align: left;">
       <span>🔒 Privacy Policy</span>
       <span style="color: #94a3b8;">›</span>
     </button>
-    <button type="button" onclick="openLegalModal('terms')" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; color: #1e293b; font-weight: 500; cursor: pointer; text-align: left;">
+    <button type="button" onclick="showLegalPopup('terms')" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 12px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; color: #1e293b; font-weight: 500; cursor: pointer; text-align: left;">
       <span>📄 Terms & Conditions</span>
       <span style="color: #94a3b8;">›</span>
     </button>
-    <button type="button" onclick="openLegalModal('disclaimer')" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; color: #1e293b; font-weight: 500; cursor: pointer; text-align: left;">
+    <button type="button" onclick="showLegalPopup('disclaimer')" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 12px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; color: #1e293b; font-weight: 500; cursor: pointer; text-align: left;">
       <span>⚖️ Legal Disclaimer</span>
       <span style="color: #94a3b8;">›</span>
     </button>
   </div>
-  
   <p style="text-align: center; margin: 16px 0 0 0; font-size: 11px; color: #94a3b8;">© 2026 Khata Bahi v1.0.0</p>
 </div>
+
+<!-- INLINE POPUP BOX -->
+<div id="inlineLegalBox" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); z-index: 9999999; align-items: center; justify-content: center; padding: 16px; font-family: sans-serif;">
+  <div style="background: #ffffff; width: 100%; max-width: 500px; max-height: 80vh; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; overflow: hidden;">
+    
+    <div style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #ffffff;">
+      <h3 id="inlineLegalTitle" style="margin: 0; font-size: 17px; font-weight: 700; color: #1e293b;">Details</h3>
+      <button type="button" onclick="document.getElementById('inlineLegalBox').style.display='none'" style="background: #f1f5f9; border: none; font-size: 16px; padding: 6px 10px; border-radius: 8px; cursor: pointer; color: #64748b;">✕</button>
+    </div>
+
+    <div id="inlineLegalBody" style="padding: 20px; overflow-y: auto; font-size: 14px; line-height: 1.6; color: #334155;"></div>
+
+    <div style="padding: 12px 20px; border-top: 1px solid #e2e8f0; text-align: right; background: #f8fafc;">
+      <button type="button" onclick="document.getElementById('inlineLegalBox').style.display='none'" style="background: #4f46e5; color: #ffffff; border: none; padding: 8px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+window.showLegalPopup = function(key) {
+  const data = {
+    about: {
+      title: "About Khata Bahi 🌸",
+      content: "<p><strong>Khata Bahi</strong> is a lightweight, cloud-powered digital bookkeeping and ledger app designed for small businesses, shopkeepers, and retail merchants.</p><p>It allows you to record daily cash-in (Receipt) and cash-out (Payment), calculate totals, and sync your financial entries securely across multiple companies.</p>"
+    },
+    faq: {
+      title: "Frequently Asked Questions (FAQ)",
+      content: "<p><strong>Q: Is Khata Bahi free?</strong><br>A: Yes, the core digital ledger and multi-company setup are completely free to use.</p><p><strong>Q: Is my transaction data safe?</strong><br>A: Yes, all data is synced directly to your secure Google Cloud Firestore database linked to your Google login.</p><p><strong>Q: Can I manage more than one business?</strong><br>A: Yes, you can add and switch between multiple companies using the top company selector.</p>"
+    },
+    contact: {
+      title: "Contact & Support",
+      content: "<p>For questions, support, or feedback, please reach out to us:</p><div style='background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 13px;'><p style='margin: 4px 0;'><strong>📧 Email:</strong> swadsangamindia@gmail.com</p><p style='margin: 4px 0;'><strong>📍 Location:</strong> Delhi, India</p><p style='margin: 4px 0;'><strong>⏰ Hours:</strong> Mon – Sat: 9:00 AM – 6:00 PM IST</p></div>"
+    },
+    privacy: {
+      title: "Privacy Policy",
+      content: "<p><em>Last Updated: August 2026</em></p><p>Your privacy is important to us. When you sign in using Google, we store your profile UID solely to keep your personal ledgers separated and secure.</p><p>We do not share, sell, or disclose your financial records to any third party.</p>"
+    },
+    terms: {
+      title: "Terms & Conditions",
+      content: "<p><em>Last Updated: August 2026</em></p><p>By using Khata Bahi, you agree that:</p><ul><li>The app provides digital bookkeeping and calculation assistance.</li><li>You are responsible for keeping your connected Google account secure.</li></ul>"
+    },
+    disclaimer: {
+      title: "Legal & Tax Disclaimer",
+      content: "<p>Khata Bahi is a digital bookkeeping and calculation tool. It does not provide certified financial, legal, or chartered accountant services. Please verify your tax calculations with a professional for official filings.</p>"
+    }
+  };
+
+  const item = data[key];
+  if (!item) return;
+
+  const box = document.getElementById('inlineLegalBox');
+  document.getElementById('inlineLegalTitle').innerHTML = item.title;
+  document.getElementById('inlineLegalBody').innerHTML = item.content;
+  box.style.display = 'flex';
+};
+</script>
+
         </div>
     </div>
 
