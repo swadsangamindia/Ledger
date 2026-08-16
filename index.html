@@ -1706,29 +1706,27 @@
   <!-- ================= KHATA BAHI FOOTER & LEGAL LINKS ================= -->
 
 <!-- ================= POPUP MODAL ================= -->
-<div id="legalModalBox" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); z-index: 99999; align-items: center; justify-content: center; padding: 16px; font-family: sans-serif;">
-  <div style="background: #ffffff; width: 100%; max-width: 550px; max-height: 85vh; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15); display: flex; flex-direction: column; overflow: hidden;">
+<div id="legalModalBox" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 999999; align-items: center; justify-content: center; padding: 16px; font-family: sans-serif;">
+  <div style="background: #ffffff; width: 100%; max-width: 500px; max-height: 85vh; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); display: flex; flex-direction: column; overflow: hidden;">
     
     <!-- Modal Header -->
     <div style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #ffffff;">
       <h3 id="legalModalTitle" style="margin: 0; font-size: 17px; font-weight: 700; color: #1e293b;">Title</h3>
-      <button onclick="closeLegalModal()" style="background: #f1f5f9; border: none; font-size: 16px; line-height: 1; padding: 6px 10px; border-radius: 8px; cursor: pointer; color: #64748b;">✕</button>
+      <button onclick="window.closeLegalModal()" style="background: #f1f5f9; border: none; font-size: 16px; padding: 6px 10px; border-radius: 8px; cursor: pointer; color: #64748b;">✕</button>
     </div>
 
-    <!-- Modal Content -->
-    <div id="legalModalBody" style="padding: 20px; overflow-y: auto; font-size: 14px; line-height: 1.6; color: #334155;">
-      <!-- Dynamic Content -->
-    </div>
+    <!-- Modal Body -->
+    <div id="legalModalBody" style="padding: 20px; overflow-y: auto; font-size: 14px; line-height: 1.6; color: #334155;"></div>
 
     <!-- Modal Footer -->
     <div style="padding: 12px 20px; border-top: 1px solid #e2e8f0; text-align: right; background: #f8fafc;">
-      <button onclick="closeLegalModal()" style="background: #4f46e5; color: #ffffff; border: none; padding: 8px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">Close</button>
+      <button onclick="window.closeLegalModal()" style="background: #4f46e5; color: #ffffff; border: none; padding: 8px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">Close</button>
     </div>
   </div>
 </div>
 
 <script>
-const legalContentData = {
+window.legalContentData = {
   about: {
     title: "About Khata Bahi 🌸",
     content: "<p><strong>Khata Bahi</strong> is a lightweight, cloud-powered digital bookkeeping and ledger app designed for small businesses, shopkeepers, and retail merchants.</p><p>It allows you to record daily cash-in (Receipt) and cash-out (Payment), calculate totals, and sync your financial entries securely across multiple companies.</p>"
@@ -1755,22 +1753,22 @@ const legalContentData = {
   }
 };
 
-function openLegalModal(pageKey) {
-  const page = legalContentData[pageKey];
+window.openLegalModal = function(pageKey) {
+  const page = window.legalContentData[pageKey];
   if (!page) return;
   document.getElementById('legalModalTitle').innerHTML = page.title;
   document.getElementById('legalModalBody').innerHTML = page.content;
   document.getElementById('legalModalBox').style.display = 'flex';
-}
+};
 
-function closeLegalModal() {
+window.closeLegalModal = function() {
   document.getElementById('legalModalBox').style.display = 'none';
-}
+};
 
 window.addEventListener('click', function(e) {
   const modal = document.getElementById('legalModalBox');
   if (e.target === modal) {
-    closeLegalModal();
+    window.closeLegalModal();
   }
 });
 </script>
