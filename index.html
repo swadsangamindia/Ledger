@@ -886,116 +886,118 @@ window.showLegalPopup = function(key) {
 
   <!-- DYNAMIC COMPANY INVOICE PRINT TEMPLATE -->
   <!-- DYNAMIC COMPANY INVOICE PRINT TEMPLATE (BOXED GST FORMAT) -->
+<!-- DYNAMIC GST INVOICE TEMPLATE -->
 <div style="display: none;">
-  <div id="invoice-pdf-template" style="width: 700px; max-width: 700px;background: #ffffff; color: #000000; font-family: Arial, sans-serif; font-size: 11px; padding: 12px; margin: auto;">
-    <div style="border: 1.5px solid #000;">
+  <div id="invoice-pdf-template" style="width: 700px; max-width: 700px; background: #ffffff; color: #000000; font-family: Arial, Helvetica, sans-serif; font-size: 11px; padding: 10px; box-sizing: border-box; margin: auto;">
+    <div style="border: 1.5px solid #000; box-sizing: border-box;">
       
-      <!-- Top Party Details (Billed to / Shipped to) -->
+      <!-- Top Party Details -->
       <div style="display: flex; border-bottom: 1px solid #000;">
-        <div style="flex: 1; padding: 8px 10px; border-right: 1px solid #000; line-height: 1.4;">
-          <div style="font-weight: bold; font-style: italic; margin-bottom: 4px;">Billed to :</div>
-          <div id="pdf-billed-name"style="font-weight: bold; font-size: 13px;">Customer / Party</div>
-          <div id="pdf-party-address">Delhi, India</div>
-          <div style="margin-top: 6px;"><strong>GSTIN / UIN : </strong><span id="pdf-billed-gstin">N/A</span></div>
+        <div style="width: 50%; padding: 6px 8px; border-right: 1px solid #000; line-height: 1.35; box-sizing: border-box;">
+          <div style="font-weight: bold; font-style: italic; margin-bottom: 3px;">Billed to :</div>
+          <div id="pdf-billed-name" style="font-weight: bold; font-size: 12px;">Customer / Party</div>
+          <div id="pdf-billed-address">Delhi, India</div>
+          <div style="margin-top: 5px;"><strong>GSTIN / UIN : </strong><span id="pdf-billed-gstin">N/A</span></div>
         </div>
-        <div style="flex: 1; padding: 8px 10px; line-height: 1.4;">
-          <div style="font-weight: bold; font-style: italic; margin-bottom: 4px;">Shipped to :</div>
-          <div id="pdf-shipped-name" style="font-weight: bold; font-size: 13px;">Customer / Party</div>
+        <div style="width: 50%; padding: 6px 8px; line-height: 1.35; box-sizing: border-box;">
+          <div style="font-weight: bold; font-style: italic; margin-bottom: 3px;">Shipped to :</div>
+          <div id="pdf-shipped-name" style="font-weight: bold; font-size: 12px;">Customer / Party</div>
           <div id="pdf-shipped-address">Delhi, India</div>
-          <div style="margin-top: 6px;"><strong>GSTIN / UIN : </strong><span id="pdf-shipped-gstin">N/A</span></div>
+          <div style="margin-top: 5px;"><strong>GSTIN / UIN : </strong><span id="pdf-shipped-gstin">N/A</span></div>
         </div>
       </div>
 
-      <!-- Main Column Table -->
-      <table style="width: 100%; border-collapse: collapse; text-align: left;">
+      <!-- Main Item Table -->
+      <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
         <thead>
-          <tr style="border-bottom: 1px solid #000; background: #fbfbfb; font-size: 10px;">
-            <th style="border-right: 1px solid #000; padding: 6px 2px; text-align: center; width: 30px;">S.N.</th>
-            <th style="border-right: 1px solid #000; padding: 6px 4px; text-align: left;">Description of Goods</th>
-            <th style="border-right: 1px solid #000; padding: 6px 2px; text-align: center; width: 60px;">HSN/SAC<br>Code</th>
-            <th style="border-right: 1px solid #000; padding: 6px 2px; text-align: center; width: 35px;">Qty.</th>
-            <th style="border-right: 1px solid #000; padding: 6px 2px; text-align: center; width: 35px;">Unit</th>
-            <th style="border-right: 1px solid #000; padding: 6px 2px; text-align: center; width: 45px;">Price</th>
-            <th style="border-right: 1px solid #000; padding: 6px 2px; text-align: center; width: 45px;">CGST<br>Rate</th>
-            <th style="border-right: 1px solid #000; padding: 6px 4px; text-align: right; width: 55px;">CGST<br>Amount</th>
-            <th style="border-right: 1px solid #000; padding: 6px 2px; text-align: center; width: 45px;">SGST<br>Rate</th>
-            <th style="border-right: 1px solid #000; padding: 6px 4px; text-align: right; width: 55px;">SGST<br>Amount</th>
-            <th style="padding: 6px 4px; text-align: right; width: 75px;">Amount(₹)</th>
+          <tr style="border-bottom: 1px solid #000; background: #fafafa; font-size: 9.5px;">
+            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: center; width: 28px;">S.N.</th>
+            <th style="border-right: 1px solid #000; padding: 4px 4px; text-align: left; width: 170px;">Description of Goods</th>
+            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: center; width: 50px;">HSN/SAC</th>
+            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: center; width: 30px;">Qty</th>
+            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: center; width: 30px;">Unit</th>
+            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: right; width: 50px;">Price</th>
+            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: center; width: 42px;">CGST%</th>
+            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: right; width: 52px;">CGST Amt</th>
+            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: center; width: 42px;">SGST%</th>
+            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: right; width: 52px;">SGST Amt</th>
+            <th style="padding: 4px 4px; text-align: right; width: 70px;">Amount(₹)</th>
           </tr>
         </thead>
         <tbody>
-          <tr style="height: 160px; vertical-align: top;">
-            <td style="border-right: 1px solid #000; text-align: center; padding: 6px 2px;">1.</td>
-            <td style="border-right: 1px solid #000; padding: 6px 4px;">
-              <div id="pdf-desc" style="font-weight: bold;">CAR HIRE CHARGES</div>
-              <div id="pdf-notes" style="font-size: 9.5px; font-style: italic; color: #333; margin-top: 4px; line-height: 1.3;"></div>
+          <tr style="height: 140px; vertical-align: top; font-size: 10px;">
+            <td style="border-right: 1px solid #000; text-align: center; padding: 5px 2px;">1.</td>
+            <td style="border-right: 1px solid #000; padding: 5px 4px; word-break: break-word;">
+              <div id="pdf-item-desc" style="font-weight: bold;">Goods / Service</div>
+              <div id="pdf-item-notes" style="font-size: 9px; font-style: italic; color: #444; margin-top: 3px;"></div>
             </td>
-            <td id="pdf-hsn" style="border-right: 1px solid #000; text-align: center; padding: 6px 2px;">9966</td>
-            <td id="pdf-qty" style="border-right: 1px solid #000; text-align: center; padding: 6px 2px;">1</td>
-            <td style="border-right: 1px solid #000; text-align: center; padding: 6px 2px;">--</td>
-            <td id="pdf-rate" style="border-right: 1px solid #000; text-align: center; padding: 6px 2px;">--</td>
-            <td id="pdf-cgst-rate" style="border-right: 1px solid #000; text-align: center; padding: 6px 2px;">9.00 %</td>
-            <td id="pdf-cgst-amt" style="border-right: 1px solid #000; text-align: right; padding: 6px 4px;">0.00</td>
-            <td id="pdf-sgst-rate" style="border-right: 1px solid #000; text-align: center; padding: 6px 2px;">9.00 %</td>
-            <td id="pdf-sgst-amt" style="border-right: 1px solid #000; text-align: right; padding: 6px 4px;">0.00</td>
-            <td id="pdf-amount" style="text-align: right; padding: 6px 4px; font-weight: bold;">0.00</td>
+            <td id="pdf-item-hsn" style="border-right: 1px solid #000; text-align: center; padding: 5px 2px;">9966</td>
+            <td id="pdf-item-qty" style="border-right: 1px solid #000; text-align: center; padding: 5px 2px;">1</td>
+            <td style="border-right: 1px solid #000; text-align: center; padding: 5px 2px;">Nos</td>
+            <td id="pdf-item-price" style="border-right: 1px solid #000; text-align: right; padding: 5px 2px;">0.00</td>
+            <td id="pdf-cgst-rate" style="border-right: 1px solid #000; text-align: center; padding: 5px 2px;">2.50 %</td>
+            <td id="pdf-cgst-amt" style="border-right: 1px solid #000; text-align: right; padding: 5px 2px;">0.00</td>
+            <td id="pdf-sgst-rate" style="border-right: 1px solid #000; text-align: center; padding: 5px 2px;">2.50 %</td>
+            <td id="pdf-sgst-amt" style="border-right: 1px solid #000; text-align: right; padding: 5px 2px;">0.00</td>
+            <td id="pdf-item-total" style="text-align: right; padding: 5px 4px; font-weight: bold;">0.00</td>
           </tr>
         </tbody>
       </table>
 
       <!-- Grand Total Bar -->
-      <div style="display: flex; border-top: 1px solid #000; border-bottom: 1px solid #000; line-height: 24px; font-weight: bold;">
-        <div style="flex: 1; text-align: right; padding-right: 15px;">Grand Total ₹</div>
-        <div id="pdf-grand-total" style="width: 75px; text-align: right; padding-right: 4px; border-left: 1px solid #000;">0.00</div>
+      <div style="display: flex; border-top: 1px solid #000; border-bottom: 1px solid #000; line-height: 22px; font-weight: bold; font-size: 11px;">
+        <div style="flex: 1; text-align: right; padding-right: 12px;">Grand Total ₹</div>
+        <div id="pdf-grand-total" style="width: 70px; text-align: right; padding-right: 4px; border-left: 1px solid #000;">0.00</div>
       </div>
 
       <!-- Tax Summary Table -->
-      <div style="border-bottom: 1px solid #000; padding: 6px 10px;">
+      <div style="border-bottom: 1px solid #000; padding: 5px 8px;">
         <table style="width: auto; border-collapse: collapse;">
-          <tr style="border-bottom: 1px solid #ccc; font-weight: bold; font-size: 10px;">
-            <td style="padding-right: 20px;">Tax Rate</td>
-            <td style="padding-right: 20px; text-align: right;">Taxable Amt.</td>
-            <td style="padding-right: 20px; text-align: right;">CGST Amt.</td>
-            <td style="padding-right: 20px; text-align: right;">SGST Amt.</td>
+          <tr style="border-bottom: 1px solid #ccc; font-weight: bold; font-size: 9.5px;">
+            <td style="padding-right: 18px;">Tax Rate</td>
+            <td style="padding-right: 18px; text-align: right;">Taxable Amt.</td>
+            <td style="padding-right: 18px; text-align: right;">CGST Amt.</td>
+            <td style="padding-right: 18px; text-align: right;">SGST Amt.</td>
             <td style="text-align: right;">Total Tax</td>
           </tr>
-          <tr style="font-size: 10.5px;">
-            <td id="pdf-gst-rate-summary">18%</td>
-            <td id="pdf-subtotal" style="text-align: right; padding-right: 20px;">0.00</td>
-            <td id="pdf-cgst-summary" style="text-align: right; padding-right: 20px;">0.00</td>
-            <td id="pdf-sgst-summary" style="text-align: right; padding-right: 20px;">0.00</td>
-            <td id="pdf-gst-val" style="text-align: right;">0.00</td>
+          <tr style="font-size: 10px;">
+            <td id="pdf-tax-rate-summary">5%</td>
+            <td id="pdf-taxable-amt" style="text-align: right; padding-right: 18px;">0.00</td>
+            <td id="pdf-cgst-summary" style="text-align: right; padding-right: 18px;">0.00</td>
+            <td id="pdf-sgst-summary" style="text-align: right; padding-right: 18px;">0.00</td>
+            <td id="pdf-total-tax-amt" style="text-align: right;">0.00</td>
           </tr>
         </table>
       </div>
 
       <!-- Amount in Words -->
-      <div id="pdf-words" style="border-bottom: 1px solid #000; padding: 6px 10px; font-weight: bold; font-size: 11px;">
+      <div id="pdf-amount-in-words" style="border-bottom: 1px solid #000; padding: 5px 8px; font-weight: bold; font-size: 10.5px;">
         Rupees Zero Only
       </div>
 
       <!-- Footer Terms & Signatures -->
       <div style="display: flex;">
-        <div style="flex: 1.2; padding: 8px 10px; border-right: 1px solid #000; font-size: 9.5px; line-height: 1.35;">
-          <div style="text-decoration: underline; font-weight: bold; margin-bottom: 3px;">Terms & Conditions</div>
+        <div style="flex: 1.2; padding: 6px 8px; border-right: 1px solid #000; font-size: 9px; line-height: 1.35;">
+          <div style="text-decoration: underline; font-weight: bold; margin-bottom: 2px;">Terms & Conditions</div>
           <div>E.& O.E.</div>
           <div>1. Goods once sold will not be taken back.</div>
-          <div>2. Interest @ 18% p.a. will be charged if the payment is not made within the stipulated time.</div>
+          <div>2. Interest @ 18% p.a. charged if payment delayed.</div>
           <div>3. Subject to 'Delhi' Jurisdiction only.</div>
         </div>
-        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 10px; text-align: right;">
-          <div style="text-align: left; font-size: 10px;"><strong>Receiver's Signature :</strong></div>
-          <div>
-            <img id="pdf-sig-preview" src="" style="display: none; max-height: 40px; max-width: 120px; object-fit: contain; margin-bottom: 4px;" alt="Signature" />
-
-            <div style="font-weight: bold; margin-bottom: 30px;">for <span id="pdf-company-name">Swad Sangam</span></div>
-            <div style="font-weight: bold;">Authorised Signatory</div>
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 6px 8px; text-align: right;">
+          <div style="text-align: left; font-size: 9.5px;"><strong>Receiver's Signature :</strong></div>
+          <div style="display: flex; flex-direction: column; align-items: flex-end;">
+            <img id="pdf-sig-preview" src="" style="display: none; max-height: 40px; max-width: 120px; object-fit: contain; margin-bottom: 2px;" alt="Signature" />
+            <div style="font-weight: bold; margin-bottom: 2px;">for <span id="pdf-company-name">Swad Sangam</span></div>
+            <div style="font-weight: bold; font-size: 9.5px;">Authorised Signatory</div>
           </div>
         </div>
       </div>
 
     </div>
   </div>
+</div>
+
 </div>
 
     </div>
