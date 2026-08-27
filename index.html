@@ -1439,12 +1439,23 @@ function generateInvoicePDF(id) {
   const activeComp = getActiveCompany();
   const qty = Number(item.quantity) || 1;
   const rate = Number(item.rate || item.amount || 0);
-  const taxable = item.subtotal ? Number(item.subtotal) : (qty * rate);
   
-  // Dynamic GST calculation
-  const gstRate = item.gstRate !== undefined ? Number(item.gstRate) : 18;
+  // Dynamic Calculation
+  const gstRate = item.gstRate !== undefined ? Number(item.gstRate) : 5;
   const halfRate = (gstRate / 2).toFixed(2);
-  const totalTax = Number(item.gstAmount || ((taxable * gstRate) / 100));
+  const totalAmt = Number(item.totalAmount || item.amount || 0);
+  
+  // Taxable & Tax breakdown
+  let taxable = 0;
+  let totalTax = 0;
+  if (item.subtotal) {
+    taxable = Number(item.subtotal);
+    totalTax = Number(item.gstAmount || ((taxable * gstRate) / 100));
+  } else {
+    // If total includes GST:
+    taxable = totalAmt / (1 + (gstRate / 100));
+    totalTax = totalAmt - taxable;
+  }
   const halfTax = (totalTax / 2).toFixed(2);
   const grandTotal = (taxable + totalTax).toFixed(2);
 
@@ -1453,24 +1464,24 @@ function generateInvoicePDF(id) {
     if (el) el.innerText = val; 
   };
 
-  // Party Data Binding
+  // 1. Party Data Binding
   const partyName = item.partyName || item.customerName || 'Customer / Party';
   setT('pdf-billed-name', partyName);
-  setT('pdf-billed-address', item.partyAddress || activeComp.address || 'Delhi, India');
+  setT('pdf-billed-address', item.partyAddress || 'Delhi, India');
   setT('pdf-billed-gstin', item.partyGstin || 'N/A');
 
   setT('pdf-shipped-name', partyName);
-  setT('pdf-shipped-address', item.partyAddress || activeComp.address || 'Delhi, India');
+  setT('pdf-shipped-address', item.partyAddress || 'Delhi, India');
   setT('pdf-shipped-gstin', item.partyGstin || 'N/A');
 
-  // Item Details
+  // 2. Item Description & Particulars
   setT('pdf-item-desc', item.description || item.particulars || 'CAR HIRE CHARGES');
   setT('pdf-item-notes', item.notes || '');
   setT('pdf-item-hsn', item.hsn || '9966');
   setT('pdf-item-qty', qty);
-  setT('pdf-item-price', rate.toFixed(2));
+  setT('pdf-item-price', taxable > 0 ? (taxable/qty).toFixed(2) : rate.toFixed(2));
 
-  // Table GST Rates & Amounts
+  // 3. Dynamic GST Rate and Tax Breakdown
   setT('pdf-cgst-rate', halfRate + ' %');
   setT('pdf-cgst-amt', halfTax);
   setT('pdf-sgst-rate', halfRate + ' %');
@@ -1478,18 +1489,18 @@ function generateInvoicePDF(id) {
   setT('pdf-item-total', grandTotal);
   setT('pdf-grand-total', grandTotal);
 
-  // Summary Box
+  // Summary Table (Now properly bound)
   setT('pdf-tax-rate-summary', gstRate + '%');
   setT('pdf-taxable-amt', taxable.toFixed(2));
   setT('pdf-cgst-summary', halfTax);
   setT('pdf-sgst-summary', halfTax);
   setT('pdf-total-tax-amt', totalTax.toFixed(2));
 
-  // Words & Company
+  // Amount in Words
   setT('pdf-amount-in-words', 'Rupees ' + inrWords(grandTotal));
   setT('pdf-company-name', activeComp.name || 'Swad sangam india');
 
-  // Signature Render
+  // Digital Signature
   const sigImg = document.getElementById('pdf-sig-preview');
   if (sigImg) {
     if (companySignatureDataUrl) {
@@ -1515,6 +1526,7 @@ function generateInvoicePDF(id) {
     element.style.display = 'none';
   });
 }
+
 
 
 
