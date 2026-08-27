@@ -873,14 +873,14 @@ window.showLegalPopup = function(key) {
   <!-- DYNAMIC COMPANY INVOICE PRINT TEMPLATE -->
   <!-- DYNAMIC COMPANY INVOICE PRINT TEMPLATE (BOXED GST FORMAT) -->
 <div style="display: none;">
-  <div id="invoice-pdf-template" style="width: 780px; background: #ffffff; color: #000000; font-family: Arial, sans-serif; font-size: 11px; padding: 12px; margin: auto;">
+  <div id="invoice-pdf-template" style="width: 700px; max-width: 700px;background: #ffffff; color: #000000; font-family: Arial, sans-serif; font-size: 11px; padding: 12px; margin: auto;">
     <div style="border: 1.5px solid #000;">
       
       <!-- Top Party Details (Billed to / Shipped to) -->
       <div style="display: flex; border-bottom: 1px solid #000;">
         <div style="flex: 1; padding: 8px 10px; border-right: 1px solid #000; line-height: 1.4;">
           <div style="font-weight: bold; font-style: italic; margin-bottom: 4px;">Billed to :</div>
-          <div id="pdf-party-name" style="font-weight: bold; font-size: 13px;">Customer / Party</div>
+          <div id="pdf-billed-name"style="font-weight: bold; font-size: 13px;">Customer / Party</div>
           <div id="pdf-party-address">Delhi, India</div>
           <div style="margin-top: 6px;"><strong>GSTIN / UIN : </strong><span id="pdf-billed-gstin">N/A</span></div>
         </div>
@@ -972,6 +972,8 @@ window.showLegalPopup = function(key) {
         <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 10px; text-align: right;">
           <div style="text-align: left; font-size: 10px;"><strong>Receiver's Signature :</strong></div>
           <div>
+            <img id="pdf-sig-preview" src="" style="display: none; max-height: 40px; max-width: 120px; object-fit: contain; margin-bottom: 4px;" alt="Signature" />
+
             <div style="font-weight: bold; margin-bottom: 30px;">for <span id="pdf-company-name">Swad Sangam</span></div>
             <div style="font-weight: bold;">Authorised Signatory</div>
           </div>
