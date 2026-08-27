@@ -1385,8 +1385,37 @@ window.showLegalPopup = function(key) {
       lucide.createIcons();
     }
 
-    /* INVOICE PDF GENERATOR */
-    /* INVOICE PDF GENERATOR */
+    /* SIGNATURE STORAGE */
+let companySignatureDataUrl = localStorage.getItem('user_digital_signature') || '';
+
+function uploadDigitalSignature(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    companySignatureDataUrl = e.target.result;
+    localStorage.setItem('user_digital_signature', companySignatureDataUrl);
+    alert('Digital Signature saved successfully!');
+  };
+  reader.readAsDataURL(file);
+}
+
+/* NUMBER TO WORDS CONVERTER (INR) */
+function inrWords(num) {
+  const a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
+  const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+  let n = ('000000000' + parseInt(Math.floor(num))).substr(-9);
+  let str = '';
+  let cr = parseInt(n.substr(0, 2)), lk = parseInt(n.substr(2, 2)), th = parseInt(n.substr(4, 2)), hu = parseInt(n.substr(6, 1)), re = parseInt(n.substr(7, 2));
+  if (cr > 0) str += (a[cr] || b[Math.floor(cr/10)] + ' ' + a[cr%10]) + 'Crore ';
+  if (lk > 0) str += (a[lk] || b[Math.floor(lk/10)] + ' ' + a[lk%10]) + 'Lakh ';
+  if (th > 0) str += (a[th] || b[Math.floor(th/10)] + ' ' + a[th%10]) + 'Thousand ';
+  if (hu > 0) str += a[hu] + 'Hundred ';
+  if (re > 0) str += (str != '' ? 'and ' : '') + (a[re] || b[Math.floor(re/10)] + ' ' + a[re%10]);
+  return (str.trim() || 'Zero') + ' Only';
+}
+
+/* INVOICE PDF GENERATOR */
 function generateInvoicePDF(id) {
   const item = transactions.find(t => t.id === id);
   if (!item) return alert("Transaction record not found!");
@@ -1394,69 +1423,72 @@ function generateInvoicePDF(id) {
   const activeComp = getActiveCompany();
   const qty = Number(item.quantity) || 1;
   const rate = Number(item.rate || item.amount || 0);
-  const subtotal = item.subtotal ? Number(item.subtotal) : (qty * rate);
-  const gstRate = Number(item.gstRate || 18);
+  const taxable = item.subtotal ? Number(item.subtotal) : (qty * rate);
+  
+  // Dynamic GST calculation
+  const gstRate = item.gstRate !== undefined ? Number(item.gstRate) : 18;
   const halfRate = (gstRate / 2).toFixed(2);
-  const halfTax = ((subtotal * (gstRate / 2)) / 100).toFixed(2);
-  const totalTax = ((subtotal * gstRate) / 100).toFixed(2);
-  const grandTotal = (subtotal + Number(totalTax)).toFixed(2);
+  const totalTax = Number(item.gstAmount || ((taxable * gstRate) / 100));
+  const halfTax = (totalTax / 2).toFixed(2);
+  const grandTotal = (taxable + totalTax).toFixed(2);
 
-  // Helper: Number to Indian Words
-  function numberToWordsINR(num) {
-    const a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
-    const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-    let n = ('000000000' + parseInt(num)).substr(-9);
-    let str = '';
-    let crore = parseInt(n.substr(0, 2));
-    let lakh = parseInt(n.substr(2, 2));
-    let thousand = parseInt(n.substr(4, 2));
-    let hundred = parseInt(n.substr(6, 1));
-    let rest = parseInt(n.substr(7, 2));
-    if (crore > 0) str += (a[crore] || b[Math.floor(crore / 10)] + ' ' + a[crore % 10]) + 'Crore ';
-    if (lakh > 0) str += (a[lakh] || b[Math.floor(lakh / 10)] + ' ' + a[lakh % 10]) + 'Lakh ';
-    if (thousand > 0) str += (a[thousand] || b[Math.floor(thousand / 10)] + ' ' + a[thousand % 10]) + 'Thousand ';
-    if (hundred > 0) str += a[hundred] + 'Hundred ';
-    if (rest > 0) str += (str != '' ? 'and ' : '') + (a[rest] || b[Math.floor(rest / 10)] + ' ' + a[rest % 10]);
-    return (str.trim() || 'Zero') + ' Only';
+  const setT = (elemId, val) => { 
+    const el = document.getElementById(elemId); 
+    if (el) el.innerText = val; 
+  };
+
+  // Party Data Binding
+  const partyName = item.partyName || item.customerName || 'Customer / Party';
+  setT('pdf-billed-name', partyName);
+  setT('pdf-billed-address', item.partyAddress || activeComp.address || 'Delhi, India');
+  setT('pdf-billed-gstin', item.partyGstin || 'N/A');
+
+  setT('pdf-shipped-name', partyName);
+  setT('pdf-shipped-address', item.partyAddress || activeComp.address || 'Delhi, India');
+  setT('pdf-shipped-gstin', item.partyGstin || 'N/A');
+
+  // Item Details
+  setT('pdf-item-desc', item.description || item.particulars || 'CAR HIRE CHARGES');
+  setT('pdf-item-notes', item.notes || '');
+  setT('pdf-item-hsn', item.hsn || '9966');
+  setT('pdf-item-qty', qty);
+  setT('pdf-item-price', rate.toFixed(2));
+
+  // Table GST Rates & Amounts
+  setT('pdf-cgst-rate', halfRate + ' %');
+  setT('pdf-cgst-amt', halfTax);
+  setT('pdf-sgst-rate', halfRate + ' %');
+  setT('pdf-sgst-amt', halfTax);
+  setT('pdf-item-total', grandTotal);
+  setT('pdf-grand-total', grandTotal);
+
+  // Summary Box
+  setT('pdf-tax-rate-summary', gstRate + '%');
+  setT('pdf-taxable-amt', taxable.toFixed(2));
+  setT('pdf-cgst-summary', halfTax);
+  setT('pdf-sgst-summary', halfTax);
+  setT('pdf-total-tax-amt', totalTax.toFixed(2));
+
+  // Words & Company
+  setT('pdf-amount-in-words', 'Rupees ' + inrWords(grandTotal));
+  setT('pdf-company-name', activeComp.name || 'Swad sangam india');
+
+  // Signature Render
+  const sigImg = document.getElementById('pdf-sig-preview');
+  if (sigImg) {
+    if (companySignatureDataUrl) {
+      sigImg.src = companySignatureDataUrl;
+      sigImg.style.display = 'block';
+    } else {
+      sigImg.style.display = 'none';
+    }
   }
-
-  // Populate New Template Elements
-  const setEl = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; };
-
-  setEl('pdf-company-name', activeComp.name || 'Company Name');
-  setEl('pdf-billed-name', item.partyName || 'Shambhu');
-  setEl('pdf-billed-address', item.partyAddress || activeComp.address || 'Delhi-110043');
-  setEl('pdf-billed-gstin', item.partyGstin || 'N/A');
-
-  setEl('pdf-shipped-name', item.partyName || 'Shambhu');
-  setEl('pdf-shipped-address', item.partyAddress || activeComp.address || 'Delhi-110043');
-  setEl('pdf-shipped-gstin', item.partyGstin || 'N/A');
-
-  setEl('pdf-item-desc', item.description || 'CAR HIRE CHARGES');
-  setEl('pdf-item-notes', item.notes || '');
-  setEl('pdf-item-hsn', item.hsn || '9966');
-  setEl('pdf-item-qty', qty > 0 ? qty : '--');
-  setEl('pdf-item-rate', rate > 0 ? rate.toFixed(2) : '--');
-
-  setEl('pdf-cgst-rate', halfRate + ' %');
-  setEl('pdf-cgst-amt', halfTax);
-  setEl('pdf-sgst-rate', halfRate + ' %');
-  setEl('pdf-sgst-amt', halfTax);
-  setEl('pdf-item-total', grandTotal);
-
-  setEl('pdf-grand-total', grandTotal);
-  setEl('pdf-taxable-amt', subtotal.toFixed(2));
-  setEl('pdf-tax-rate-summary', gstRate + '%');
-  setEl('pdf-total-tax-amt', totalTax);
-
-  setEl('pdf-amount-in-words', 'Rupees ' + numberToWordsINR(grandTotal));
-  setEl('pdf-sign-company', (activeComp.name || 'WEEKEND BHARAMAN TOUR PLANNER').toUpperCase());
 
   const element = document.getElementById('invoice-pdf-template');
   element.style.display = 'block';
 
   const opt = {
-    margin: [5, 5, 5, 5],
+    margin: [4, 4, 4, 4],
     filename: `Invoice_${(activeComp.name || 'Bill').replace(/\s+/g, '_')}_${item.id}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2, useCORS: true },
@@ -1467,6 +1499,7 @@ function generateInvoicePDF(id) {
     element.style.display = 'none';
   });
 }
+
 
 
     /* CONVERSION UTILITIES ENGINE */
