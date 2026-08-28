@@ -1441,12 +1441,11 @@ function generateInvoicePDF(id) {
   const qty = Number(item.quantity) || 1;
   const rate = Number(item.rate || item.amount || 0);
 
-  // Dynamic Calculation
+  // Calculations
   const gstRate = item.gstRate !== undefined ? Number(item.gstRate) : 5;
   const halfRate = (gstRate / 2).toFixed(2);
   const totalAmt = Number(item.totalAmount || item.amount || 0);
 
-  // Taxable & Tax breakdown
   let taxable = 0;
   let totalTax = 0;
   if (item.subtotal) {
@@ -1464,13 +1463,13 @@ function generateInvoicePDF(id) {
     if (el) el.innerText = val;
   };
 
-  // Top Company Header Binding
-  setT('pdf-top-company-name', activeComp.name || 'Swad Sangam India');
+  // 1. Company Header
+  setT('pdf-top-company-name', activeComp.name || 'Prism Store');
   setT('pdf-top-company-address', activeComp.address || 'Delhi, India');
   setT('pdf-top-company-gstin', activeComp.gstin || 'N/A');
   setT('pdf-top-company-phone', activeComp.phone || 'N/A');
 
-  // 1. Party Data Binding
+  // 2. Party Details
   const partyName = item.partyName || item.customerName || 'Customer / Party';
   setT('pdf-billed-name', partyName);
   setT('pdf-billed-address', item.partyAddress || 'Delhi, India');
@@ -1480,14 +1479,14 @@ function generateInvoicePDF(id) {
   setT('pdf-shipped-address', item.partyAddress || 'Delhi, India');
   setT('pdf-shipped-gstin', item.partyGstin || 'N/A');
 
-  // 2. Item Description & Particulars
+  // 3. Particulars
   setT('pdf-item-desc', item.description || item.particulars || 'CAR HIRE CHARGES');
   setT('pdf-item-notes', item.notes || '');
   setT('pdf-item-hsn', item.hsn || '9966');
   setT('pdf-item-qty', qty);
   setT('pdf-item-price', taxable > 0 ? (taxable / qty).toFixed(2) : rate.toFixed(2));
 
-  // 3. Dynamic GST Rate and Tax Breakdown
+  // 4. GST Breakdown
   setT('pdf-cgst-rate', halfRate + ' %');
   setT('pdf-cgst-amt', halfTax);
   setT('pdf-sgst-rate', halfRate + ' %');
@@ -1495,18 +1494,17 @@ function generateInvoicePDF(id) {
   setT('pdf-item-total', grandTotal);
   setT('pdf-grand-total', grandTotal);
 
-  // Summary Table
+  // 5. Summary Table
   setT('pdf-tax-rate-summary', gstRate + '%');
   setT('pdf-taxable-amt', taxable.toFixed(2));
   setT('pdf-cgst-summary', halfTax);
   setT('pdf-sgst-summary', halfTax);
   setT('pdf-total-tax-amt', totalTax.toFixed(2));
 
-  // Amount in Words & Signatory Company
+  // 6. Signatures & Text
   setT('pdf-amount-in-words', 'Rupees ' + inrWords(grandTotal));
-  setT('pdf-company-name', activeComp.name || 'Swad Sangam India');
+  setT('pdf-company-name', activeComp.name || 'Prism Store');
 
-  // Digital Signature
   const sigImg = document.getElementById('pdf-sig-preview');
   if (sigImg) {
     if (companySignatureDataUrl) {
@@ -1517,7 +1515,9 @@ function generateInvoicePDF(id) {
     }
   }
 
+  // 7. Make Element Visible Temporarily & Render PDF
   const element = document.getElementById('invoice-pdf-template');
+  element.style.display = 'block';
 
   const opt = {
     margin: [4, 4, 4, 4],
@@ -1527,8 +1527,13 @@ function generateInvoicePDF(id) {
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
-  html2pdf().set(opt).from(element).save();
+  html2pdf().set(opt).from(element).save().then(() => {
+    element.style.display = 'none';
+  }).catch(() => {
+    element.style.display = 'none';
+  });
 }
+
 
 
 
