@@ -1452,12 +1452,12 @@ function generateInvoicePDF(id) {
   const activeComp = getActiveCompany();
   const qty = Number(item.quantity) || 1;
   const rate = Number(item.rate || item.amount || 0);
-  
+
   // Dynamic Calculation
   const gstRate = item.gstRate !== undefined ? Number(item.gstRate) : 5;
   const halfRate = (gstRate / 2).toFixed(2);
   const totalAmt = Number(item.totalAmount || item.amount || 0);
-  
+
   // Taxable & Tax breakdown
   let taxable = 0;
   let totalTax = 0;
@@ -1465,19 +1465,18 @@ function generateInvoicePDF(id) {
     taxable = Number(item.subtotal);
     totalTax = Number(item.gstAmount || ((taxable * gstRate) / 100));
   } else {
-    // If total includes GST:
     taxable = totalAmt / (1 + (gstRate / 100));
     totalTax = totalAmt - taxable;
   }
   const halfTax = (totalTax / 2).toFixed(2);
   const grandTotal = (taxable + totalTax).toFixed(2);
 
-  const setT = (elemId, val) => { 
-    const el = document.getElementById(elemId); 
-    if (el) el.innerText = val; 
+  const setT = (elemId, val) => {
+    const el = document.getElementById(elemId);
+    if (el) el.innerText = val;
   };
 
-    // Top Company Header Binding
+  // Top Company Header Binding
   setT('pdf-top-company-name', activeComp.name || 'Swad Sangam India');
   setT('pdf-top-company-address', activeComp.address || 'Delhi, India');
   setT('pdf-top-company-gstin', activeComp.gstin || 'N/A');
@@ -1498,7 +1497,7 @@ function generateInvoicePDF(id) {
   setT('pdf-item-notes', item.notes || '');
   setT('pdf-item-hsn', item.hsn || '9966');
   setT('pdf-item-qty', qty);
-  setT('pdf-item-price', taxable > 0 ? (taxable/qty).toFixed(2) : rate.toFixed(2));
+  setT('pdf-item-price', taxable > 0 ? (taxable / qty).toFixed(2) : rate.toFixed(2));
 
   // 3. Dynamic GST Rate and Tax Breakdown
   setT('pdf-cgst-rate', halfRate + ' %');
@@ -1508,16 +1507,16 @@ function generateInvoicePDF(id) {
   setT('pdf-item-total', grandTotal);
   setT('pdf-grand-total', grandTotal);
 
-  // Summary Table (Now properly bound)
+  // Summary Table
   setT('pdf-tax-rate-summary', gstRate + '%');
   setT('pdf-taxable-amt', taxable.toFixed(2));
   setT('pdf-cgst-summary', halfTax);
   setT('pdf-sgst-summary', halfTax);
   setT('pdf-total-tax-amt', totalTax.toFixed(2));
 
-  // Amount in Words
+  // Amount in Words & Signatory Company
   setT('pdf-amount-in-words', 'Rupees ' + inrWords(grandTotal));
-  setT('pdf-company-name', activeComp.name || 'Swad sangam india');
+  setT('pdf-company-name', activeComp.name || 'Swad Sangam India');
 
   // Digital Signature
   const sigImg = document.getElementById('pdf-sig-preview');
@@ -1531,19 +1530,16 @@ function generateInvoicePDF(id) {
   }
 
   const element = document.getElementById('invoice-pdf-template');
-  element.style.display = 'block';
 
   const opt = {
     margin: [4, 4, 4, 4],
     filename: `Invoice_${(activeComp.name || 'Bill').replace(/\s+/g, '_')}_${item.id}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true },
+    html2canvas: { scale: 2, useCORS: true, logging: false },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
-  html2pdf().set(opt).from(element).save().then(() => {
-    element.style.display = 'none';
-  });
+  html2pdf().set(opt).from(element).save();
 }
 
 
