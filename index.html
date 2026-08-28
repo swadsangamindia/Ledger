@@ -976,26 +976,23 @@ window.showLegalPopup = function(key) {
       <div id="pdf-amount-in-words" style="border-bottom: 1px solid #000; padding: 5px 8px; font-weight: bold; font-size: 10.5px;">
         Rupees Zero Only
       </div>
-
-      <!-- Footer Terms & Signatures -->
+      <!-- Footer Signatures (Terms & Conditions Removed) -->
       <div style="display: flex;">
-        <div style="flex: 1.2; padding: 6px 8px; border-right: 1px solid #000; font-size: 9px; line-height: 1.35;">
-          <div style="text-decoration: underline; font-weight: bold; margin-bottom: 2px;">Terms & Conditions</div>
-          <div>E.& O.E.</div>
-          <div>1. Goods once sold will not be taken back.</div>
-          <div>2. Interest @ 18% p.a. charged if payment delayed.</div>
-          <div>3. Subject to 'Delhi' Jurisdiction only.</div>
+        <div style="flex: 1; padding: 8px 10px 12px 10px; border-right: 1px solid #000; display: flex; flex-direction: column; justify-content: space-between;">
+          <div style="font-size: 9.5px; font-weight: bold;">Receiver's Signature :</div>
+          <div style="border-bottom: 1px dotted #999; width: 80%; margin-top: 40px;"></div>
         </div>
-        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 6px 8px 12px 8px; text-align: right;">
-  <div style="text-align: left; font-size: 9.5px;"><strong>Receiver's Signature :</strong></div>
-  <div style="display: flex; flex-direction: column; align-items: flex-end; padding-bottom: 4px;">
-    <img id="pdf-sig-preview" src="" style="display: none; max-height: 40px; max-width: 120px; object-fit: contain; margin-bottom: 4px;" alt="Signature" />
-    <div style="font-weight: bold; margin-bottom: 3px;">for <span id="pdf-company-name">Swad Sangam</span></div>
-    <div style="font-weight: bold; font-size: 9.5px; padding-bottom: 4px;">Authorised Signatory</div>
-  </div>
-</div>
-
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 10px 12px 10px; text-align: right;">
+          <div>&nbsp;</div>
+          <div style="display: flex; flex-direction: column; align-items: flex-end; padding-bottom: 4px;">
+            <img id="pdf-sig-preview" src="" style="display: none; max-height: 40px; max-width: 120px; object-fit: contain; margin-bottom: 4px;" alt="Signature" />
+            <div style="font-weight: bold; margin-bottom: 3px;">for <span id="pdf-company-name">Swad Sangam</span></div>
+            <div style="font-weight: bold; font-size: 9.5px; padding-bottom: 4px;">Authorised Signatory</div>
+          </div>
+        </div>
       </div>
+
+
 
     </div>
   </div>
