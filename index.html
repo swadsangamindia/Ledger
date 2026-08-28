@@ -1481,6 +1481,12 @@ function generateInvoicePDF(id) {
     if (el) el.innerText = val; 
   };
 
+    // Top Company Header Binding
+  setT('pdf-top-company-name', activeComp.name || 'Swad Sangam India');
+  setT('pdf-top-company-address', activeComp.address || 'Delhi, India');
+  setT('pdf-top-company-gstin', activeComp.gstin || 'N/A');
+  setT('pdf-top-company-phone', activeComp.phone || 'N/A');
+
   // 1. Party Data Binding
   const partyName = item.partyName || item.customerName || 'Customer / Party';
   setT('pdf-billed-name', partyName);
