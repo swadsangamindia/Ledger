@@ -886,10 +886,9 @@ window.showLegalPopup = function(key) {
     </div>
   </div>
 
-  <!-- DYNAMIC COMPANY INVOICE PRINT TEMPLATE -->
-<!-- DYNAMIC GST INVOICE TEMPLATE (OFFSCREEN POSITIONED) -->
-<div id="invoice-pdf-template" style="position: fixed; top: 0; left: 0; z-index: -9999; width: 700px; max-width: 700px; background: #ffffff; color: #000000; font-family: Arial, Helvetica, sans-serif; font-size: 11px; padding: 10px 10px 20px 10px; box-sizing: border-box; pointer-events: none;">
- <div style="border: 1.5px solid #000; box-sizing: border-box;">
+<!-- DYNAMIC GST INVOICE TEMPLATE -->
+<div id="invoice-pdf-template" style="display: none; width: 700px; max-width: 700px; background: #ffffff; color: #000000; font-family: Arial, Helvetica, sans-serif; font-size: 11px; padding: 10px 10px 20px 10px; box-sizing: border-box; margin: auto;">
+  <div style="border: 1.5px solid #000; box-sizing: border-box;">
     
     <!-- 1. Top Company Header -->
     <div style="text-align: center; padding: 8px 10px; border-bottom: 1.5px solid #000; background: #fafafa;">
@@ -1004,17 +1003,6 @@ window.showLegalPopup = function(key) {
   </div>
 </div>
 
-
-
-
-    </div>
-  </div>
-</div>
-
-</div>
-
-    </div>
-  </div>
 
   <!-- APPLICATION LOGIC -->
   <script>
