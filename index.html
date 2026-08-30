@@ -1450,13 +1450,15 @@ function generateInvoicePDF(id) {
   const qty = Number(item.quantity) || 1;
   const rate = Number(item.rate || item.amount || 0);
 
-  // Calculations
-  const gstRate = item.gstRate !== undefined ? Number(item.gstRate) : 5;
+  // Calculations (Payment/Receipt has 0% GST)
+  const isVoucher = (item.type === 'sale' || item.type === 'purchase');
+  const gstRate = isVoucher && item.gstRate !== undefined ? Number(item.gstRate) : 0;
   const halfRate = (gstRate / 2).toFixed(2);
   const totalAmt = Number(item.totalAmount || item.amount || 0);
 
-  let taxable = 0;
+  let taxable = totalAmt;
   let totalTax = 0;
+
   if (item.subtotal) {
     taxable = Number(item.subtotal);
     totalTax = Number(item.gstAmount || ((taxable * gstRate) / 100));
