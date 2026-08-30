@@ -1281,13 +1281,22 @@ window.showLegalPopup = function(key) {
     }
 
     function calculateAmounts() {
-      const qty = parseFloat(document.getElementById('quantity').value) || 1;
-      const rate = parseFloat(document.getElementById('rate').value) || 0;
-      const gstPct = isProUser ? (parseFloat(document.getElementById('gst-rate').value) || 0) : 0;
+  const typeEl = document.getElementById('type');
+  const typeVal = typeEl ? typeEl.value : 'receipt';
+  const isVoucher = (typeVal === 'sale' || typeVal === 'purchase');
 
-      const subtotal = qty * rate;
-      const gstAmount = subtotal * (gstPct / 100);
-      const total = subtotal + gstAmount;
+  const qtyEl = document.getElementById('quantity');
+  const rateEl = document.getElementById('rate');
+  const gstEl = document.getElementById('gst-rate');
+
+  const qty = qtyEl ? (parseFloat(qtyEl.value) || 1) : 1;
+  const rate = rateEl ? (parseFloat(rateEl.value) || 0) : 0;
+  const gstPct = (isVoucher && gstEl) ? (parseFloat(gstEl.value) || 0) : 0;
+
+  const subtotal = qty * rate;
+  const gstAmount = (subtotal * gstPct) / 100;
+  const total = subtotal + gstAmount;
+
 
       const curr = currentUser ? currentUser.currency : '₹';
       document.getElementById('summary-subtotal').innerText = `${curr}${subtotal.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
