@@ -2066,6 +2066,77 @@ function generateInvoicePDF(id) {
       }
     }
   });
+  /* GULLAK JAVASCRIPT LOGIC */
+let gullakBalance = Number(localStorage.getItem(`gullak_bal_${activeCompanyId}`)) || 0;
+let gullakHistory = JSON.parse(localStorage.getItem(`gullak_hist_${activeCompanyId}`)) || [];
+
+window.updateGullakUI = function() {
+  const balEl = document.getElementById('gullak-balance-display');
+  if (balEl) balEl.innerText = `₹${gullakBalance.toFixed(2)}`;
+  
+  const container = document.getElementById('gullak-history-list');
+  if (!container) return;
+
+  if (gullakHistory.length === 0) {
+    container.innerHTML = `<p class="text-[11px] text-slate-400 text-center py-2">कोई रिकॉर्ड नहीं है</p>`;
+    return;
+  }
+
+  container.innerHTML = gullakHistory.slice(0, 10).map(item => `
+    <div class="flex items-center justify-between p-2 rounded-xl border text-xs ${item.type === 'deposit' ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200'}">
+      <div>
+        <p class="font-bold text-slate-800">${item.note}</p>
+        <p class="text-[10px] text-slate-400">${item.date}</p>
+      </div>
+      <span class="font-bold ${item.type === 'deposit' ? 'text-emerald-600' : 'text-rose-500'}">
+        ${item.type === 'deposit' ? '+' : '-'}₹${item.amount.toFixed(2)}
+      </span>
+    </div>
+  `).join('');
+  if (window.lucide) lucide.createIcons();
+};
+
+window.depositGullak = function() {
+  const amtInput = document.getElementById('gullak-amount-input');
+  const noteInput = document.getElementById('gullak-note-input');
+  const amt = parseFloat(amtInput.value);
+  const note = noteInput.value.trim() || 'Saved in Gullak';
+  
+  if (!amt || amt <= 0) return alert("कृपया सही राशि डालें!");
+
+  gullakBalance += amt;
+  gullakHistory.unshift({ type: 'deposit', amount: amt, note: note, date: new Date().toLocaleDateString('en-GB') });
+
+  localStorage.setItem(`gullak_bal_${activeCompanyId}`, gullakBalance);
+  localStorage.setItem(`gullak_hist_${activeCompanyId}`, JSON.stringify(gullakHistory));
+  
+  amtInput.value = '';
+  noteInput.value = '';
+  window.updateGullakUI();
+};
+
+window.withdrawGullak = function() {
+  const amtInput = document.getElementById('gullak-amount-input');
+  const noteInput = document.getElementById('gullak-note-input');
+  const amt = parseFloat(amtInput.value);
+  const note = noteInput.value.trim() || 'Withdrawn from Gullak';
+  
+  if (!amt || amt <= 0) return alert("कृपया सही राशि डालें!");
+  if (amt > gullakBalance) return alert("गुल्लक में इतने पैसे नहीं हैं!");
+
+  gullakBalance -= amt;
+  gullakHistory.unshift({ type: 'withdraw', amount: amt, note: note, date: new Date().toLocaleDateString('en-GB') });
+
+  localStorage.setItem(`gullak_bal_${activeCompanyId}`, gullakBalance);
+  localStorage.setItem(`gullak_hist_${activeCompanyId}`, JSON.stringify(gullakHistory));
+  
+  amtInput.value = '';
+  noteInput.value = '';
+  window.updateGullakUI();
+};
+
+// Initialize UI
+window.updateGullakUI();
  </script>
 </body>
 </html>
