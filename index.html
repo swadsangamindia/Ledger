@@ -243,9 +243,9 @@
           <div class="pt-6 border-t border-slate-200 flex flex-wrap justify-between items-center text-xs text-slate-500 gap-3">
             <span>© 2026 Khata Bahi Digital Ledger.</span>
             <div class="flex items-center gap-3">
-              <a href="guides.html" class="text-indigo-600 hover:text-indigo-800 font-semibold underline">Business Guides</a>
+              <button onclick="openSupportModal('about')" class="text-indigo-600 hover:text-indigo-800 font-semibold underline">Business Guides</button>
               <span>•</span>
-              <a href="privacy-policy.html" class="text-indigo-600 hover:text-indigo-800 font-semibold underline">Privacy Policy</a>
+              <button onclick="openSupportModal('privacy')" class="text-indigo-600 hover:text-indigo-800 font-semibold underline">Privacy Policy</button>
             </div>
           </div>
         </div>
@@ -517,7 +517,7 @@
             </div>
             <div>
               <h3 class="font-extrabold text-slate-900 text-base heading-font">मेरी गुल्लक (Gullak Savings)</h3>
-              <p class="text-[11px] text-slate-500">Daily Personal Savings Ledger</p>
+              <p class="text-[11px] text-slate-500">Personal Savings Ledger for: <span class="font-bold text-indigo-600" id="gullak-company-name">My Shop</span></p>
             </div>
           </div>
           <span class="text-xs bg-amber-50 text-amber-700 font-bold px-3 py-1 rounded-full border border-amber-200">Savings</span>
@@ -561,7 +561,7 @@
       </div>
     </div>
 
-    <!-- 5. COMPANY SETTINGS VIEW -->
+    <!-- 5. COMPANY SETTINGS / PROFILE VIEW -->
     <div id="view-settings" class="tab-view hidden space-y-6">
 
       <!-- USER ACCOUNT PROFILE CARD -->
@@ -634,6 +634,64 @@
             <i data-lucide="crown" class="w-4 h-4"></i> Upgrade Pro (₹99/30d)
           </button>
         </div>
+
+        <!-- ABOUT & SUPPORT SECTION -->
+        <div class="pt-6 border-t border-slate-200">
+          <h4 class="text-xs font-black text-slate-700 uppercase tracking-wider mb-3">About & Support</h4>
+
+          <div class="space-y-2 text-xs font-bold text-slate-800">
+            <div onclick="openSupportModal('about')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-200 cursor-pointer transition">
+              <div class="flex items-center gap-3">
+                <span class="text-base">🌸</span>
+                <span>About Khata Bahi</span>
+              </div>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+            </div>
+
+            <div onclick="openSupportModal('faq')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-200 cursor-pointer transition">
+              <div class="flex items-center gap-3">
+                <span class="text-base">❓</span>
+                <span>Frequently Asked Questions (FAQ)</span>
+              </div>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+            </div>
+
+            <div onclick="openSupportModal('contact')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-200 cursor-pointer transition">
+              <div class="flex items-center gap-3">
+                <span class="text-base">💬</span>
+                <span>Contact & Support</span>
+              </div>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+            </div>
+
+            <div onclick="openSupportModal('privacy')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-200 cursor-pointer transition">
+              <div class="flex items-center gap-3">
+                <span class="text-base">🔒</span>
+                <span>Privacy Policy</span>
+              </div>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+            </div>
+
+            <div onclick="openSupportModal('terms')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-200 cursor-pointer transition">
+              <div class="flex items-center gap-3">
+                <span class="text-base">📄</span>
+                <span>Terms & Conditions</span>
+              </div>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+            </div>
+
+            <div onclick="openSupportModal('disclaimer')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-200 cursor-pointer transition">
+              <div class="flex items-center gap-3">
+                <span class="text-base">⚖️</span>
+                <span>Legal Disclaimer</span>
+              </div>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+            </div>
+          </div>
+
+          <p class="text-center text-[11px] text-slate-400 mt-5 font-semibold">© 2026 Khata Bahi v1.0.0</p>
+        </div>
+
       </div>
     </div>
 
@@ -664,6 +722,19 @@
       <i data-lucide="building" class="w-5 h-5"></i> Profile
     </button>
   </nav>
+
+  <!-- INFO & SUPPORT MODAL -->
+  <div id="support-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div class="glass-card bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[85vh] flex flex-col">
+      <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+        <h3 id="support-modal-title" class="text-base font-bold text-slate-900 heading-font">Information</h3>
+        <button onclick="closeSupportModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div id="support-modal-body" class="overflow-y-auto pr-1 text-xs text-slate-600 leading-relaxed space-y-3">
+        <!-- Dynamically injected -->
+      </div>
+    </div>
+  </div>
 
   <!-- ADD COMPANY MODAL -->
   <div id="add-company-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
@@ -961,6 +1032,9 @@
 
       renderCompanySelectors();
       saveAndRender();
+      if (typeof window.reloadGullakForActiveCompany === 'function') {
+        window.reloadGullakForActiveCompany();
+      }
     }
 
     function renderCompanySelectors() {
@@ -982,10 +1056,12 @@
       const currentCompDisplay = document.getElementById('current-company-display');
       const tableCompName = document.getElementById('table-company-name');
       const settingsCurrentCompanyTitle = document.getElementById('settings-current-company-title');
+      const gullakCompName = document.getElementById('gullak-company-name');
       
       if (currentCompDisplay) currentCompDisplay.innerText = activeComp.name;
       if (tableCompName) tableCompName.innerText = activeComp.name;
       if (settingsCurrentCompanyTitle) settingsCurrentCompanyTitle.innerText = activeComp.name;
+      if (gullakCompName) gullakCompName.innerText = activeComp.name;
 
       document.getElementById('set-company-name').value = activeComp.name || '';
       document.getElementById('set-company-gstin').value = activeComp.gstin || '';
@@ -1037,6 +1113,8 @@
 
       companies = companies.filter(c => c.id !== id);
       localStorage.removeItem(`ledger_tx_${id}`);
+      localStorage.removeItem(`gullak_bal_${id}`);
+      localStorage.removeItem(`gullak_hist_${id}`);
       localStorage.setItem('ledger_companies', JSON.stringify(companies));
 
       if (activeCompanyId === id) {
@@ -1076,6 +1154,9 @@
       transactions = JSON.parse(localStorage.getItem(`ledger_tx_${activeCompanyId}`)) || [];
       renderCompanySelectors();
       saveAndRender();
+      if (typeof window.reloadGullakForActiveCompany === 'function') {
+        window.reloadGullakForActiveCompany();
+      }
     }
 
     function openAddCompanyModal() {
@@ -1176,7 +1257,6 @@
         if(planDesc) planDesc.innerText = `Free Plan (Receipt & Payment only)`;
         if(proFields) proFields.classList.add('hidden');
       }
-      if (window.updatePlanUI) window.updatePlanUI(isProUser);
       lucide.createIcons();
     }
 
@@ -1752,6 +1832,81 @@
       a.click();
     }
 
+    // SUPPORT & LEGAL MODALS LOGIC
+    const supportContent = {
+      about: {
+        title: "🌸 About Khata Bahi",
+        html: `
+          <p><strong>Khata Bahi</strong> is a high-speed digital accounting, bookkeeping, and document utilities platform engineered for Indian merchants, Kirana shopkeepers, and independent contractors.</p>
+          <p>It eliminates manual calculation errors in traditional paper ledger books, enables real-time GST invoicing, and helps separate business records across multiple companies seamlessly.</p>
+          <p class="font-semibold text-indigo-600">Built for simple, secure, and offline-ready merchant accounting.</p>
+        `
+      },
+      faq: {
+        title: "❓ Frequently Asked Questions",
+        html: `
+          <div class="space-y-3">
+            <div>
+              <p class="font-bold text-slate-800">Q1. Is my financial data kept private?</p>
+              <p>Yes. All conversions, PDF generation, and calculations run completely client-side in your browser. Cloud syncing only activates when you log in with Google.</p>
+            </div>
+            <div>
+              <p class="font-bold text-slate-800">Q2. How do multi-company ledgers work?</p>
+              <p>Each company profile stores its own independent transaction register and personal Gullak savings ledger.</p>
+            </div>
+            <div>
+              <p class="font-bold text-slate-800">Q3. How do I activate Khata Pro?</p>
+              <p>Go to Company Profile > Upgrade Pro (₹99/30d), complete the UPI transaction, and enter the UTR reference number.</p>
+            </div>
+          </div>
+        `
+      },
+      contact: {
+        title: "💬 Contact & Customer Support",
+        html: `
+          <p>Need help or want to request a custom feature for your shop?</p>
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1 mt-2">
+            <p><strong>Email Support:</strong> support@wadsangamindia.github.io</p>
+            <p><strong>UPI Inquiries:</strong> swadsangamindia@upi</p>
+            <p><strong>Operating Hours:</strong> 9:00 AM - 7:00 PM IST (Mon - Sat)</p>
+          </div>
+        `
+      },
+      privacy: {
+        title: "🔒 Privacy Policy",
+        html: `
+          <p>We value your business confidentiality. Khata Bahi does not sell, rent, or trade your financial or customer data.</p>
+          <p>Documents uploaded to the utilities section (PDF, Excel, Images) are processed solely in memory within your browser session and are never uploaded to any remote server.</p>
+        `
+      },
+      terms: {
+        title: "📄 Terms & Conditions",
+        html: `
+          <p>By using Khata Bahi, you agree to generate tax invoices responsibly according to applicable GST regulations.</p>
+          <p>Pro subscriptions are non-refundable once activated. Khata Bahi provides client-side ledger computation tools as-is for self-employed merchants.</p>
+        `
+      },
+      disclaimer: {
+        title: "⚖️ Legal Disclaimer",
+        html: `
+          <p>The calculators and invoices generated by Khata Bahi are intended for merchant record-keeping and estimation purposes.</p>
+          <p>Please consult a certified Chartered Accountant or tax advisor for statutory audits and final GST return filings.</p>
+        `
+      }
+    };
+
+    function openSupportModal(type) {
+      const data = supportContent[type];
+      if (!data) return;
+      document.getElementById('support-modal-title').innerHTML = data.title;
+      document.getElementById('support-modal-body').innerHTML = data.html;
+      document.getElementById('support-modal').classList.remove('hidden');
+    }
+
+    function closeSupportModal() {
+      document.getElementById('support-modal').classList.add('hidden');
+    }
+
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
     setupUpiPaymentLinks();
@@ -1798,14 +1953,21 @@
       if (!activeUid || isSyncingFromCloud) return;
       try {
         const allTransactions = {};
+        const allGullaks = {};
+
         companies.forEach(c => {
           allTransactions[c.id] = JSON.parse(localStorage.getItem(`ledger_tx_${c.id}`)) || [];
+          allGullaks[c.id] = {
+            balance: Number(localStorage.getItem(`gullak_bal_${c.id}`)) || 0,
+            history: JSON.parse(localStorage.getItem(`gullak_hist_${c.id}`)) || []
+          };
         });
 
         await setDoc(doc(db, "users", activeUid), {
           companies: companies,
           activeCompanyId: activeCompanyId,
           transactionsMap: allTransactions,
+          gullaksMap: allGullaks,
           updatedAt: new Date().toISOString()
         });
       } catch (err) {
@@ -1867,6 +2029,13 @@
                 localStorage.setItem(`ledger_tx_${id}`, JSON.stringify(txs));
               });
             }
+            if (data.gullaksMap) {
+              Object.entries(data.gullaksMap).forEach(([id, g]) => {
+                localStorage.setItem(`gullak_bal_${id}`, g.balance || 0);
+                localStorage.setItem(`gullak_hist_${id}`, JSON.stringify(g.history || []));
+              });
+            }
+
             if (typeof loadCompanyTransactions === 'function') {
               loadCompanyTransactions();
             }
@@ -1888,6 +2057,7 @@
             
             renderCompanySelectors();
             saveAndRender();
+            window.reloadGullakForActiveCompany();
           }
         }, (error) => {
           console.error("Firestore Snapshot error:", error);
@@ -1912,19 +2082,31 @@
       }
     });
 
-    /* GULLAK CONTROLLER LOGIC */
-    let gullakBalance = Number(localStorage.getItem(`gullak_bal_${activeCompanyId}`)) || 0;
-    let gullakHistory = JSON.parse(localStorage.getItem(`gullak_hist_${activeCompanyId}`)) || [];
+    /* GULLAK CONTROLLER LOGIC (COMPANY ISOLATED) */
+    let gullakBalance = 0;
+    let gullakHistory = [];
+
+    window.reloadGullakForActiveCompany = function() {
+      gullakBalance = Number(localStorage.getItem(`gullak_bal_${activeCompanyId}`)) || 0;
+      gullakHistory = JSON.parse(localStorage.getItem(`gullak_hist_${activeCompanyId}`)) || [];
+      window.updateGullakUI();
+    };
 
     window.updateGullakUI = function() {
       const balEl = document.getElementById('gullak-balance-display');
       if (balEl) balEl.innerText = `₹${gullakBalance.toFixed(2)}`;
       
+      const compLabel = document.getElementById('gullak-company-name');
+      if (compLabel) {
+        const comp = typeof getActiveCompany === 'function' ? getActiveCompany() : null;
+        if (comp) compLabel.innerText = comp.name;
+      }
+
       const container = document.getElementById('gullak-history-list');
       if (!container) return;
 
       if (gullakHistory.length === 0) {
-        container.innerHTML = `<p class="text-[11px] text-slate-400 text-center py-2">कोई रिकॉर्ड नहीं है</p>`;
+        container.innerHTML = `<p class="text-[11px] text-slate-400 text-center py-2">इस कंपनी के लिए कोई बचत रिकॉर्ड नहीं है</p>`;
         return;
       }
 
@@ -1959,6 +2141,10 @@
       amtInput.value = '';
       noteInput.value = '';
       window.updateGullakUI();
+
+      if (typeof window.syncLedgerToCloud === 'function') {
+        window.syncLedgerToCloud();
+      }
     };
 
     window.withdrawGullak = function() {
@@ -1979,9 +2165,13 @@
       amtInput.value = '';
       noteInput.value = '';
       window.updateGullakUI();
+
+      if (typeof window.syncLedgerToCloud === 'function') {
+        window.syncLedgerToCloud();
+      }
     };
 
-    window.updateGullakUI();
+    window.reloadGullakForActiveCompany();
   </script>
 </body>
 </html>
