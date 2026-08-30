@@ -1775,43 +1775,51 @@ function generateInvoicePDF(id) {
       alert(`🎉 Khata Pro Activated via ${source}!\nYour subscription is valid for 30 days.`);
     }
 
-    document.getElementById('transaction-form').addEventListener('submit', (e) => {
+        document.getElementById('transaction-form').addEventListener('submit', (e) => {
       e.preventDefault();
       
       const type = document.getElementById('type').value;
+      const isVoucher = (type === 'sale' || type === 'purchase');
       const amountVal = parseFloat(document.getElementById('rate').value) || 0;
 
-      if (!isProUser) {
-        transactions.push({
-          id: Date.now(),
-          type: type,
-          partyName: '-',
-          description: document.getElementById('description').value,
-          amount: amountVal,
-          totalAmount: amountVal,
-          gstAmount: 0,
-          category: document.getElementById('category').value,
-          method: document.getElementById('method').value,
-          date: document.getElementById('date').value
-        });
-      } else {
+      if (isVoucher && isProUser) {
+        // SALE / PURCHASE (Vouchers with GST)
         const qty = parseFloat(document.getElementById('quantity').value) || 1;
         const gstPct = parseFloat(document.getElementById('gst-rate').value) || 0;
         const subtotal = qty * amountVal;
-        const gstAmount = subtotal * (gstPct / 100);
+        const gstAmount = (subtotal * gstPct) / 100;
         const totalAmount = subtotal + gstAmount;
 
         transactions.push({
           id: Date.now(),
           type: type,
-          partyName: document.getElementById('party-name').value || '-',
-          description: document.getElementById('description').value,
+          partyName: document.getElementById('party-name').value.trim() || '-',
+          description: document.getElementById('description').value.trim(),
           quantity: qty,
           rate: amountVal,
           gstRate: gstPct,
           gstAmount: gstAmount,
           subtotal: subtotal,
           totalAmount: totalAmount,
+          amount: totalAmount,
+          category: document.getElementById('category').value,
+          method: document.getElementById('method').value,
+          date: document.getElementById('date').value
+        });
+      } else {
+        // PAYMENT & RECEIPT (0% GST, exact cash amount)
+        transactions.push({
+          id: Date.now(),
+          type: type,
+          partyName: '-',
+          description: document.getElementById('description').value.trim(),
+          quantity: 1,
+          rate: amountVal,
+          amount: amountVal,
+          totalAmount: amountVal,
+          subtotal: amountVal,
+          gstRate: 0,
+          gstAmount: 0,
           category: document.getElementById('category').value,
           method: document.getElementById('method').value,
           date: document.getElementById('date').value
