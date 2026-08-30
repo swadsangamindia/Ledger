@@ -1397,7 +1397,8 @@ window.showLegalPopup = function(key) {
           <td class="py-3.5 font-bold text-slate-800">${item.partyName || '-'}</td>
           <td class="py-3.5 text-slate-600">${item.description}</td>
           <td class="py-3.5 text-slate-500">${item.quantity || 1} x ${curr}${item.rate || item.amount}</td>
-          <td class="py-3.5 text-slate-500">${item.gstRate || 0}%</td>
+          <td class="py-3.5 text-slate-500">${(item.type === 'sale' || item.type === 'purchase') ? (item.gstRate || 0) + '%' : '-'}</td>
+          
           <td class="py-3.5 font-extrabold ${isPositive ? 'text-emerald-600' : 'text-rose-500'}">
             ${curr}${(item.totalAmount || item.amount).toLocaleString('en-IN', {minimumFractionDigits: 2})}
           </td>
