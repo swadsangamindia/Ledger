@@ -3,571 +3,666 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Khata Bahi - Multi-Company Digital Ledger & PDF Utilities</title>
-  
-  <!-- Tailwind CSS CDN -->
+  <title>Khata Bahi - Multi-Company Cloud Ledger, Gullak & Business Knowledge Hub</title>
+  <meta name="description" content="Modern digital accounting ledger, daily micro-savings Gullak, PDF/Excel tools, and bookkeeping guides for retail merchants.">
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js CDN -->
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- UTILITY LIBRARIES -->
+  <!-- Utility Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
-  <!-- Google AdSense Code -->
+  <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8403484408535539" crossorigin="anonymous"></script>
 
   <style>
-    body { 
-      font-family: 'Plus Jakarta Sans', sans-serif; 
-      background-color: #0f172a;
-      background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.85)), url('https://images.wallpapersden.com/image/download/anime-landscape-scenery_bGltaGmUmZqaraWkpJRmbmdlrWZlbWU.jpg');
-      background-repeat: no-repeat;
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f1f5f9;
+      background-image: 
+        linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(241, 245, 249, 0.92)),
+        url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2070&auto=format&fit=crop');
       background-position: center center;
       background-size: cover;
+      background-repeat: no-repeat;
       background-attachment: fixed;
+      color: #0f172a;
     }
-    .heading-font { font-family: 'Quicksand', sans-serif; }
+    .brand-font { font-family: 'Outfit', sans-serif; }
     
-    .glass-card {
-      background: #ffffff !important;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    .app-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05), 0 4px 10px -2px rgba(15, 23, 42, 0.02);
     }
-    
-    .glass-sidebar {
-      background: #0f172a !important;
-      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    .app-card-hover {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-
-    .glass-nav-mobile {
-      background: #0f172a !important;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    .app-card-hover:hover {
+      transform: translateY(-2px);
+      border-color: rgba(99, 102, 241, 0.35);
+      box-shadow: 0 16px 32px -4px rgba(99, 102, 241, 0.12);
     }
-
-    .nav-active { 
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); 
-      color: white !important;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    .app-input {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #cbd5e1;
+      color: #0f172a;
+      transition: all 0.2s ease;
     }
+    .app-input:focus {
+      background: #ffffff;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+      outline: none;
+    }
+    .nav-btn {
+      color: #475569;
+    }
+    .nav-btn:hover {
+      background: rgba(241, 245, 249, 0.8);
+      color: #0f172a;
+    }
+    .nav-active {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: #ffffff !important;
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(79, 70, 229, 0.28);
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
   </style>
 </head>
-<body class="text-slate-800 flex flex-col md:flex-row h-screen overflow-hidden">
+<body class="flex flex-col md:flex-row h-screen overflow-hidden select-none">
 
   <!-- DESKTOP SIDEBAR -->
-  <aside class="hidden md:flex w-64 glass-sidebar text-white flex-col justify-between p-5 shrink-0 z-20">
-    <div>
-      <div class="flex items-center gap-3 px-2 py-3 mb-4">
-        <div class="bg-gradient-to-br from-pink-500 to-indigo-600 p-2.5 rounded-2xl text-white shadow-lg shadow-indigo-500/30">
+  <aside class="hidden md:flex w-64 bg-white/85 backdrop-blur-xl border-r border-slate-200/80 text-slate-700 flex-col justify-between p-4 shrink-0 z-20">
+    <div class="space-y-4">
+      <!-- App Brand Logo -->
+      <div class="flex items-center gap-3 px-2 py-1.5">
+        <div class="bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 p-2.5 rounded-2xl text-white shadow-md shadow-indigo-500/25">
           <i data-lucide="book-open" class="w-6 h-6"></i>
         </div>
         <div>
-          <h1 class="text-white font-extrabold text-xl heading-font leading-none drop-shadow">Khata Bahi</h1>
-          <span class="plan-badge-tag text-[11px] text-amber-200 font-bold flex items-center gap-1 mt-1 bg-amber-400/20 px-2.5 py-0.5 rounded-full border border-amber-300/40 w-fit" id="sidebar-plan-badge">
-            <i data-lucide="crown" class="w-3 h-3 text-amber-300"></i> Free Plan
+          <h1 class="text-slate-900 font-black text-xl brand-font tracking-tight">Khata Bahi</h1>
+          <span class="text-[10px] text-indigo-700 font-extrabold flex items-center gap-1 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200 w-fit mt-0.5" id="sidebar-plan-badge">
+            <i data-lucide="shield" class="w-3 h-3"></i> Free Plan
           </span>
         </div>
       </div>
 
-      <!-- MULTI-COMPANY SELECTOR -->
-      <div class="mb-5 bg-slate-800/80 p-3 rounded-2xl border border-slate-700">
-        <label class="block text-[10px] font-bold text-indigo-300 uppercase tracking-wider mb-1">Select Active Company</label>
-        <select id="company-selector" onchange="switchActiveCompany()" class="w-full bg-slate-900 text-white font-bold text-xs rounded-xl p-2.5 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          <!-- Dynamically populated -->
+      <!-- Business Store Selector -->
+      <div class="bg-slate-50/80 backdrop-blur-sm p-3 rounded-2xl border border-slate-200">
+        <div class="flex justify-between items-center mb-1.5">
+          <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Active Store</label>
+          <span class="text-[9px] text-slate-500 font-semibold" id="store-count-badge">1 Store</span>
+        </div>
+        <select id="company-selector" onchange="switchActiveCompany()" class="w-full bg-white text-slate-800 font-bold text-xs rounded-xl p-2.5 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm">
         </select>
-        <button onclick="openAddCompanyModal()" class="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold py-2 rounded-xl transition flex items-center justify-center gap-1">
-          <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add New Company
+        <button onclick="openAddCompanyModal()" class="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold py-2 rounded-xl transition flex items-center justify-center gap-1.5 shadow-sm">
+          <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add New Store
         </button>
       </div>
 
+      <!-- Navigation Links -->
       <nav class="space-y-1">
-        <button onclick="switchTab('about')" id="nav-about" class="nav-btn nav-active w-full flex items-center gap-3 px-4 py-2.5 rounded-2xl font-semibold transition text-xs">
-          <i data-lucide="home" class="w-4 h-4"></i> Home & Features
+        <button onclick="switchTab('about')" id="nav-about" class="nav-btn nav-active w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-xs font-semibold">
+          <i data-lucide="compass" class="w-4 h-4 text-indigo-600"></i> Explore & Hub
         </button>
-        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 hover:text-white hover:bg-slate-800 rounded-2xl transition text-slate-200 font-bold text-xs">
-          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Ledger Dashboard
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-xs font-semibold">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-indigo-600"></i> Ledger Dashboard
         </button>
-        <button onclick="switchTab('gullak')" id="nav-gullak" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 hover:text-white hover:bg-slate-800 rounded-2xl transition text-slate-200 font-bold text-xs">
-          <i data-lucide="piggy-bank" class="w-4 h-4 text-amber-400"></i> Gullak (Savings)
+        <button onclick="switchTab('gullak')" id="nav-gullak" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-xs font-semibold">
+          <i data-lucide="piggy-bank" class="w-4 h-4 text-amber-500"></i> Gullak (Savings)
         </button>
-        <button onclick="openModal()" class="w-full flex items-center gap-3 px-4 py-2.5 hover:text-white hover:bg-slate-800 rounded-2xl transition text-slate-200 font-bold text-xs">
-          <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Entry
+        <button onclick="openModal()" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-xs font-semibold text-slate-700 hover:bg-slate-100">
+          <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-600"></i> Add Cash Entry
         </button>
-        <button onclick="switchTab('transactions')" id="nav-transactions" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 hover:text-white hover:bg-slate-800 rounded-2xl transition text-slate-200 font-bold text-xs">
-          <i data-lucide="list-todo" class="w-4 h-4"></i> All Entries
+        <button onclick="switchTab('transactions')" id="nav-transactions" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-xs font-semibold">
+          <i data-lucide="receipt" class="w-4 h-4 text-blue-600"></i> Transactions Log
         </button>
-        <button onclick="switchTab('tools')" id="nav-tools" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 hover:text-white hover:bg-slate-800 rounded-2xl transition text-slate-200 font-bold text-xs">
-          <i data-lucide="wrench" class="w-4 h-4 text-purple-400"></i> PDF & Business Tools
+        <button onclick="switchTab('tools')" id="nav-tools" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-xs font-semibold">
+          <i data-lucide="wrench" class="w-4 h-4 text-purple-600"></i> PDF & Business Tools
         </button>
-        <button onclick="switchTab('calculator')" id="nav-calculator" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 hover:text-white hover:bg-slate-800 rounded-2xl transition text-slate-200 font-bold text-xs">
-          <i data-lucide="calculator" class="w-4 h-4 text-emerald-400"></i> Interest & Tax Calc
+        <button onclick="switchTab('calculator')" id="nav-calculator" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-xs font-semibold">
+          <i data-lucide="calculator" class="w-4 h-4 text-teal-600"></i> GST & Interest Calc
         </button>
-        <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 hover:text-white hover:bg-slate-800 rounded-2xl transition text-slate-200 font-bold text-xs">
-          <i data-lucide="building" class="w-4 h-4"></i> Company Profile
+        <button onclick="switchTab('guides')" id="nav-guides" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-xs font-semibold">
+          <i data-lucide="book-open" class="w-4 h-4 text-amber-600"></i> Business Guides
+        </button>
+        <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition text-xs font-semibold">
+          <i data-lucide="store" class="w-4 h-4 text-slate-600"></i> Store Profile
         </button>
       </nav>
     </div>
 
-    <div>
-      <div class="relative overflow-hidden rounded-2xl p-3.5 mb-3 border border-slate-700 bg-slate-800 shadow-lg">
-        <p class="text-[10px] font-semibold text-indigo-300 uppercase">Net Balance</p>
-        <h3 id="card-total-balance" class="text-white text-xl font-extrabold heading-font mt-0.5">₹0.00</h3>
+    <!-- Bottom Wallet Total & Cloud Status -->
+    <div class="space-y-2 pt-2 border-t border-slate-200/80">
+      <div class="p-3 rounded-2xl bg-white/90 border border-slate-200 shadow-sm">
+        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Net Cash Total</span>
+        <h3 id="card-total-balance" class="text-slate-900 text-xl font-black brand-font mt-0.5">₹0.00</h3>
       </div>
-
-      <button onclick="handleGoogleSignIn()" class="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition text-xs font-bold shadow-md">
-        <i data-lucide="user-check" class="w-4 h-4"></i> Google Login
+      <button onclick="handleGoogleSignIn()" class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 rounded-xl transition text-xs font-bold">
+        <i data-lucide="cloud" class="w-3.5 h-3.5"></i> Google Cloud Sync
       </button>
     </div>
   </aside>
 
-  <!-- MOBILE HEADER -->
-  <div class="md:hidden glass-sidebar text-white p-3 flex justify-between items-center shrink-0 border-b border-slate-800 z-20">
-    <div class="flex items-center gap-2">
-      <div class="bg-indigo-600 p-1.5 rounded-xl text-white">
+  <!-- MOBILE TOP BAR -->
+  <header class="md:hidden bg-white/90 backdrop-blur-md text-slate-900 px-4 py-3 flex justify-between items-center border-b border-slate-200 shrink-0 z-30 shadow-sm">
+    <div class="flex items-center gap-2.5">
+      <div class="bg-gradient-to-tr from-indigo-600 to-purple-600 p-1.5 rounded-xl text-white">
         <i data-lucide="book-open" class="w-4 h-4"></i>
       </div>
-      <span class="font-bold text-sm heading-font text-white">Khata Bahi</span>
+      <span class="font-black text-base brand-font">Khata Bahi</span>
     </div>
     <div class="flex items-center gap-2">
-      <select id="mobile-company-selector" onchange="switchActiveCompanyMobile()" class="bg-slate-800 text-white font-bold text-[11px] rounded-lg p-1.5 border border-slate-600">
-        <!-- Dynamically populated -->
+      <select id="mobile-company-selector" onchange="switchActiveCompanyMobile()" class="bg-slate-50 text-slate-800 font-bold text-[11px] rounded-xl px-2.5 py-1.5 border border-slate-300">
       </select>
-      <button onclick="openAddCompanyModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold px-2.5 py-1.5 rounded-lg flex items-center gap-1 shadow-sm">
-        <i data-lucide="plus" class="w-3 h-3"></i> New
+      <button id="mobile-upgrade-btn" onclick="openUpgradeModal()" class="bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[11px] font-black px-2.5 py-1.5 rounded-xl shadow-sm flex items-center gap-1">
+        <i data-lucide="crown" class="w-3 h-3"></i> Pro
       </button>
     </div>
-  </div>
+  </header>
 
-  <!-- MAIN CONTENT AREA -->
+  <!-- MAIN SCROLLABLE VIEWPORT -->
   <main class="flex-1 overflow-y-auto p-4 md:p-8 pb-28 md:pb-8 relative z-10">
     
-    <!-- Top Header -->
-    <header class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6 md:mb-8">
+    <!-- Top Action Header -->
+    <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6">
       <div>
-        <h1 class="text-2xl md:text-3xl font-extrabold text-white heading-font drop-shadow-md" id="welcome-heading">Welcome to Khata Bahi 🌸</h1>
-        <p class="text-xs md:text-sm text-slate-200 font-bold drop-shadow" id="company-header-title">Working On: <span class="text-indigo-300 underline font-extrabold" id="current-company-display">My Shop</span></p>
+        <div class="flex items-center gap-2.5">
+          <h2 class="text-2xl md:text-3xl font-black text-slate-900 brand-font tracking-tight" id="welcome-heading">Store Workspace</h2>
+          <span id="header-pro-tag" class="text-[10px] bg-slate-200 text-slate-700 font-extrabold px-2.5 py-0.5 rounded-full border border-slate-300">Free Plan</span>
+        </div>
+        <p class="text-xs text-slate-600 font-medium mt-0.5">Active Shop: <span class="text-indigo-600 font-extrabold underline" id="current-company-display">My Shop</span></p>
       </div>
-      <div class="flex items-center gap-2 sm:gap-3">
-        <button onclick="exportData()" class="flex-1 sm:flex-none bg-white hover:bg-slate-100 text-slate-800 px-4 py-2.5 rounded-2xl text-xs md:text-sm font-bold flex items-center justify-center gap-2 transition shadow-md">
-          <i data-lucide="download" class="w-4 h-4 text-slate-600"></i> Export CSV
+      <div class="flex items-center gap-2">
+        <button onclick="exportData()" class="bg-white/90 hover:bg-white text-slate-700 border border-slate-300 px-3.5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition shadow-sm">
+          <i data-lucide="download" class="w-4 h-4 text-emerald-600"></i> Export CSV
         </button>
-        <button onclick="openModal()" class="flex-1 sm:flex-none bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2.5 rounded-2xl text-xs md:text-sm font-bold flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/30 transition">
+        <button id="header-upgrade-btn" onclick="openUpgradeModal()" class="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3.5 py-2.5 rounded-xl text-xs font-black flex items-center gap-1.5 shadow-md shadow-amber-500/20">
+          <i data-lucide="crown" class="w-4 h-4"></i> Get Pro (₹99)
+        </button>
+        <button onclick="openModal()" class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:opacity-95 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition shadow-md shadow-indigo-500/20">
           <i data-lucide="plus" class="w-4 h-4"></i> Add Entry
         </button>
       </div>
-    </header>
+    </div>
 
-    <!-- 0. PUBLIC ABOUT PAGE -->
+    <!-- 0. VIEW: EXPLORE & KNOWLEDGE HUB -->
     <div id="view-about" class="tab-view space-y-6">
-      <section class="glass-card p-6 md:p-8 rounded-3xl space-y-6">
-        <div class="max-w-3xl">
-          <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Multi-Company Supported</span>
-          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 heading-font mt-3">Manage Multiple Businesses & Ledgers Under One Account</h2>
-          <p class="text-xs md:text-sm text-slate-600 mt-2 leading-relaxed">
-            Khata Bahi is a digital bookkeeping manager built for shopkeepers, traders, Kirana store owners, and freelancers. Maintain separate company profiles, record cash-in (Jama) and cash-out (Udhar) entries, convert PDF/Excel documents, and calculate automated GST and late-fee interest.
+      <section class="app-card p-6 md:p-8 rounded-3xl space-y-6">
+        <div class="max-w-3xl space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="bg-indigo-50 text-indigo-700 border border-indigo-200 text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Cloud Ledger</span>
+            <span class="bg-amber-50 text-amber-700 border border-amber-200 text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Offline Gullak Ready</span>
+          </div>
+          <h3 class="text-2xl md:text-3xl font-black text-slate-900 brand-font leading-snug">
+            All-In-One Bookkeeping, Daily Cash Management & Multi-Business Register
+          </h3>
+          <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
+            Khata Bahi is a digital accounting suite created specifically for Indian Kirana owners, retail merchants, wholesalers, and independent service professionals. It replaces traditional paper registers with automated balance tracking, customer credit (Udhar) reconciliation, split CGST/SGST tax calculators, an offline Gullak for pocket savings, and browser-based PDF utilities.
           </p>
-          <div class="mt-4 flex gap-3">
-            <button onclick="handleGoogleSignIn()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs shadow-md transition flex items-center gap-2">
-              <i data-lucide="log-in" class="w-4 h-4"></i> Sign In to Sync Data
+          <div class="pt-2 flex flex-wrap gap-2.5">
+            <button onclick="switchTab('dashboard')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition shadow-md flex items-center gap-2">
+              <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Open Active Register
             </button>
-            <button onclick="switchTab('dashboard')" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-5 py-2.5 rounded-xl text-xs transition">
-              Open Active Ledger
+            <button onclick="switchTab('gullak')" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition shadow-md flex items-center gap-2">
+              <i data-lucide="piggy-bank" class="w-4 h-4"></i> Open Gullak (Savings)
+            </button>
+            <button id="home-upgrade-btn" onclick="openUpgradeModal()" class="bg-gradient-to-r from-amber-500 to-orange-500 text-white font-black px-4 py-2.5 rounded-xl text-xs transition shadow-md flex items-center gap-2">
+              <i data-lucide="crown" class="w-4 h-4"></i> Unlock Pro (₹99)
             </button>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-slate-200">
-          <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-            <div class="bg-indigo-100 text-indigo-700 p-2.5 rounded-xl w-fit mb-2"><i data-lucide="building" class="w-5 h-5"></i></div>
-            <h3 class="font-bold text-slate-800 text-sm">Multi-Company Setup</h3>
-            <p class="text-xs text-slate-500 mt-1">Create multiple company profiles and easily switch between them from the top selector.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-slate-100">
+          <div class="app-card app-card-hover p-4 rounded-2xl space-y-2 bg-slate-50/70 border-slate-200">
+            <div class="p-2.5 bg-indigo-100 text-indigo-700 rounded-xl w-fit"><i data-lucide="layers" class="w-5 h-5"></i></div>
+            <h4 class="font-bold text-slate-900 text-sm brand-font">Multi-Store Profiles</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">Operate multiple separate shops or side projects without mixing transaction ledgers or customer accounts.</p>
           </div>
-          <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-            <div class="bg-emerald-100 text-emerald-700 p-2.5 rounded-xl w-fit mb-2"><i data-lucide="file-spreadsheet" class="w-5 h-5"></i></div>
-            <h3 class="font-bold text-slate-800 text-sm">Rich Document Utilities</h3>
-            <p class="text-xs text-slate-500 mt-1">Convert PDF to Excel, Images to PDF, and Excel to PDF client-side safely.</p>
+          <div class="app-card app-card-hover p-4 rounded-2xl space-y-2 bg-slate-50/70 border-slate-200">
+            <div class="p-2.5 bg-amber-100 text-amber-700 rounded-xl w-fit"><i data-lucide="piggy-bank" class="w-5 h-5"></i></div>
+            <h4 class="font-bold text-slate-900 text-sm brand-font">Personal Savings Gullak</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">Stash away ₹40, ₹50, or daily leftover change. 100% offline and functional without requiring a UPI ID.</p>
           </div>
-          <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-            <div class="bg-purple-100 text-purple-700 p-2.5 rounded-xl w-fit mb-2"><i data-lucide="calculator" class="w-5 h-5"></i></div>
-            <h3 class="font-bold text-slate-800 text-sm">Calculators</h3>
-            <p class="text-xs text-slate-500 mt-1">Compute monthly interest on credit dues and split CGST/SGST tax slabs instantly.</p>
+          <div class="app-card app-card-hover p-4 rounded-2xl space-y-2 bg-slate-50/70 border-slate-200">
+            <div class="p-2.5 bg-purple-100 text-purple-700 rounded-xl w-fit"><i data-lucide="file-check" class="w-5 h-5"></i></div>
+            <h4 class="font-bold text-slate-900 text-sm brand-font">Client-Side PDF Suite</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">Turn statements into Excel sheets, images into PDF documents, and attach custom signatures to invoices.</p>
           </div>
         </div>
 
-        <div class="mt-8 pt-8 border-t border-slate-200 text-slate-700 space-y-8">
-          <section class="space-y-3">
-            <div class="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 font-bold text-xs rounded-full uppercase tracking-wider">About The Platform</div>
-            <h2 class="text-xl md:text-2xl font-black text-slate-900 leading-tight">Empowering Indian Merchants & Freelancers with Smart Digital Bookkeeping</h2>
+        <div class="pt-6 border-t border-slate-100 space-y-6">
+          <article class="space-y-2">
+            <h4 class="text-base md:text-lg font-bold text-slate-900 brand-font flex items-center gap-2">
+              <i data-lucide="help-circle" class="w-5 h-5 text-indigo-600"></i> The Economic Impact of Digital Ledgers on Indian Micro-Commerce
+            </h4>
             <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
-              <strong>Khata Bahi</strong> is an all-in-one digital accounting and multi-business ledger solution created for retail shopkeepers, Kirana owners, wholesalers, contractors, and independent service providers across India. Traditional paper accounts (Bahi-Khata) often lead to arithmetic mistakes, lost records, and uncollected debt (Udhar). Khata Bahi simplifies this with real-time balance calculations, automated GST breakdown, late payment interest computation, and multi-company profile switching.
+              Paper registers have served Indian commerce for centuries, but they are vulnerable to ink decay, water damage, manual arithmetic miscalculations, and zero off-site access. For neighbourhood Kirana stores, uncollected customer debit (Udhar) accounts for up to 30% of total working capital. Digital bookkeeping platforms like Khata Bahi eliminate balance discrepancies by automating running balances and creating verifiable audit trails for both buyers and sellers.
             </p>
-          </section>
+          </article>
 
-          <section class="space-y-4">
-            <h3 class="text-base md:text-lg font-bold text-slate-900">Why Modern Businesses Choose Khata Bahi</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
-                <h4 class="font-bold text-slate-800 text-xs md:text-sm">⚡ Accurate Credit (Udhar) Tracking</h4>
-                <p class="text-xs text-slate-600">Instantly record Jama (Credit) and Udhar (Debit) entries with date stamps to avoid balance discrepancies and track customer credit cycles.</p>
-              </div>
-              <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
-                <h4 class="font-bold text-slate-800 text-xs md:text-sm">🏢 Multi-Company & Shop Management</h4>
-                <p class="text-xs text-slate-600">Manage distinct storefronts, branches, or side ventures under a single authenticated dashboard without mixing balances or invoices.</p>
-              </div>
-              <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
-                <h4 class="font-bold text-slate-800 text-xs md:text-sm">📊 GST & Late-Fee Financial Calculators</h4>
-                <p class="text-xs text-slate-600">Calculate split GST rates (CGST/SGST/IGST) and determine compound interest on overdue client balances in seconds.</p>
-              </div>
-              <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
-                <h4 class="font-bold text-slate-800 text-xs md:text-sm">📄 Client-Side PDF & Excel Utility</h4>
-                <p class="text-xs text-slate-600">Export statement sheets to CSV/Excel and compile customer bill receipts into PDF documents directly within your browser.</p>
-              </div>
-            </div>
-          </section>
-
-          <section class="space-y-3 bg-indigo-50/60 p-5 rounded-2xl border border-indigo-100">
-            <h3 class="text-base font-bold text-indigo-950">How to Use Khata Bahi in 3 Easy Steps</h3>
-            <ol class="list-decimal list-inside space-y-2 text-xs md:text-sm text-indigo-900/80 font-medium">
-              <li><strong>Create / Select Your Business:</strong> Use the top selector to assign entries to your specific shop or enterprise profile.</li>
-              <li><strong>Log Entries in Real Time:</strong> Click <em>"+ Add Entry"</em> to input daily transactions with party name, amount, and payment status.</li>
-              <li><strong>Generate One-Click Statements:</strong> Use the export tools to download structured CSV reports for tax audits or share balances via customer summaries.</li>
-            </ol>
-          </section>
-
-          <div class="pt-6 border-t border-slate-200 flex flex-wrap justify-between items-center text-xs text-slate-500 gap-3">
-            <span>© 2026 Khata Bahi Digital Ledger.</span>
-            <div class="flex items-center gap-3">
-              <a href="guides.html" class="text-indigo-600 hover:text-indigo-800 font-semibold underline">Business Guides</a>
-<span>•</span>
-<a href="privacy-policy.html" class="text-indigo-600 hover:text-indigo-800 font-semibold underline">Privacy Policy</a>
-<span>•</span>
-<a href="terms.html" class="text-indigo-600 hover:text-indigo-800 font-semibold underline">Terms & Conditions</a>
-              </div>
-          </div>
+          <article class="space-y-2">
+            <h4 class="text-base md:text-lg font-bold text-slate-900 brand-font flex items-center gap-2">
+              <i data-lucide="shield-check" class="w-5 h-5 text-emerald-600"></i> Privacy, Safety and Local Device Execution
+            </h4>
+            <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
+              Many merchant apps sell retail trend data to commercial marketing giants. Khata Bahi operates on a privacy-first model: all ledger calculations, Gullak deposits, and document conversions execute client-side directly within your browser. Optional cloud synchronization is strictly locked to your personal Google Cloud account.
+            </p>
+          </article>
         </div>
       </section>
     </div>
 
-    <!-- 1. DASHBOARD VIEW -->
-    <div id="view-dashboard" class="tab-view hidden space-y-6 md:space-y-8">
-      <section class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
-        <div class="glass-card p-4 rounded-3xl flex flex-col justify-between relative overflow-hidden">
-          <div class="flex justify-between items-start">
-            <div>
-              <span class="text-[11px] font-semibold text-slate-600">Total Receipts</span>
-              <h2 id="total-receipts" class="text-xl md:text-2xl font-extrabold text-emerald-600 heading-font mt-1">₹0.00</h2>
-            </div>
-            <div class="bg-emerald-100 text-emerald-600 p-2.5 rounded-2xl"><i data-lucide="arrow-down-left" class="w-5 h-5"></i></div>
-          </div>
+    <!-- 1. VIEW: LEDGER DASHBOARD -->
+    <div id="view-dashboard" class="tab-view hidden space-y-6">
+      <section class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+        <div class="app-card p-4 rounded-2xl flex flex-col justify-between">
+          <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Received (Jama)</span>
+          <h3 id="total-receipts" class="text-xl md:text-2xl font-black text-emerald-600 brand-font mt-1">₹0.00</h3>
         </div>
-
-        <div class="glass-card p-4 rounded-3xl flex flex-col justify-between relative overflow-hidden">
-          <div class="flex justify-between items-start">
-            <div>
-              <span class="text-[11px] font-semibold text-slate-600">Total Payments</span>
-              <h2 id="total-payments" class="text-xl md:text-2xl font-extrabold text-rose-500 heading-font mt-1">₹0.00</h2>
-            </div>
-            <div class="bg-rose-100 text-rose-500 p-2.5 rounded-2xl"><i data-lucide="arrow-up-right" class="w-5 h-5"></i></div>
-          </div>
+        <div class="app-card p-4 rounded-2xl flex flex-col justify-between">
+          <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Paid (Udhar)</span>
+          <h3 id="total-payments" class="text-xl md:text-2xl font-black text-rose-500 brand-font mt-1">₹0.00</h3>
         </div>
-
-        <div class="glass-card p-4 rounded-3xl flex flex-col justify-between relative overflow-hidden">
-          <div class="flex justify-between items-start">
-            <div>
-              <span class="text-[11px] font-semibold text-slate-600">Total Sales (Pro)</span>
-              <h2 id="total-sales" class="text-xl md:text-2xl font-extrabold text-indigo-600 heading-font mt-1">₹0.00</h2>
-            </div>
-            <div class="bg-indigo-100 text-indigo-600 p-2.5 rounded-2xl"><i data-lucide="trending-up" class="w-5 h-5"></i></div>
-          </div>
+        <div class="app-card p-4 rounded-2xl flex flex-col justify-between">
+          <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Sales Invoiced</span>
+          <h3 id="total-sales" class="text-xl md:text-2xl font-black text-indigo-600 brand-font mt-1">₹0.00</h3>
         </div>
-
-        <div class="glass-card p-4 rounded-3xl flex flex-col justify-between relative overflow-hidden">
-          <div class="flex justify-between items-start">
-            <div>
-              <span class="text-[11px] font-semibold text-slate-600">Total GST Liability</span>
-              <h2 id="total-gst" class="text-xl md:text-2xl font-extrabold text-amber-600 heading-font mt-1">₹0.00</h2>
-            </div>
-            <div class="bg-amber-100 text-amber-600 p-2.5 rounded-2xl"><i data-lucide="file-text" class="w-5 h-5"></i></div>
-          </div>
+        <div class="app-card p-4 rounded-2xl flex flex-col justify-between">
+          <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total GST Tax</span>
+          <h3 id="total-gst" class="text-xl md:text-2xl font-black text-amber-600 brand-font mt-1">₹0.00</h3>
         </div>
       </section>
 
-      <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="md:col-span-2 glass-card p-5 md:p-6 rounded-3xl">
-          <div class="flex justify-between items-center mb-4">
-            <h3 class="font-bold text-slate-800 text-sm md:text-base heading-font flex items-center gap-2">
-              <i data-lucide="trending-up" class="w-4 h-4 text-indigo-600"></i> Cash Flow Performance
-            </h3>
-          </div>
-          <div class="h-52 md:h-64"><canvas id="overviewChart"></canvas></div>
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="md:col-span-2 app-card p-5 rounded-3xl">
+          <h4 class="font-bold text-slate-900 text-sm brand-font mb-4 flex items-center gap-2">
+            <i data-lucide="trending-up" class="w-4 h-4 text-indigo-600"></i> Cash Flow & Receipts Trend
+          </h4>
+          <div class="h-60"><canvas id="overviewChart"></canvas></div>
         </div>
 
-        <div class="glass-card p-5 md:p-6 rounded-3xl flex flex-col justify-between">
-          <h3 class="font-bold text-slate-800 text-sm md:text-base heading-font mb-2">Category Breakdown</h3>
-          <div class="relative flex justify-center items-center h-44 md:h-48"><canvas id="categoryChart"></canvas></div>
-          <div id="category-legend" class="space-y-1.5 mt-4 text-xs font-semibold text-slate-700"></div>
+        <div class="app-card p-5 rounded-3xl flex flex-col justify-between">
+          <h4 class="font-bold text-slate-900 text-sm brand-font mb-2">Category Breakdown</h4>
+          <div class="relative flex justify-center items-center h-48"><canvas id="categoryChart"></canvas></div>
+          <div id="category-legend" class="space-y-1 mt-3 text-xs font-semibold text-slate-700"></div>
         </div>
       </section>
 
-      <section class="glass-card p-5 md:p-6 rounded-3xl overflow-x-auto">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="font-bold text-slate-800 text-sm md:text-base heading-font flex items-center gap-2">
-            🌸 Recent Entries for <span id="table-company-name" class="text-indigo-600 underline">Active Company</span>
-          </h3>
+      <section class="app-card p-5 rounded-3xl overflow-x-auto">
+        <div class="flex justify-between items-center mb-3">
+          <h4 class="font-bold text-slate-900 text-sm brand-font flex items-center gap-2">
+            Recent Ledger Entries (<span id="table-company-name" class="text-indigo-600 font-extrabold">Active Store</span>)
+          </h4>
           <button onclick="switchTab('transactions')" class="text-xs font-bold text-indigo-600 hover:underline flex items-center gap-1">View All <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></button>
         </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs min-w-[650px]">
-            <thead>
-              <tr class="text-slate-500 border-b border-slate-200">
-                <th class="pb-3 font-semibold">Date</th>
-                <th class="pb-3 font-semibold">Type</th>
-                <th class="pb-3 font-semibold">Party Name</th>
-                <th class="pb-3 font-semibold">Description</th>
-                <th class="pb-3 font-semibold">GST</th>
-                <th class="pb-3 font-semibold">Amount</th>
-                <th class="pb-3 font-semibold text-right">Invoice</th>
-              </tr>
-            </thead>
-            <tbody id="dashboard-recent-rows" class="divide-y divide-slate-100 font-semibold text-slate-800"></tbody>
-          </table>
-        </div>
+        <table class="w-full text-left text-xs min-w-[620px]">
+          <thead>
+            <tr class="text-slate-400 border-b border-slate-100">
+              <th class="pb-2.5 font-semibold">Date</th>
+              <th class="pb-2.5 font-semibold">Type</th>
+              <th class="pb-2.5 font-semibold">Party / Contact</th>
+              <th class="pb-2.5 font-semibold">Particulars</th>
+              <th class="pb-2.5 font-semibold">Amount</th>
+              <th class="pb-2.5 font-semibold text-right">PDF Bill</th>
+            </tr>
+          </thead>
+          <tbody id="dashboard-recent-rows" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
+        </table>
       </section>
     </div>
 
-    <!-- 2. TRANSACTIONS VIEW -->
+    <!-- 2. VIEW: GULLAK (SAVINGS ACCOUNT) -->
+    <div id="view-gullak" class="tab-view hidden space-y-6">
+      <div class="app-card p-6 md:p-8 rounded-3xl max-w-lg mx-auto space-y-5">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-3">
+            <div class="bg-amber-100 text-amber-600 p-3 rounded-2xl border border-amber-200">
+              <i data-lucide="piggy-bank" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h3 class="font-black text-slate-900 text-base brand-font">मेरी गुल्लक (Savings Account)</h3>
+              <p class="text-[11px] text-slate-500">Personal Daily Micro-Savings & Reserve Tracker</p>
+            </div>
+          </div>
+          <span class="text-[10px] bg-amber-50 text-amber-700 font-extrabold px-3 py-1 rounded-full border border-amber-200">No UPI Required</span>
+        </div>
+
+        <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white p-6 rounded-3xl shadow-lg text-center space-y-1 relative overflow-hidden">
+          <div class="absolute -right-4 -bottom-4 opacity-20"><i data-lucide="coins" class="w-24 h-24"></i></div>
+          <p class="text-[11px] font-bold text-amber-100 uppercase tracking-widest">कुल बचत राशि (Total Gullak Balance)</p>
+          <h2 id="gullak-balance-display" class="text-4xl font-black brand-font tracking-tight">₹0.00</h2>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">रुपये दर्ज करें (Amount ₹)</label>
+            <input type="number" id="gullak-amount-input" placeholder="जैसे 40 या 50" class="w-full p-3 rounded-xl app-input font-bold text-base focus:ring-2 focus:ring-amber-500" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">विवरण / नोट (Purpose)</label>
+            <input type="text" id="gullak-note-input" placeholder="जैसे: Daily Pocket Money / Gullak" class="w-full p-3 rounded-xl app-input font-medium focus:ring-2 focus:ring-amber-500" />
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 pt-1">
+            <button type="button" onclick="depositGullak()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-1.5 shadow-md">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i> पैसे डालें (Save)
+            </button>
+            <button type="button" onclick="withdrawGullak()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-1.5 shadow-md">
+              <i data-lucide="minus-circle" class="w-4 h-4"></i> पैसे निकालें (Withdraw)
+            </button>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100">
+          <h4 class="font-bold text-slate-800 text-xs mb-2 flex items-center gap-1.5">
+            <i data-lucide="history" class="w-4 h-4 text-slate-500"></i> बचत का इतिहास (Savings Record)
+          </h4>
+          <div id="gullak-history-list" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. VIEW: ALL TRANSACTIONS -->
     <div id="view-transactions" class="tab-view hidden">
-      <section class="glass-card p-5 md:p-6 rounded-3xl">
-        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-6">
-          <h3 class="font-bold text-slate-800 text-base md:text-lg heading-font">Transactions History</h3>
-          <input type="text" id="search-input" onkeyup="filterTransactions()" placeholder="Search party or description..." class="border border-slate-300 rounded-xl px-4 py-2 text-xs w-full sm:w-64 bg-slate-50 focus:outline-indigo-600 font-semibold" />
+      <section class="app-card p-5 md:p-6 rounded-3xl">
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-4">
+          <h3 class="font-bold text-slate-900 text-base brand-font">All Logged Transactions</h3>
+          <input type="text" id="search-input" onkeyup="filterTransactions()" placeholder="Search by party or note..." class="app-input rounded-xl px-4 py-2 text-xs w-full sm:w-64" />
         </div>
         <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs min-w-[750px]">
+          <table class="w-full text-left text-xs min-w-[700px]">
             <thead>
-              <tr class="text-slate-500 border-b border-slate-200">
-                <th class="pb-3 font-semibold">Date</th>
-                <th class="pb-3 font-semibold">Type</th>
-                <th class="pb-3 font-semibold">Party Name</th>
-                <th class="pb-3 font-semibold">Description</th>
-                <th class="pb-3 font-semibold">Qty x Rate</th>
-                <th class="pb-3 font-semibold">GST (%)</th>
-                <th class="pb-3 font-semibold">Total Amount</th>
-                <th class="pb-3 font-semibold text-right">Actions</th>
+              <tr class="text-slate-400 border-b border-slate-100">
+                <th class="pb-2.5 font-semibold">Date</th>
+                <th class="pb-2.5 font-semibold">Type</th>
+                <th class="pb-2.5 font-semibold">Party</th>
+                <th class="pb-2.5 font-semibold">Description</th>
+                <th class="pb-2.5 font-semibold">Total Amount</th>
+                <th class="pb-2.5 font-semibold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody id="full-transaction-rows" class="divide-y divide-slate-100 font-semibold text-slate-800"></tbody>
+            <tbody id="full-transaction-rows" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
           </table>
         </div>
       </section>
     </div>
 
-    <!-- 3. EXPANDED PDF & UTILITIES VIEW -->
+    <!-- 4. VIEW: PDF & DOCUMENT UTILITIES -->
     <div id="view-tools" class="tab-view hidden space-y-6">
-      <div class="glass-card p-6 rounded-3xl space-y-6">
+      <div class="app-card p-6 md:p-8 rounded-3xl space-y-6">
         <div>
-          <h2 class="text-xl font-extrabold text-slate-900 heading-font">PDF, Excel & Document Utilities</h2>
-          <p class="text-xs text-slate-600 mt-0.5">100% Client-side document processing tools</p>
+          <h3 class="text-xl font-black text-slate-900 brand-font">Client-Side Document Utilities</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Private, fast browser tools. No files are uploaded to external clouds.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           <!-- PDF to Excel -->
-          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
-            <div class="flex items-center gap-3">
-              <div class="bg-blue-100 text-blue-600 p-2.5 rounded-2xl"><i data-lucide="file-spreadsheet" class="w-5 h-5"></i></div>
-              <div>
-                <h3 class="font-bold text-slate-800 text-xs">PDF to Excel (.XLSX)</h3>
-                <p class="text-[10px] text-slate-500">Extract tables into spreadsheet</p>
+          <div class="bg-slate-50/70 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-center gap-2.5">
+                <div class="bg-blue-100 text-blue-700 p-2 rounded-xl"><i data-lucide="file-spreadsheet" class="w-5 h-5"></i></div>
+                <h4 class="font-bold text-slate-900 text-xs brand-font">PDF to Excel (.XLSX)</h4>
               </div>
+              <p class="text-[11px] text-slate-500">Extract table columns and rows from your PDF invoices into clean spreadsheets.</p>
+              <input type="file" id="pdf-to-excel-input" accept=".pdf" class="w-full text-[11px] border border-slate-300 rounded-xl p-2 bg-white file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white file:font-bold" />
             </div>
-            <input type="file" id="pdf-to-excel-input" accept=".pdf" class="w-full text-[11px] border border-slate-300 rounded-xl p-2 bg-white file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white file:font-semibold" />
-            <button onclick="convertPdfToExcel()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5">
-              <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i> Convert PDF to Excel
+            <button onclick="convertPdfToExcel()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-md">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Convert PDF to Excel
             </button>
           </div>
 
           <!-- Image to PDF -->
-          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
-            <div class="flex items-center gap-3">
-              <div class="bg-indigo-100 text-indigo-600 p-2.5 rounded-2xl"><i data-lucide="image" class="w-5 h-5"></i></div>
-              <div>
-                <h3 class="font-bold text-slate-800 text-xs">Image to PDF</h3>
-                <p class="text-[10px] text-slate-500">Convert JPG/PNG photos into PDF</p>
+          <div class="bg-slate-50/70 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-center gap-2.5">
+                <div class="bg-indigo-100 text-indigo-700 p-2 rounded-xl"><i data-lucide="image" class="w-5 h-5"></i></div>
+                <h4 class="font-bold text-slate-900 text-xs brand-font">Image to PDF</h4>
               </div>
+              <p class="text-[11px] text-slate-500">Convert bill photos, JPG, and PNG documents into standardized A4 PDF sheets.</p>
+              <input type="file" id="img-file-input" accept="image/*" class="w-full text-[11px] border border-slate-300 rounded-xl p-2 bg-white file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:bg-indigo-600 file:text-white file:font-bold" />
             </div>
-            <input type="file" id="img-file-input" accept="image/*" class="w-full text-[11px] border border-slate-300 rounded-xl p-2 bg-white file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:bg-indigo-600 file:text-white file:font-semibold" />
-            <button onclick="convertImageToPDF()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5">
-              <i data-lucide="file-down" class="w-3.5 h-3.5"></i> Convert Image to PDF
+            <button onclick="convertImageToPDF()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-md">
+              <i data-lucide="file-down" class="w-4 h-4"></i> Convert Image to PDF
             </button>
-          </div>
-
-          <!-- Upload Digital Signature Card -->
-          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
-            <div class="flex items-center gap-3">
-              <div class="bg-purple-100 text-purple-600 p-2.5 rounded-xl">
-                <i data-lucide="pen-tool" class="w-5 h-5"></i>
-              </div>
-              <div>
-                <h3 class="font-bold text-slate-800 text-xs">Digital Signature</h3>
-                <p class="text-[10px] text-slate-500">Upload signature for GST bills</p>
-              </div>
-            </div>
-            <input type="file" accept="image/*" onchange="uploadDigitalSignature(event)" class="w-full text-[11px] border border-slate-300 rounded-xl p-2 bg-white file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-[10px] file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100" />
           </div>
 
           <!-- Excel to PDF -->
-          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
-            <div class="flex items-center gap-3">
-              <div class="bg-emerald-100 text-emerald-600 p-2.5 rounded-2xl"><i data-lucide="file-type" class="w-5 h-5"></i></div>
-              <div>
-                <h3 class="font-bold text-slate-800 text-xs">Excel to PDF</h3>
-                <p class="text-[10px] text-slate-500">Parse .XLSX sheets to PDF</p>
+          <div class="bg-slate-50/70 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-center gap-2.5">
+                <div class="bg-emerald-100 text-emerald-700 p-2 rounded-xl"><i data-lucide="file-type" class="w-5 h-5"></i></div>
+                <h4 class="font-bold text-slate-900 text-xs brand-font">Excel to PDF</h4>
               </div>
+              <p class="text-[11px] text-slate-500">Format and print `.xlsx` or `.csv` sheets directly into printable PDF reports.</p>
+              <input type="file" id="excel-file-input" accept=".xlsx, .xls, .csv" class="w-full text-[11px] border border-slate-300 rounded-xl p-2 bg-white file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:bg-emerald-600 file:text-white file:font-bold" />
             </div>
-            <input type="file" id="excel-file-input" accept=".xlsx, .xls, .csv" class="w-full text-[11px] border border-slate-300 rounded-xl p-2 bg-white file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:bg-emerald-600 file:text-white file:font-semibold" />
-            <button onclick="convertExcelToPDF()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5">
-              <i data-lucide="file-down" class="w-3.5 h-3.5"></i> Export Excel to PDF
+            <button onclick="convertExcelToPDF()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-md">
+              <i data-lucide="file-down" class="w-4 h-4"></i> Export Excel to PDF
             </button>
           </div>
 
-          <!-- PDF to PNG -->
-          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
-            <div class="flex items-center gap-3">
-              <div class="bg-rose-100 text-rose-600 p-2.5 rounded-2xl"><i data-lucide="file-digit" class="w-5 h-5"></i></div>
-              <div>
-                <h3 class="font-bold text-slate-800 text-xs">PDF to PNG Image</h3>
-                <p class="text-[10px] text-slate-500">Render PDF page 1 to PNG image</p>
+          <!-- PDF to PNG Image -->
+          <div class="bg-slate-50/70 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-center gap-2.5">
+                <div class="bg-rose-100 text-rose-700 p-2 rounded-xl"><i data-lucide="file-digit" class="w-5 h-5"></i></div>
+                <h4 class="font-bold text-slate-900 text-xs brand-font">PDF to PNG Image</h4>
               </div>
+              <p class="text-[11px] text-slate-500">Render high-resolution PNG picture snapshots from page 1 of any invoice PDF.</p>
+              <input type="file" id="pdf-to-img-input" accept=".pdf" class="w-full text-[11px] border border-slate-300 rounded-xl p-2 bg-white file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:bg-rose-600 file:text-white file:font-bold" />
             </div>
-            <input type="file" id="pdf-to-img-input" accept=".pdf" class="w-full text-[11px] border border-slate-300 rounded-xl p-2 bg-white file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:bg-rose-600 file:text-white file:font-semibold" />
-            <button onclick="convertPdfToImage()" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5">
-              <i data-lucide="image" class="w-3.5 h-3.5"></i> Extract PNG Image
+            <button onclick="convertPdfToImage()" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-md">
+              <i data-lucide="image" class="w-4 h-4"></i> Extract PNG Image
             </button>
+          </div>
+
+          <!-- Digital Signature -->
+          <div class="bg-slate-50/70 p-5 rounded-2xl border border-slate-200 space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-center gap-2.5">
+                <div class="bg-purple-100 text-purple-700 p-2 rounded-xl"><i data-lucide="pen-tool" class="w-5 h-5"></i></div>
+                <h4 class="font-bold text-slate-900 text-xs brand-font">Store Digital Signature</h4>
+              </div>
+              <p class="text-[11px] text-slate-500">Upload your store seal or signature image to auto-print on professional GST bills.</p>
+              <input type="file" accept="image/*" onchange="uploadDigitalSignature(event)" class="w-full text-[11px] border border-slate-300 rounded-xl p-2 bg-white file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-purple-700 file:font-semibold" />
+            </div>
+            <div id="sig-status" class="text-[10px] text-purple-700 font-bold">Ready to embed into bills</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 4. CALCULATOR VIEW -->
+    <!-- 5. VIEW: CALCULATOR -->
     <div id="view-calculator" class="tab-view hidden space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Interest Calculator -->
-        <div class="glass-card p-6 rounded-3xl space-y-4">
-          <h3 class="font-bold text-slate-900 text-base heading-font flex items-center gap-2">
-            <i data-lucide="percent" class="w-5 h-5 text-indigo-600"></i> Credit Due Interest Calculator
+        <!-- Due Interest Calculator -->
+        <div class="app-card p-6 rounded-3xl space-y-4">
+          <h3 class="font-bold text-slate-900 text-base brand-font flex items-center gap-2">
+            <i data-lucide="percent" class="w-5 h-5 text-indigo-600"></i> Customer Due Interest Calculator
           </h3>
           <div class="space-y-3 text-xs">
             <div>
-              <label class="block font-semibold mb-1 text-slate-700">Principal Amount (₹)</label>
-              <input type="number" id="calc-principal" placeholder="10000" class="w-full p-2.5 border border-slate-300 rounded-xl bg-slate-50 font-bold" />
+              <label class="block font-semibold mb-1 text-slate-700">Principal Due Amount (₹)</label>
+              <input type="number" id="calc-principal" placeholder="10000" class="w-full p-2.5 rounded-xl app-input font-bold" />
             </div>
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block font-semibold mb-1 text-slate-700">Interest Rate (% / month)</label>
-                <input type="number" id="calc-rate" placeholder="2" class="w-full p-2.5 border border-slate-300 rounded-xl bg-slate-50 font-bold" />
+                <input type="number" id="calc-rate" placeholder="2" class="w-full p-2.5 rounded-xl app-input font-bold" />
               </div>
               <div>
                 <label class="block font-semibold mb-1 text-slate-700">Duration (Months)</label>
-                <input type="number" id="calc-months" placeholder="3" class="w-full p-2.5 border border-slate-300 rounded-xl bg-slate-50 font-bold" />
+                <input type="number" id="calc-months" placeholder="3" class="w-full p-2.5 rounded-xl app-input font-bold" />
               </div>
             </div>
-            <button onclick="calculateInterest()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl transition">Calculate Interest</button>
-            <div id="interest-result" class="p-3 bg-indigo-50 border border-indigo-200 rounded-xl hidden font-bold text-slate-800"></div>
+            <button onclick="calculateInterest()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl transition shadow">Calculate Total Due</button>
+            <div id="interest-result" class="p-3 bg-indigo-50 border border-indigo-200 rounded-xl hidden font-bold text-indigo-900"></div>
           </div>
         </div>
 
-        <!-- GST Tax Splitter -->
-        <div class="glass-card p-6 rounded-3xl space-y-4">
-          <h3 class="font-bold text-slate-900 text-base heading-font flex items-center gap-2">
+        <!-- GST Splitter -->
+        <div class="app-card p-6 rounded-3xl space-y-4">
+          <h3 class="font-bold text-slate-900 text-base brand-font flex items-center gap-2">
             <i data-lucide="receipt" class="w-5 h-5 text-emerald-600"></i> CGST / SGST Tax Splitter
           </h3>
           <div class="space-y-3 text-xs">
             <div>
-              <label class="block font-semibold mb-1 text-slate-700">Total Bill Amount (Inclusive GST)</label>
-              <input type="number" id="calc-gst-total" placeholder="1180" class="w-full p-2.5 border border-slate-300 rounded-xl bg-slate-50 font-bold" />
+              <label class="block font-semibold mb-1 text-slate-700">Total Invoice Amount (Incl. GST)</label>
+              <input type="number" id="calc-gst-total" placeholder="1180" class="w-full p-2.5 rounded-xl app-input font-bold" />
             </div>
             <div>
-              <label class="block font-semibold mb-1 text-slate-700">GST Slab (%)</label>
-              <select id="calc-gst-slab" class="w-full p-2.5 border border-slate-300 rounded-xl bg-slate-50 font-bold">
+              <label class="block font-semibold mb-1 text-slate-700">GST Slab Rate</label>
+              <select id="calc-gst-slab" class="w-full p-2.5 rounded-xl app-input font-bold">
                 <option value="18">18% GST (Standard)</option>
                 <option value="12">12% GST</option>
                 <option value="5">5% GST</option>
                 <option value="28">28% GST</option>
               </select>
             </div>
-            <button onclick="calculateGstSplit()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition">Split Tax Breakdown</button>
-            <div id="gst-result" class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl hidden font-semibold text-slate-800 space-y-1"></div>
+            <button onclick="calculateGstSplit()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition shadow">Compute Split Tax</button>
+            <div id="gst-result" class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl hidden font-semibold text-emerald-900 space-y-1"></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 4.5 GULLAK (SAVINGS ACCOUNT) VIEW -->
-    <div id="view-gullak" class="tab-view hidden space-y-6">
-      <div class="glass-card p-6 md:p-8 rounded-3xl max-w-lg mx-auto space-y-5">
-        
-        <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-          <div class="flex items-center gap-3">
-            <div class="bg-amber-100 text-amber-600 p-3 rounded-2xl">
-              <i data-lucide="piggy-bank" class="w-6 h-6"></i>
-            </div>
-            <div>
-              <h3 class="font-extrabold text-slate-900 text-base heading-font">मेरी गुल्लक (Gullak Savings)</h3>
-              <p class="text-[11px] text-slate-500">Personal Savings Ledger for: <span class="font-bold text-indigo-600" id="gullak-company-name">My Shop</span></p>
-            </div>
-          </div>
-          <span class="text-xs bg-amber-50 text-amber-700 font-bold px-3 py-1 rounded-full border border-amber-200">Savings</span>
+    <!-- 6. VIEW: BUSINESS GUIDES -->
+    <div id="view-guides" class="tab-view hidden space-y-6">
+      <div class="app-card p-6 md:p-8 rounded-3xl space-y-6 max-w-4xl mx-auto">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="bg-amber-50 text-amber-700 border border-amber-200 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Business Masterclass</span>
+          <h3 class="text-2xl font-black text-slate-900 brand-font mt-2">Comprehensive Retail Bookkeeping & Accounting Knowledge Base</h3>
+          <p class="text-xs md:text-sm text-slate-500 mt-1">Operational procedures, GST guidelines, and debt recovery workflows for Indian retail merchants.</p>
         </div>
 
-        <!-- Gullak Balance Card -->
-        <div class="bg-gradient-to-r from-amber-500 to-orange-500 text-white p-6 rounded-2xl shadow-lg text-center space-y-1">
-          <p class="text-xs font-semibold text-amber-100 uppercase tracking-wider">कुल बचत (Total Saved)</p>
-          <h2 id="gullak-balance-display" class="text-4xl font-black heading-font">₹0.00</h2>
+        <div class="space-y-6 text-xs md:text-sm text-slate-700 leading-relaxed">
+          <article class="p-5 bg-slate-50/80 rounded-2xl border border-slate-200 space-y-2">
+            <h4 class="text-base font-bold text-slate-900 brand-font flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold">1</span>
+              Maintaining a Daily Single-Entry Cash Register (Khata)
+            </h4>
+            <p>
+              In single-entry bookkeeping, transactions are logged either as incoming cash (Receipt / Jama) or outgoing cash (Payment / Udhar). Unlike enterprise double-entry accounting with complex debits and credits, a single-entry cash ledger prioritizes immediate cash position visibility for Kirana shops and retail counters.
+            </p>
+            <ul class="list-disc list-inside space-y-1 text-slate-600 pt-1">
+              <li><strong>Opening Cash Balance:</strong> Tally the exact cash physically present in the cash drawer each morning.</li>
+              <li><strong>Real-Time Entry:</strong> Log payments the moment cash or UPI transfers settle to avoid memory drift.</li>
+              <li><strong>Daily Reconciliation:</strong> Compute <code>Opening Balance + Receipts - Payments</code>. If drawer cash deviates from this total, audit leakage immediately.</li>
+            </ul>
+          </article>
+
+          <article class="p-5 bg-slate-50/80 rounded-2xl border border-slate-200 space-y-2">
+            <h4 class="text-base font-bold text-slate-900 brand-font flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-bold">2</span>
+              Best Practices for Customer Credit (Udhar) Recovery
+            </h4>
+            <p>
+              Customer credit is essential in neighbourhood trade, but uncontrolled credit chokes store liquidity:
+            </p>
+            <ul class="list-disc list-inside space-y-1 text-slate-600 pt-1">
+              <li><strong>Credit Ceiling:</strong> Establish a strict cap per customer (e.g., ₹2,000 or 15 days). Stop extending further goods until partial repayment occurs.</li>
+              <li><strong>Weekly Statements:</strong> Send WhatsApp or SMS balance summaries every Sunday rather than waiting for month-end bill confrontations.</li>
+              <li><strong>Early Settlement Incentives:</strong> Offer 1–2% discounts on bills settled within 48 hours to accelerate inventory turnover.</li>
+            </ul>
+          </article>
+
+          <article class="p-5 bg-slate-50/80 rounded-2xl border border-slate-200 space-y-2">
+            <h4 class="text-base font-bold text-slate-900 brand-font flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">3</span>
+              Understanding GST Slabs: CGST, SGST, and Invoicing Rules
+            </h4>
+            <p>
+              The Goods and Services Tax (GST) requires transparent breakdown on taxable commercial invoices:
+            </p>
+            <ul class="list-disc list-inside space-y-1 text-slate-600 pt-1">
+              <li><strong>Intrastate Sales:</strong> Total GST is split evenly between Central (CGST) and State (SGST). For example, 18% GST = 9% CGST + 9% SGST.</li>
+              <li><strong>Tax Invoice vs. Payment Voucher:</strong> Invoices represent commercial supply with tax liabilities; Payment vouchers confirm monetary fund receipt without generating additional tax.</li>
+            </ul>
+          </article>
         </div>
 
-        <!-- Add / Withdraw Input Form -->
-        <div class="space-y-3 text-xs">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">रुपये (Amount ₹)</label>
-            <input type="number" id="gullak-amount-input" placeholder="e.g. 40 or 50" class="w-full p-3 border border-slate-300 rounded-xl bg-slate-50 font-bold text-slate-800 focus:outline-amber-500" />
-          </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">विवरण (Note / Reason)</label>
-            <input type="text" id="gullak-note-input" placeholder="e.g. Daily pocket savings" class="w-full p-2.5 border border-slate-300 rounded-xl bg-slate-50 font-semibold focus:outline-amber-500" />
-          </div>
-
-          <div class="grid grid-cols-2 gap-3 pt-1">
-            <button type="button" onclick="depositGullak()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-1 shadow-md">
-              <i data-lucide="plus-circle" class="w-4 h-4"></i> पैसे डालें (Save)
-            </button>
-            <button type="button" onclick="withdrawGullak()" class="bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-1 shadow-md">
-              <i data-lucide="minus-circle" class="w-4 h-4"></i> निकालें (Withdraw)
-            </button>
-          </div>
+        <div class="pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
+          <span class="text-slate-500">Written & Maintained by Khata Bahi Editors.</span>
+          <a href="guides.html" class="inline-flex items-center gap-1.5 font-bold text-indigo-600 hover:underline">
+            Open Static HTML Guides Page <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </a>
         </div>
-
-        <!-- History Section -->
-        <div class="pt-3 border-t border-slate-200">
-          <h4 class="font-bold text-slate-800 text-xs mb-2 flex items-center gap-1.5">
-            <i data-lucide="history" class="w-4 h-4 text-slate-500"></i> बचत का इतिहास (History)
-          </h4>
-          <div id="gullak-history-list" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
-        </div>
-
       </div>
     </div>
 
-    <!-- 5. COMPANY SETTINGS / PROFILE VIEW -->
+    <!-- 7. VIEW: PRIVACY POLICY -->
+    <div id="view-privacy" class="tab-view hidden space-y-6">
+      <div class="app-card p-6 md:p-8 rounded-3xl space-y-5 max-w-3xl mx-auto">
+        <div class="border-b border-slate-100 pb-3">
+          <h3 class="text-2xl font-black text-slate-900 brand-font">Privacy Policy</h3>
+          <p class="text-xs text-slate-500">Effective Date: September 2026</p>
+        </div>
+
+        <div class="space-y-4 text-xs md:text-sm text-slate-600 leading-relaxed">
+          <p>At <strong>Khata Bahi</strong> (hosted at <code>swadsangamindia.github.io</code>), your data confidentiality and financial record privacy are fundamental commitments.</p>
+          <h4 class="font-bold text-slate-900 text-sm">1. Storage and Security Architecture</h4>
+          <p>Transactions, customer names, and Gullak savings entries are stored within your browser's private LocalStorage or synced via encrypted Google Cloud Firestore upon authenticating with Google Login. We never sell, distribute, or monetize merchant accounting records.</p>
+          <h4 class="font-bold text-slate-900 text-sm">2. Third-Party Services & Advertising Cookies</h4>
+          <p>We utilize Google AdSense to serve advertisements. Google uses cookies (such as DoubleClick cookies) to display ads based on prior website interactions. Users may opt out of personalized cookies through Google Ad Settings.</p>
+          <h4 class="font-bold text-slate-900 text-sm">3. Contact Inquiries</h4>
+          <p>For data inquiries or concerns, email our support team directly at: <strong>swadsangamindia@gmail.com</strong>.</p>
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 text-center">
+          <a href="privacy-policy.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:underline">
+            View Static HTML Privacy Page <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. VIEW: TERMS AND CONDITIONS -->
+    <div id="view-terms" class="tab-view hidden space-y-6">
+      <div class="app-card p-6 md:p-8 rounded-3xl space-y-5 max-w-3xl mx-auto">
+        <div class="border-b border-slate-100 pb-3">
+          <h3 class="text-2xl font-black text-slate-900 brand-font">Terms and Conditions</h3>
+          <p class="text-xs text-slate-500">Effective Date: September 2026</p>
+        </div>
+
+        <div class="space-y-4 text-xs md:text-sm text-slate-600 leading-relaxed">
+          <p>By accessing or utilizing Khata Bahi, you agree to comply with these terms:</p>
+          <h4 class="font-bold text-slate-900 text-sm">1. Informational & Computational Scope</h4>
+          <p>Khata Bahi is a digital bookkeeping, calculator, and PDF processing helper. It does not provide certified legal, auditing, chartered accountancy (CA), or tax advisory services. Final tax filings should always be reviewed with certified tax professionals.</p>
+          <h4 class="font-bold text-slate-900 text-sm">2. Account Responsibility & Statement Backups</h4>
+          <p>Users are responsible for safeguarding their Google credentials and routinely exporting statement CSV files to maintain off-site ledger records.</p>
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 text-center">
+          <a href="terms.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:underline">
+            View Static HTML Terms Page <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. VIEW: STORE & PRO SETTINGS -->
     <div id="view-settings" class="tab-view hidden space-y-6">
-
-      <!-- USER ACCOUNT PROFILE CARD -->
-      <div class="glass-card p-5 md:p-6 rounded-3xl max-w-2xl flex items-center justify-between">
+      <!-- User Profile Card -->
+      <div class="app-card p-5 md:p-6 rounded-3xl max-w-2xl flex items-center justify-between">
         <div class="flex items-center gap-3">
           <div class="w-11 h-11 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold text-base shadow-md" id="user-avatar">
             U
@@ -582,231 +677,171 @@
         </button>
       </div>
 
-      <!-- ALL CREATED COMPANIES MANAGEMENT CARD -->
-      <div class="glass-card p-6 md:p-8 rounded-3xl space-y-4 max-w-2xl">
-        <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+      <!-- Pro Membership Details Box -->
+      <div class="app-card p-6 md:p-8 rounded-3xl space-y-4 max-w-2xl border-amber-300 bg-amber-50/50">
+        <div class="flex justify-between items-center border-b border-amber-200 pb-3">
           <div>
-            <h3 class="text-lg font-bold text-slate-900 heading-font">Your Created Companies</h3>
-            <p class="text-xs text-slate-500">Tap any company below to select and start working on its ledger</p>
+            <span class="text-[10px] text-amber-700 font-bold uppercase tracking-wider">Account Membership</span>
+            <h4 class="text-lg font-bold text-slate-900 brand-font" id="settings-plan-desc">Free Plan (Receipt & Payment Only)</h4>
           </div>
-          <button onclick="openAddCompanyModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs flex items-center gap-1 transition shadow-sm">
-            <i data-lucide="plus" class="w-4 h-4"></i> Add New Company
+          <button id="settings-upgrade-btn" onclick="openUpgradeModal()" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-90 text-white font-extrabold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow-md">
+            <i data-lucide="crown" class="w-4 h-4"></i> Upgrade Pro (₹99)
           </button>
         </div>
-
-        <div id="company-list-container" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
+        <p class="text-xs text-slate-600">
+          Khata Pro unlocks Sale & Purchase vouchers with automatic GST computation, custom invoices with store signatures, and multi-company cloud backups.
+        </p>
       </div>
 
-      <!-- EDIT ACTIVE COMPANY DETAILS FORM -->
-      <div class="glass-card p-6 md:p-8 rounded-3xl space-y-6 max-w-2xl">
-        <div>
-          <h3 class="text-xl font-bold text-slate-900 heading-font">Active Company Invoice Details</h3>
-          <p class="text-xs text-slate-600 mt-1">Editing details for: <span class="font-extrabold text-indigo-600" id="settings-current-company-title">Active Company</span></p>
-        </div>
-
-        <form id="company-profile-form" onsubmit="saveCompanyDetails(event)" class="space-y-4 text-xs">
+      <!-- Store List -->
+      <div class="app-card p-6 md:p-8 rounded-3xl space-y-4 max-w-2xl">
+        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
           <div>
-            <label class="block font-bold text-slate-800 mb-1">Company / Business Name</label>
-            <input type="text" id="set-company-name" required class="w-full p-3 border border-slate-300 rounded-xl bg-slate-50 font-bold text-slate-800 focus:outline-indigo-600" placeholder="e.g. Swad Sangam Traders" />
+            <h4 class="text-lg font-bold text-slate-900 brand-font">Created Business Profiles</h4>
+            <p class="text-xs text-slate-500">Tap a store to load its active cash ledger</p>
           </div>
-
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label class="block font-bold text-slate-800 mb-1">GSTIN Number (Optional)</label>
-              <input type="text" id="set-company-gstin" class="w-full p-3 border border-slate-300 rounded-xl bg-slate-50 uppercase font-mono text-slate-800 focus:outline-indigo-600" placeholder="22AAAAA0000A1Z5" />
-            </div>
-            <div>
-              <label class="block font-bold text-slate-800 mb-1">Phone Number</label>
-              <input type="text" id="set-company-phone" class="w-full p-3 border border-slate-300 rounded-xl bg-slate-50 font-semibold text-slate-800 focus:outline-indigo-600" placeholder="+91 9876543210" />
-            </div>
-          </div>
-
-          <div>
-            <label class="block font-bold text-slate-800 mb-1">Business Address</label>
-            <textarea id="set-company-address" rows="2" class="w-full p-3 border border-slate-300 rounded-xl bg-slate-50 font-semibold text-slate-800 focus:outline-indigo-600" placeholder="Street Address, City, State, Pin Code"></textarea>
-          </div>
-
-          <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl transition shadow-md">Save Changes to Active Company</button>
-        </form>
-
-        <div class="pt-4 border-t border-slate-200">
-          <h4 class="font-bold text-slate-800 text-sm mb-1">Account Plan Status</h4>
-          <p id="settings-plan-desc" class="text-xs text-slate-500 mb-3">Free Plan</p>
-          <button id="settings-upgrade-btn" onclick="openUpgradeModal()" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-1.5 transition">
-            <i data-lucide="crown" class="w-4 h-4"></i> Upgrade Pro (₹99/30d)
+          <button onclick="openAddCompanyModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1.5 rounded-xl text-xs flex items-center gap-1">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add
           </button>
         </div>
+        <div id="company-list-container" class="space-y-2 max-h-56 overflow-y-auto pr-1"></div>
+      </div>
 
-        <!-- ABOUT & SUPPORT SECTION -->
-        <div class="pt-6 border-t border-slate-200">
-          <h4 class="text-xs font-black text-slate-700 uppercase tracking-wider mb-3">About & Support</h4>
-
-          <div class="space-y-2 text-xs font-bold text-slate-800">
-            <div onclick="openSupportModal('about')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-200 cursor-pointer transition">
-              <div class="flex items-center gap-3">
-                <span class="text-base">🌸</span>
-                <span>About Khata Bahi</span>
-              </div>
-              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+      <!-- Edit Store Profile -->
+      <div class="app-card p-6 md:p-8 rounded-3xl space-y-5 max-w-2xl">
+        <h4 class="text-lg font-bold text-slate-900 brand-font">Active Business Invoice Information</h4>
+        <form id="company-profile-form" onsubmit="saveCompanyDetails(event)" class="space-y-4 text-xs">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Company / Store Name</label>
+            <input type="text" id="set-company-name" required class="w-full p-3 rounded-xl app-input font-bold" />
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">GSTIN Number (Optional)</label>
+              <input type="text" id="set-company-gstin" class="w-full p-3 rounded-xl app-input uppercase font-mono" placeholder="22AAAAA0000A1Z5" />
             </div>
-
-            <div onclick="openSupportModal('faq')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-200 cursor-pointer transition">
-              <div class="flex items-center gap-3">
-                <span class="text-base">❓</span>
-                <span>Frequently Asked Questions (FAQ)</span>
-              </div>
-              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
-            </div>
-
-            <div onclick="openSupportModal('contact')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-200 cursor-pointer transition">
-              <div class="flex items-center gap-3">
-                <span class="text-base">💬</span>
-                <span>Contact & Support</span>
-              </div>
-              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
-            </div>
-
-            <div onclick="openSupportModal('privacy')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-200 cursor-pointer transition">
-              <div class="flex items-center gap-3">
-                <span class="text-base">🔒</span>
-                <span>Privacy Policy</span>
-              </div>
-              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
-            </div>
-
-            <div onclick="openSupportModal('terms')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-200 cursor-pointer transition">
-              <div class="flex items-center gap-3">
-                <span class="text-base">📄</span>
-                <span>Terms & Conditions</span>
-              </div>
-              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
-            </div>
-
-            <div onclick="openSupportModal('disclaimer')" class="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-slate-100 rounded-2xl border border-slate-200 cursor-pointer transition">
-              <div class="flex items-center gap-3">
-                <span class="text-base">⚖️</span>
-                <span>Legal Disclaimer</span>
-              </div>
-              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Phone</label>
+              <input type="text" id="set-company-phone" class="w-full p-3 rounded-xl app-input" />
             </div>
           </div>
-
-          <p class="text-center text-[11px] text-slate-400 mt-5 font-semibold">© 2026 Khata Bahi v1.0.0</p>
-        </div>
-
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Business Address</label>
+            <textarea id="set-company-address" rows="2" class="w-full p-3 rounded-xl app-input"></textarea>
+          </div>
+          <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md">Update Store Profile</button>
+        </form>
       </div>
     </div>
 
+    <!-- GLOBAL SITE FOOTER -->
+    <footer class="mt-12 py-6 border-t border-slate-200 text-center text-xs text-slate-500 space-y-2">
+      <p>© 2026 Khata Bahi Digital Ledger. Empowering Indian Small Retailers & Traders.</p>
+      <div class="flex items-center justify-center gap-4 text-indigo-600 font-bold">
+        <a href="guides.html" class="hover:underline">Business Guides</a>
+        <span>•</span>
+        <a href="privacy-policy.html" class="hover:underline">Privacy Policy</a>
+        <span>•</span>
+        <a href="terms.html" class="hover:underline">Terms & Conditions</a>
+      </div>
+    </footer>
+
     <!-- FLOATING ACTION BUTTON -->
-    <button onclick="openModal()" class="fixed bottom-20 md:bottom-8 right-5 md:right-8 bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 text-white p-4 rounded-full shadow-2xl transition transform hover:scale-110 active:scale-95 z-30 flex items-center justify-center border border-white">
+    <button onclick="openModal()" class="fixed bottom-20 md:bottom-8 right-5 md:right-8 bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-600 text-white p-4 rounded-full shadow-2xl transition transform hover:scale-105 active:scale-95 z-30 flex items-center justify-center border-2 border-white">
       <i data-lucide="plus" class="w-7 h-7"></i>
     </button>
   </main>
 
-  <!-- MOBILE BOTTOM NAVIGATION BAR -->
-  <nav class="md:hidden fixed bottom-0 left-0 right-0 glass-nav-mobile text-white flex justify-around items-center p-2 z-40">
-    <button onclick="switchTab('about')" id="m-nav-about" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-indigo-300 font-bold">
-      <i data-lucide="home" class="w-5 h-5"></i> Home
+  <!-- MOBILE BOTTOM NAVIGATION -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200 text-slate-600 flex justify-around items-center p-2 z-40 shadow-lg">
+    <button onclick="switchTab('about')" id="m-nav-about" class="flex flex-col items-center gap-1 p-1 text-[10px] text-indigo-600 font-bold">
+      <i data-lucide="compass" class="w-5 h-5"></i> Hub
     </button>
-    <button onclick="switchTab('dashboard')" id="m-nav-dashboard" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
+    <button onclick="switchTab('dashboard')" id="m-nav-dashboard" class="flex flex-col items-center gap-1 p-1 text-[10px] font-semibold">
       <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Ledger
     </button>
-    <button onclick="switchTab('calculator')" id="m-nav-calculator" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
-      <i data-lucide="calculator" class="w-5 h-5 text-emerald-300"></i> Calc
+    <button onclick="switchTab('gullak')" id="m-nav-gullak" class="flex flex-col items-center gap-1 p-1 text-[10px] font-semibold">
+      <i data-lucide="piggy-bank" class="w-5 h-5 text-amber-500"></i> Gullak
     </button>
-    <button onclick="switchTab('gullak')" id="m-nav-gullak" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
-      <i data-lucide="piggy-bank" class="w-5 h-5 text-amber-300"></i> Gullak
+    <button onclick="switchTab('tools')" id="m-nav-tools" class="flex flex-col items-center gap-1 p-1 text-[10px] font-semibold">
+      <i data-lucide="wrench" class="w-5 h-5 text-purple-600"></i> Tools
     </button>
-    <button onclick="switchTab('tools')" id="m-nav-tools" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
-      <i data-lucide="wrench" class="w-5 h-5 text-purple-300"></i> Tools
+    <button onclick="switchTab('guides')" id="m-nav-guides" class="flex flex-col items-center gap-1 p-1 text-[10px] font-semibold">
+      <i data-lucide="book-open" class="w-5 h-5 text-amber-600"></i> Guides
     </button>
-    <button onclick="switchTab('settings')" id="m-nav-settings" class="flex flex-col items-center gap-1 p-1.5 text-[10px] text-slate-300 font-semibold">
-      <i data-lucide="building" class="w-5 h-5"></i> Profile
+    <button onclick="switchTab('settings')" id="m-nav-settings" class="flex flex-col items-center gap-1 p-1 text-[10px] font-semibold">
+      <i data-lucide="store" class="w-5 h-5"></i> Store
     </button>
   </nav>
 
-  <!-- INFO & SUPPORT MODAL -->
-  <div id="support-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-    <div class="glass-card bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[85vh] flex flex-col">
-      <div class="flex justify-between items-center border-b border-slate-200 pb-3">
-        <h3 id="support-modal-title" class="text-base font-bold text-slate-900 heading-font">Information</h3>
-        <button onclick="closeSupportModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-      <div id="support-modal-body" class="overflow-y-auto pr-1 text-xs text-slate-600 leading-relaxed space-y-3">
-        <!-- Dynamically injected -->
-      </div>
-    </div>
-  </div>
-
-  <!-- ADD COMPANY MODAL -->
-  <div id="add-company-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-    <div class="glass-card bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl relative space-y-4">
-      <div class="flex justify-between items-center border-b border-slate-200 pb-3">
-        <h3 class="text-base font-bold text-slate-900">Create New Company</h3>
+  <!-- MODAL: ADD COMPANY -->
+  <div id="add-company-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div class="app-card rounded-3xl max-w-sm w-full p-6 space-y-4">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <h3 class="text-base font-bold text-slate-900 brand-font">Create New Store Profile</h3>
         <button onclick="closeAddCompanyModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
-
       <div class="space-y-3 text-xs">
         <div>
-          <label class="block font-bold text-slate-800 mb-1">Company / Store Name</label>
-          <input type="text" id="new-company-name-input" placeholder="e.g. Swad Sangam Store #2" class="w-full p-3 border border-slate-300 rounded-xl bg-slate-50 font-bold focus:outline-indigo-600" />
+          <label class="block font-bold text-slate-700 mb-1">Store / Business Name</label>
+          <input type="text" id="new-company-name-input" placeholder="e.g. Swad Sangam Branch 2" class="w-full p-3 rounded-xl app-input font-bold" />
         </div>
         <button onclick="createNewCompany()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-md">
-          Save & Switch to New Company
+          Save & Switch Store
         </button>
       </div>
     </div>
   </div>
 
-  <!-- ADD VOUCHER MODAL -->
-  <div id="modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
-    <div class="glass-card rounded-3xl max-w-lg w-full p-5 md:p-6 shadow-2xl max-h-[90vh] overflow-y-auto border border-white">
+  <!-- MODAL: ADD ENTRY (PRO SALE/PURCHASE UNLOCK) -->
+  <div id="modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div class="app-card rounded-3xl max-w-lg w-full p-5 md:p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="text-base md:text-lg font-bold text-slate-900 heading-font">Add Entry 🌸</h3>
+        <h3 class="text-base md:text-lg font-bold text-slate-900 brand-font">Add Entry 🌸</h3>
         <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
 
-      <form id="transaction-form" class="space-y-3.5">
+      <form id="transaction-form" class="space-y-3.5 text-xs">
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Entry Type</label>
-            <select id="type" onchange="toggleVoucherFields()" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600 font-bold">
+            <label class="block font-semibold text-slate-700 mb-1">Entry Type</label>
+            <select id="type" onchange="toggleVoucherFields()" class="w-full rounded-xl p-2.5 app-input font-bold">
               <option value="receipt">Receipt (Money Received)</option>
               <option value="payment">Payment (Money Paid)</option>
-              <option value="sale" id="opt-sale">Sale (Invoice - Pro 🔒)</option>
-              <option value="purchase" id="opt-purchase">Purchase (Stock - Pro 🔒)</option>
+              <option value="sale">Sale (Invoice - Pro 🔒)</option>
+              <option value="purchase">Purchase (Stock - Pro 🔒)</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Date</label>
-            <input type="date" id="date" required class="w-full border border-slate-300 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600 font-semibold" />
+            <label class="block font-semibold text-slate-700 mb-1">Date</label>
+            <input type="date" id="date" required class="w-full rounded-xl p-2.5 app-input font-semibold" />
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Description / Particulars</label>
-          <input type="text" id="description" required placeholder="e.g., Electricity Bill / Office Rent" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600 font-semibold" />
+          <label class="block font-semibold text-slate-700 mb-1">Description / Particulars</label>
+          <input type="text" id="description" required placeholder="e.g. Daily Kirana Sales / Milk Supply" class="w-full rounded-xl p-2.5 app-input font-semibold" />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Amount (₹)</label>
-          <input type="number" step="0.01" id="rate" required placeholder="500.00" oninput="calculateAmounts()" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600 font-bold" />
+          <label class="block font-semibold text-slate-700 mb-1">Amount (₹)</label>
+          <input type="number" step="0.01" id="rate" required placeholder="500.00" oninput="calculateAmounts()" class="w-full rounded-xl p-2.5 app-input font-bold text-sm" />
         </div>
 
-        <div id="pro-fields-container" class="space-y-3.5 border-t border-b border-amber-300 bg-amber-50 p-3.5 rounded-2xl hidden">
+        <!-- PRO GST FIELDS -->
+        <div id="pro-fields-container" class="space-y-3.5 border border-amber-300 bg-amber-50/70 p-3.5 rounded-2xl hidden">
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Party Name (Customer / Vendor)</label>
-            <input type="text" id="party-name" placeholder="e.g., Rahul Verma" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm bg-white focus:outline-indigo-600 font-semibold" />
+            <label class="block font-semibold text-amber-900 mb-1">Party Name (Customer / Vendor)</label>
+            <input type="text" id="party-name" placeholder="e.g. Rahul Verma" class="w-full rounded-xl p-2.5 app-input font-semibold bg-white" />
           </div>
-
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Quantity</label>
-              <input type="number" step="1" id="quantity" value="1" min="1" oninput="calculateAmounts()" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm bg-white focus:outline-indigo-600 font-semibold" />
+              <label class="block font-semibold text-amber-900 mb-1">Quantity</label>
+              <input type="number" step="1" id="quantity" value="1" min="1" oninput="calculateAmounts()" class="w-full rounded-xl p-2.5 app-input font-semibold bg-white" />
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">GST Rate (%)</label>
-              <select id="gst-rate" onchange="calculateAmounts()" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm bg-white focus:outline-indigo-600 font-bold">
+              <label class="block font-semibold text-amber-900 mb-1">GST Rate (%)</label>
+              <select id="gst-rate" onchange="calculateAmounts()" class="w-full rounded-xl p-2.5 app-input font-bold bg-white">
                 <option value="0">0% (Exempt)</option>
                 <option value="5">5%</option>
                 <option value="12">12%</option>
@@ -815,188 +850,142 @@
               </select>
             </div>
           </div>
-
-          <div class="bg-white border border-slate-200 rounded-xl p-3 text-xs space-y-1 font-medium text-slate-600">
+          <div class="bg-white border border-amber-200 rounded-xl p-3 text-xs space-y-1 font-medium text-slate-700">
             <div class="flex justify-between"><span>Subtotal:</span><span id="summary-subtotal">₹0.00</span></div>
-            <div class="flex justify-between"><span>GST Amount:</span><span id="summary-gst" class="text-indigo-600">+₹0.00</span></div>
-            <div class="flex justify-between font-bold text-slate-900 border-t border-slate-200 pt-1 text-sm"><span>Total Bill Amount:</span><span id="summary-total">₹0.00</span></div>
+            <div class="flex justify-between"><span>GST Amount:</span><span id="summary-gst" class="text-amber-600 font-bold">+₹0.00</span></div>
+            <div class="flex justify-between font-bold text-slate-900 border-t border-slate-200 pt-1 text-sm"><span>Total Bill:</span><span id="summary-total" class="text-emerald-600 font-black">₹0.00</span></div>
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Category</label>
-            <select id="category" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600 font-semibold">
+            <label class="block font-semibold text-slate-700 mb-1">Category</label>
+            <select id="category" class="w-full rounded-xl p-2.5 app-input font-semibold">
               <option value="General Trade">General Trade</option>
               <option value="Office Expenses">Office Expenses</option>
-              <option value="Food & Dining">Food & Dining</option>
+              <option value="Groceries & Kirana">Groceries & Kirana</option>
               <option value="Services">Services</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Payment Mode</label>
-            <select id="method" class="w-full border border-slate-300 rounded-xl p-2.5 text-sm bg-slate-50 focus:outline-indigo-600 font-semibold">
-              <option value="UPI">UPI</option>
+            <label class="block font-semibold text-slate-700 mb-1">Payment Mode</label>
+            <select id="method" class="w-full rounded-xl p-2.5 app-input font-semibold">
               <option value="Cash">Cash</option>
+              <option value="UPI">UPI</option>
               <option value="Bank Transfer">Bank Transfer</option>
-              <option value="Credit / Outstanding">Credit / Outstanding</option>
+              <option value="Credit / Udhar">Credit / Udhar</option>
             </select>
           </div>
         </div>
 
-        <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg mt-2">Save Entry</button>
+        <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:opacity-95 text-white font-bold py-3.5 rounded-xl transition shadow-lg mt-2">Save Entry</button>
       </form>
     </div>
   </div>
 
-  <!-- UPGRADE TO PRO MODAL -->
+  <!-- MODAL: UPGRADE TO PRO -->
   <div id="upgrade-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-    <div class="glass-card bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl relative space-y-4">
+    <div class="app-card rounded-3xl max-w-sm w-full p-6 shadow-2xl relative space-y-4 border-2 border-amber-300">
       <div class="flex justify-between items-center">
-        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 border border-amber-300">
+        <span class="bg-amber-100 text-amber-800 text-[10px] font-extrabold px-3 py-1 rounded-full flex items-center gap-1 border border-amber-300">
           <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-600"></i> PRO MEMBERSHIP
         </span>
         <button onclick="closeUpgradeModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
 
       <div class="text-center">
-        <h3 class="text-xl font-bold text-slate-900 heading-font">Upgrade to Khata Pro</h3>
-        <p class="text-xs text-slate-500 mt-1">Unlock Multi-Company, GST Bills & Interest Tools</p>
+        <h3 class="text-xl font-black text-slate-900 brand-font">Upgrade to Khata Pro</h3>
+        <p class="text-xs text-slate-500 mt-1">Unlock Multi-Store Cloud Sync, GST Bills & Due Calculators</p>
         <div class="mt-2 flex justify-center items-baseline gap-1">
-          <span class="text-3xl font-extrabold text-indigo-600">₹99</span>
+          <span class="text-3xl font-black text-amber-600 brand-font">₹99</span>
           <span class="text-xs text-slate-500 font-medium">/ 30 days</span>
         </div>
       </div>
 
       <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-center space-y-3">
-        <p class="text-xs font-bold text-slate-700">Scan or Tap to Pay via UPI</p>
+        <p class="text-xs font-bold text-slate-700">Scan QR Code or Tap to Pay</p>
         <div class="flex justify-center">
-          <img id="upi-qr-code" src="" alt="UPI QR Code" class="w-36 h-36 rounded-xl border border-slate-200 shadow-sm bg-white p-1" />
+          <img id="upi-qr-code" src="" alt="UPI QR Code" class="w-36 h-36 rounded-xl border border-slate-300 shadow-sm bg-white p-1.5" />
         </div>
-        <a id="upi-pay-link" href="#" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm">
+        <p class="text-[11px] font-mono text-indigo-700 font-bold">UPI ID: swadsangamindia@upi</p>
+        <a id="upi-pay-link" href="#" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-md">
           <i data-lucide="smartphone" class="w-4 h-4"></i> Pay ₹99 via Any UPI App
         </a>
       </div>
 
       <div class="space-y-1.5 pt-1">
-        <label class="block text-[11px] font-semibold text-slate-600">Enter UPI Ref / UTR No. after paying:</label>
+        <label class="block text-[11px] font-semibold text-slate-600">Enter UPI Ref / UTR No. after payment:</label>
         <div class="flex gap-2">
-          <input type="text" id="upi-utr-input" placeholder="e.g. 4201XXXXXXXX" class="flex-1 border border-slate-300 rounded-xl px-3 py-2 text-xs font-mono" />
-          <button onclick="verifyUpiPayment()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl">Submit</button>
+          <input type="text" id="upi-utr-input" placeholder="e.g. 4201XXXXXXXX" class="flex-1 rounded-xl p-2 app-input text-xs font-mono" />
+          <button onclick="verifyUpiPayment()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition shadow">Verify</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- DYNAMIC GST INVOICE TEMPLATE -->
-  <div id="invoice-pdf-template" style="display: none; width: 700px; max-width: 700px; background: #ffffff; color: #000000; font-family: Arial, Helvetica, sans-serif; font-size: 11px; padding: 10px 10px 20px 10px; box-sizing: border-box; margin: auto;">
-    <div style="border: 1.5px solid #000; box-sizing: border-box;">
-      <div style="text-align: center; padding: 8px 10px; border-bottom: 1.5px solid #000; background: #fafafa;">
-        <div style="font-size: 13px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;">TAX INVOICE</div>
-        <div id="pdf-top-company-name" style="font-size: 16px; font-weight: 900; margin-top: 2px; text-transform: uppercase; color: #111;">Prism Store</div>
-        <div id="pdf-top-company-address" style="font-size: 10px; color: #333; margin-top: 2px;">Delhi, India</div>
-        <div style="font-size: 9.5px; margin-top: 2px; color: #222;">
+  <!-- INVOICE PRINT TEMPLATE (OFFSCREEN) -->
+  <div id="invoice-pdf-template" style="display: none; width: 700px; max-width: 700px; background: #ffffff; color: #000; font-family: Arial, sans-serif; font-size: 11px; padding: 10px; margin: auto;">
+    <div style="border: 1.5px solid #000;">
+      <div style="text-align: center; padding: 8px; border-bottom: 1.5px solid #000; background: #fafafa;">
+        <div style="font-size: 13px; font-weight: 800; text-transform: uppercase;">TAX INVOICE</div>
+        <div id="pdf-top-company-name" style="font-size: 16px; font-weight: 900; margin-top: 2px;">Store Name</div>
+        <div id="pdf-top-company-address" style="font-size: 10px; color: #333;">Delhi, India</div>
+        <div style="font-size: 9px; margin-top: 2px;">
           <strong>GSTIN:</strong> <span id="pdf-top-company-gstin">N/A</span> | <strong>Phone:</strong> <span id="pdf-top-company-phone">N/A</span>
         </div>
       </div>
-
       <div style="display: flex; border-bottom: 1px solid #000;">
-        <div style="width: 50%; padding: 6px 8px; border-right: 1px solid #000; line-height: 1.35; box-sizing: border-box;">
-          <div style="font-weight: bold; font-style: italic; margin-bottom: 3px;">Billed to :</div>
-          <div id="pdf-billed-name" style="font-weight: bold; font-size: 12px;">Customer / Party</div>
+        <div style="width: 50%; padding: 6px; border-right: 1px solid #000;">
+          <div style="font-weight: bold; font-style: italic;">Billed to:</div>
+          <div id="pdf-billed-name" style="font-weight: bold; font-size: 12px;">Customer</div>
           <div id="pdf-billed-address">Delhi, India</div>
-          <div style="margin-top: 5px;"><strong>GSTIN / UIN : </strong><span id="pdf-billed-gstin">N/A</span></div>
         </div>
-        <div style="width: 50%; padding: 6px 8px; line-height: 1.35; box-sizing: border-box;">
-          <div style="font-weight: bold; font-style: italic; margin-bottom: 3px;">Shipped to :</div>
-          <div id="pdf-shipped-name" style="font-weight: bold; font-size: 12px;">Customer / Party</div>
+        <div style="width: 50%; padding: 6px;">
+          <div style="font-weight: bold; font-style: italic;">Shipped to:</div>
+          <div id="pdf-shipped-name" style="font-weight: bold; font-size: 12px;">Customer</div>
           <div id="pdf-shipped-address">Delhi, India</div>
-          <div style="margin-top: 5px;"><strong>GSTIN / UIN : </strong><span id="pdf-shipped-gstin">N/A</span></div>
         </div>
       </div>
-
       <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
         <thead>
           <tr style="border-bottom: 1px solid #000; background: #fafafa; font-size: 9.5px;">
-            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: center; width: 28px;">S.N.</th>
-            <th style="border-right: 1px solid #000; padding: 4px 4px; text-align: left; width: 170px;">Description of Goods</th>
-            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: center; width: 50px;">HSN/SAC</th>
-            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: center; width: 30px;">Qty</th>
-            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: center; width: 30px;">Unit</th>
-            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: right; width: 50px;">Price</th>
-            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: center; width: 42px;">CGST%</th>
-            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: right; width: 52px;">CGST Amt</th>
-            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: center; width: 42px;">SGST%</th>
-            <th style="border-right: 1px solid #000; padding: 4px 2px; text-align: right; width: 52px;">SGST Amt</th>
-            <th style="padding: 4px 4px; text-align: right; width: 70px;">Amount(₹)</th>
+            <th style="border-right: 1px solid #000; padding: 4px; text-align: left; width: 200px;">Description</th>
+            <th style="border-right: 1px solid #000; padding: 4px; text-align: center; width: 40px;">Qty</th>
+            <th style="border-right: 1px solid #000; padding: 4px; text-align: right; width: 60px;">Price</th>
+            <th style="border-right: 1px solid #000; padding: 4px; text-align: center; width: 50px;">CGST%</th>
+            <th style="border-right: 1px solid #000; padding: 4px; text-align: center; width: 50px;">SGST%</th>
+            <th style="padding: 4px; text-align: right; width: 80px;">Amount(₹)</th>
           </tr>
         </thead>
         <tbody>
-          <tr style="height: 140px; vertical-align: top; font-size: 10px;">
-            <td style="border-right: 1px solid #000; text-align: center; padding: 5px 2px;">1.</td>
-            <td style="border-right: 1px solid #000; padding: 5px 4px; word-break: break-word;">
-              <div id="pdf-item-desc" style="font-weight: bold;">Goods / Service</div>
-              <div id="pdf-item-notes" style="font-size: 9px; font-style: italic; color: #444; margin-top: 3px;"></div>
-            </td>
-            <td id="pdf-item-hsn" style="border-right: 1px solid #000; text-align: center; padding: 5px 2px;">9966</td>
-            <td id="pdf-item-qty" style="border-right: 1px solid #000; text-align: center; padding: 5px 2px;">1</td>
-            <td style="border-right: 1px solid #000; text-align: center; padding: 5px 2px;">Nos</td>
-            <td id="pdf-item-price" style="border-right: 1px solid #000; text-align: right; padding: 5px 2px;">0.00</td>
-            <td id="pdf-cgst-rate" style="border-right: 1px solid #000; text-align: center; padding: 5px 2px;">2.50 %</td>
-            <td id="pdf-cgst-amt" style="border-right: 1px solid #000; text-align: right; padding: 5px 2px;">0.00</td>
-            <td id="pdf-sgst-rate" style="border-right: 1px solid #000; text-align: center; padding: 5px 2px;">2.50 %</td>
-            <td id="pdf-sgst-amt" style="border-right: 1px solid #000; text-align: right; padding: 5px 2px;">0.00</td>
-            <td id="pdf-item-total" style="text-align: right; padding: 5px 4px; font-weight: bold;">0.00</td>
+          <tr style="height: 100px; vertical-align: top;">
+            <td id="pdf-item-desc" style="border-right: 1px solid #000; padding: 6px; font-weight: bold;">Goods</td>
+            <td id="pdf-item-qty" style="border-right: 1px solid #000; padding: 6px; text-align: center;">1</td>
+            <td id="pdf-item-price" style="border-right: 1px solid #000; padding: 6px; text-align: right;">0.00</td>
+            <td id="pdf-cgst-rate" style="border-right: 1px solid #000; padding: 6px; text-align: center;">9%</td>
+            <td id="pdf-sgst-rate" style="border-right: 1px solid #000; padding: 6px; text-align: center;">9%</td>
+            <td id="pdf-item-total" style="padding: 6px; text-align: right; font-weight: bold;">0.00</td>
           </tr>
         </tbody>
       </table>
-
-      <div style="display: flex; border-top: 1px solid #000; border-bottom: 1px solid #000; line-height: 22px; font-weight: bold; font-size: 11px;">
+      <div style="display: flex; border-top: 1px solid #000; line-height: 22px; font-weight: bold; font-size: 11px;">
         <div style="flex: 1; text-align: right; padding-right: 12px;">Grand Total ₹</div>
-        <div id="pdf-grand-total" style="width: 70px; text-align: right; padding-right: 4px; border-left: 1px solid #000;">0.00</div>
+        <div id="pdf-grand-total" style="width: 80px; text-align: right; padding-right: 4px; border-left: 1px solid #000;">0.00</div>
       </div>
-
-      <div style="border-bottom: 1px solid #000; padding: 5px 8px;">
-        <table style="width: auto; border-collapse: collapse;">
-          <tr style="border-bottom: 1px solid #ccc; font-weight: bold; font-size: 9.5px;">
-            <td style="padding-right: 18px;">Tax Rate</td>
-            <td style="padding-right: 18px; text-align: right;">Taxable Amt.</td>
-            <td style="padding-right: 18px; text-align: right;">CGST Amt.</td>
-            <td style="padding-right: 18px; text-align: right;">SGST Amt.</td>
-            <td style="text-align: right;">Total Tax</td>
-          </tr>
-          <tr style="font-size: 10px;">
-            <td id="pdf-tax-rate-summary">5%</td>
-            <td id="pdf-taxable-amt" style="text-align: right; padding-right: 18px;">0.00</td>
-            <td id="pdf-cgst-summary" style="text-align: right; padding-right: 18px;">0.00</td>
-            <td id="pdf-sgst-summary" style="text-align: right; padding-right: 18px;">0.00</td>
-            <td id="pdf-total-tax-amt" style="text-align: right;">0.00</td>
-          </tr>
-        </table>
-      </div>
-
-      <div id="pdf-amount-in-words" style="border-bottom: 1px solid #000; padding: 5px 8px; font-weight: bold; font-size: 10.5px;">
-        Rupees Zero Only
-      </div>
-
-      <div style="display: flex;">
-        <div style="flex: 1; padding: 8px 10px 12px 10px; border-right: 1px solid #000; display: flex; flex-direction: column; justify-content: space-between;">
-          <div style="font-size: 9.5px; font-weight: bold;">Receiver's Signature :</div>
-          <div style="border-bottom: 1px dotted #999; width: 80%; margin-top: 40px;"></div>
+      <div style="display: flex; border-top: 1px solid #000;">
+        <div style="flex: 1; padding: 8px; border-right: 1px solid #000;">
+          <div style="font-size: 9px; font-weight: bold;">Receiver's Signature:</div>
+          <div style="border-bottom: 1px dotted #999; width: 80%; margin-top: 30px;"></div>
         </div>
-        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 10px 12px 10px; text-align: right;">
-          <div>&nbsp;</div>
-          <div style="display: flex; flex-direction: column; align-items: flex-end; padding-bottom: 4px;">
-            <img id="pdf-sig-preview" src="" style="display: none; max-height: 40px; max-width: 120px; object-fit: contain; margin-bottom: 4px;" alt="Signature" />
-            <div style="font-weight: bold; margin-bottom: 3px;">for <span id="pdf-company-name">Prism Store</span></div>
-            <div style="font-weight: bold; font-size: 9.5px; padding-bottom: 4px;">Authorised Signatory</div>
-          </div>
+        <div style="flex: 1; padding: 8px; text-align: right; display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end;">
+          <img id="pdf-sig-preview" src="" style="display: none; max-height: 35px; max-width: 120px; object-fit: contain; margin-bottom: 4px;" alt="Signature" />
+          <div style="font-weight: bold; font-size: 9.5px;">Authorised Signatory</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- APPLICATION LOGIC -->
+  <!-- APPLICATION CORE LOGIC -->
   <script>
     lucide.createIcons();
 
@@ -1012,36 +1001,189 @@
       { id: 'c_default', name: 'My Main Shop', address: 'Delhi, India', gstin: 'N/A', phone: '' }
     ];
     let activeCompanyId = localStorage.getItem('ledger_active_company_id') || companies[0].id;
-
     let transactions = JSON.parse(localStorage.getItem(`ledger_tx_${activeCompanyId}`)) || [];
     let currentUser = JSON.parse(localStorage.getItem('ledger_user')) || { name: 'Aditya', email: 'aditya@example.com', currency: '₹' };
 
     let isProUser = JSON.parse(localStorage.getItem('ledger_is_pro')) || false;
     let proExpiry = JSON.parse(localStorage.getItem('ledger_pro_expiry')) || null;
-
     let lineChart, doughnutChart;
 
-    function resetLocalStateToDefault() {
-      companies = [
-        { id: `c_${Date.now()}`, name: 'My Main Shop', address: 'Delhi, India', gstin: 'N/A', phone: '' }
-      ];
-      activeCompanyId = companies[0].id;
-      transactions = [];
-
-      localStorage.setItem('ledger_companies', JSON.stringify(companies));
-      localStorage.setItem('ledger_active_company_id', activeCompanyId);
-      localStorage.setItem(`ledger_tx_${activeCompanyId}`, JSON.stringify(transactions));
-
-      renderCompanySelectors();
-      saveAndRender();
-      if (typeof window.reloadGullakForActiveCompany === 'function') {
-        window.reloadGullakForActiveCompany();
+    /* PRO STATUS VERIFICATION & EXPIRY */
+    function checkProSubscriptionExpiry() {
+      if (isProUser && proExpiry) {
+        if (Date.now() > proExpiry) {
+          isProUser = false;
+          localStorage.setItem('ledger_is_pro', JSON.stringify(false));
+          localStorage.removeItem('ledger_pro_expiry');
+        }
       }
     }
 
+    function getProDaysRemaining() {
+      if (!isProUser || !proExpiry) return 0;
+      const diffMs = proExpiry - Date.now();
+      if (diffMs <= 0) return 0;
+      return Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+    }
+
+    function updateProStatusUI() {
+      const planBadge = document.getElementById('sidebar-plan-badge');
+      const headerProTag = document.getElementById('header-pro-tag');
+      const planDesc = document.getElementById('settings-plan-desc');
+      
+      const headerUpgradeBtn = document.getElementById('header-upgrade-btn');
+      const mobileUpgradeBtn = document.getElementById('mobile-upgrade-btn');
+      const homeUpgradeBtn = document.getElementById('home-upgrade-btn');
+      const settingsUpgradeBtn = document.getElementById('settings-upgrade-btn');
+      const proFields = document.getElementById('pro-fields-container');
+
+      const remainingDays = getProDaysRemaining();
+
+      if (isProUser && remainingDays > 0) {
+        if (planBadge) planBadge.innerHTML = `<i data-lucide="crown" class="w-3 h-3 text-amber-600"></i> Pro (${remainingDays}d left)`;
+        if (headerProTag) {
+          headerProTag.innerText = `Pro (${remainingDays}d left)`;
+          headerProTag.className = "text-[10px] bg-amber-100 text-amber-800 font-extrabold px-2.5 py-0.5 rounded-full border border-amber-300";
+        }
+        if (planDesc) planDesc.innerText = `Pro Membership Active (${remainingDays} days remaining)`;
+
+        // HIDE ALL UPGRADE BUTTONS AFTER BUYING PRO
+        if (headerUpgradeBtn) headerUpgradeBtn.classList.add('hidden');
+        if (mobileUpgradeBtn) mobileUpgradeBtn.classList.add('hidden');
+        if (homeUpgradeBtn) homeUpgradeBtn.classList.add('hidden');
+        if (settingsUpgradeBtn) settingsUpgradeBtn.classList.add('hidden');
+
+        if (proFields) proFields.classList.remove('hidden');
+      } else {
+        if (planBadge) planBadge.innerHTML = `<i data-lucide="shield" class="w-3 h-3"></i> Free Plan`;
+        if (headerProTag) {
+          headerProTag.innerText = "Free Plan";
+          headerProTag.className = "text-[10px] bg-slate-100 text-slate-700 font-bold px-2.5 py-0.5 rounded-full border border-slate-300";
+        }
+        if (planDesc) planDesc.innerText = "Free Plan (Receipt & Payment only)";
+
+        // SHOW UPGRADE BUTTONS
+        if (headerUpgradeBtn) headerUpgradeBtn.classList.remove('hidden');
+        if (mobileUpgradeBtn) mobileUpgradeBtn.classList.remove('hidden');
+        if (homeUpgradeBtn) homeUpgradeBtn.classList.remove('hidden');
+        if (settingsUpgradeBtn) settingsUpgradeBtn.classList.remove('hidden');
+
+        if (proFields) proFields.classList.add('hidden');
+      }
+      lucide.createIcons();
+    }
+
+    function setupUpiPaymentLinks() {
+      const upiUrl = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(RECEIVER_NAME)}&am=${PRO_PRICE}&cu=INR&tn=KhataPro30Days`;
+      const upiLinkBtn = document.getElementById('upi-pay-link');
+      const upiQrImg = document.getElementById('upi-qr-code');
+
+      if (upiLinkBtn) upiLinkBtn.href = upiUrl;
+      if (upiQrImg) upiQrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUrl)}`;
+    }
+
+    function openUpgradeModal() {
+      setupUpiPaymentLinks();
+      document.getElementById('upgrade-modal').classList.remove('hidden');
+    }
+    function closeUpgradeModal() {
+      document.getElementById('upgrade-modal').classList.add('hidden');
+    }
+
+    function verifyUpiPayment() {
+      const utr = document.getElementById('upi-utr-input').value.trim();
+      if (utr.length >= 8) {
+        const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+        isProUser = true;
+        proExpiry = Date.now() + thirtyDaysMs;
+
+        localStorage.setItem('ledger_is_pro', JSON.stringify(true));
+        localStorage.setItem('ledger_pro_expiry', JSON.stringify(proExpiry));
+
+        updateProStatusUI();
+        closeUpgradeModal();
+        alert(`🎉 Khata Pro Activated successfully with UTR: ${utr}!\nValid for 30 Days.`);
+      } else {
+        alert("Please enter a valid UPI Reference / UTR Number (at least 8 digits).");
+      }
+    }
+
+    /* GULLAK LOGIC */
+    let gullakBalance = Number(localStorage.getItem(`gullak_bal_${activeCompanyId}`)) || 0;
+    let gullakHistory = JSON.parse(localStorage.getItem(`gullak_hist_${activeCompanyId}`)) || [];
+
+    function updateGullakUI() {
+      const balEl = document.getElementById('gullak-balance-display');
+      if (balEl) balEl.innerText = `₹${gullakBalance.toFixed(2)}`;
+      
+      const container = document.getElementById('gullak-history-list');
+      if (!container) return;
+
+      if (gullakHistory.length === 0) {
+        container.innerHTML = `<p class="text-[11px] text-slate-400 text-center py-3">गुल्लक में कोई रिकॉर्ड नहीं है।</p>`;
+        return;
+      }
+
+      container.innerHTML = gullakHistory.slice(0, 10).map(item => `
+        <div class="flex items-center justify-between p-2.5 rounded-xl border border-slate-200 bg-white text-xs shadow-sm">
+          <div>
+            <p class="font-bold text-slate-900">${item.note}</p>
+            <p class="text-[10px] text-slate-500 font-mono">${item.date}</p>
+          </div>
+          <span class="font-black ${item.type === 'deposit' ? 'text-emerald-600' : 'text-rose-600'}">
+            ${item.type === 'deposit' ? '+' : '-'}₹${item.amount.toFixed(2)}
+          </span>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function depositGullak() {
+      const amtInput = document.getElementById('gullak-amount-input');
+      const noteInput = document.getElementById('gullak-note-input');
+      const amt = parseFloat(amtInput.value);
+      const note = noteInput.value.trim() || 'Saved in Gullak';
+      
+      if (!amt || amt <= 0) return alert("कृपया सही राशि डालें (जैसे: ₹40 या ₹50)!");
+
+      gullakBalance += amt;
+      gullakHistory.unshift({ type: 'deposit', amount: amt, note: note, date: new Date().toLocaleDateString('en-GB') });
+
+      localStorage.setItem(`gullak_bal_${activeCompanyId}`, gullakBalance);
+      localStorage.setItem(`gullak_hist_${activeCompanyId}`, JSON.stringify(gullakHistory));
+      
+      amtInput.value = '';
+      noteInput.value = '';
+      updateGullakUI();
+    }
+
+    function withdrawGullak() {
+      const amtInput = document.getElementById('gullak-amount-input');
+      const noteInput = document.getElementById('gullak-note-input');
+      const amt = parseFloat(amtInput.value);
+      const note = noteInput.value.trim() || 'Withdrawn from Gullak';
+      
+      if (!amt || amt <= 0) return alert("कृपया सही राशि डालें!");
+      if (amt > gullakBalance) return alert("गुल्लक में इतने पैसे नहीं हैं!");
+
+      gullakBalance -= amt;
+      gullakHistory.unshift({ type: 'withdraw', amount: amt, note: note, date: new Date().toLocaleDateString('en-GB') });
+
+      localStorage.setItem(`gullak_bal_${activeCompanyId}`, gullakBalance);
+      localStorage.setItem(`gullak_hist_${activeCompanyId}`, JSON.stringify(gullakHistory));
+      
+      amtInput.value = '';
+      noteInput.value = '';
+      updateGullakUI();
+    }
+
+    /* MULTI-COMPANY HANDLERS */
     function renderCompanySelectors() {
       const desktopSel = document.getElementById('company-selector');
       const mobileSel = document.getElementById('mobile-company-selector');
+      const badge = document.getElementById('store-count-badge');
+
+      if (badge) badge.innerText = `${companies.length} Store${companies.length > 1 ? 's' : ''}`;
 
       if (desktopSel && mobileSel) {
         desktopSel.innerHTML = '';
@@ -1057,13 +1199,9 @@
       const activeComp = getActiveCompany();
       const currentCompDisplay = document.getElementById('current-company-display');
       const tableCompName = document.getElementById('table-company-name');
-      const settingsCurrentCompanyTitle = document.getElementById('settings-current-company-title');
-      const gullakCompName = document.getElementById('gullak-company-name');
       
       if (currentCompDisplay) currentCompDisplay.innerText = activeComp.name;
       if (tableCompName) tableCompName.innerText = activeComp.name;
-      if (settingsCurrentCompanyTitle) settingsCurrentCompanyTitle.innerText = activeComp.name;
-      if (gullakCompName) gullakCompName.innerText = activeComp.name;
 
       document.getElementById('set-company-name').value = activeComp.name || '';
       document.getElementById('set-company-gstin').value = activeComp.gstin || '';
@@ -1081,53 +1219,16 @@
       companies.forEach(c => {
         const isActive = c.id === activeCompanyId;
         container.innerHTML += `
-          <div class="p-3 rounded-2xl border transition flex justify-between items-center ${isActive ? 'bg-indigo-50 border-indigo-500 shadow-sm' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}">
-            <div onclick="selectCompanyById('${c.id}')" class="flex-1 cursor-pointer">
-              <p class="font-bold text-xs text-slate-800">${c.name} ${isActive ? '<span class="text-[10px] bg-indigo-600 text-white px-2 py-0.5 rounded-full ml-1 font-bold">Active</span>' : ''}</p>
-              <p class="text-[10px] text-slate-500 mt-0.5">${c.address || 'No address set'} ${c.gstin ? '• GST: ' + c.gstin : ''}</p>
+          <div onclick="selectCompanyById('${c.id}')" class="p-3 rounded-2xl border transition cursor-pointer flex justify-between items-center ${isActive ? 'bg-indigo-50 border-indigo-300' : 'bg-white border-slate-200 hover:bg-slate-50'}">
+            <div>
+              <p class="font-bold text-xs text-slate-900">${c.name} ${isActive ? '<span class="text-[9px] bg-indigo-600 text-white px-2 py-0.5 rounded-full ml-1 font-bold">Active</span>' : ''}</p>
+              <p class="text-[10px] text-slate-500">${c.address || 'Delhi, India'}</p>
             </div>
-            <div class="flex items-center gap-2">
-              <div onclick="selectCompanyById('${c.id}')" class="cursor-pointer">
-                <i data-lucide="${isActive ? 'check-circle-2' : 'circle'}" class="w-4 h-4 ${isActive ? 'text-indigo-600' : 'text-slate-400'}"></i>
-              </div>
-              ${companies.length > 1 ? `
-                <button onclick="deleteCompany('${c.id}', event)" title="Delete Business" class="text-rose-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition">
-                  <i data-lucide="trash-2" class="w-4 h-4"></i>
-                </button>
-              ` : ''}
-            </div>
+            <i data-lucide="${isActive ? 'check-circle-2' : 'circle'}" class="w-4 h-4 ${isActive ? 'text-indigo-600' : 'text-slate-400'}"></i>
           </div>
         `;
       });
       lucide.createIcons();
-    }
-
-    function deleteCompany(id, event) {
-      if (event) event.stopPropagation();
-      if (companies.length <= 1) {
-        return alert("You must have at least one active business.");
-      }
-      
-      const compToDelete = companies.find(c => c.id === id);
-      if (!confirm(`Are you sure you want to delete "${compToDelete.name}" and all its records?`)) {
-        return;
-      }
-
-      companies = companies.filter(c => c.id !== id);
-      localStorage.removeItem(`ledger_tx_${id}`);
-      localStorage.removeItem(`gullak_bal_${id}`);
-      localStorage.removeItem(`gullak_hist_${id}`);
-      localStorage.setItem('ledger_companies', JSON.stringify(companies));
-
-      if (activeCompanyId === id) {
-        activeCompanyId = companies[0].id;
-        localStorage.setItem('ledger_active_company_id', activeCompanyId);
-      }
-
-      loadCompanyTransactions();
-      if (typeof window.syncLedgerToCloud === 'function') {
-        window.syncLedgerToCloud();
-      }
     }
 
     function selectCompanyById(id) {
@@ -1154,49 +1255,35 @@
 
     function loadCompanyTransactions() {
       transactions = JSON.parse(localStorage.getItem(`ledger_tx_${activeCompanyId}`)) || [];
+      gullakBalance = Number(localStorage.getItem(`gullak_bal_${activeCompanyId}`)) || 0;
+      gullakHistory = JSON.parse(localStorage.getItem(`gullak_hist_${activeCompanyId}`)) || [];
       renderCompanySelectors();
+      updateGullakUI();
       saveAndRender();
-      if (typeof window.reloadGullakForActiveCompany === 'function') {
-        window.reloadGullakForActiveCompany();
-      }
     }
 
-    function openAddCompanyModal() {
-      document.getElementById('add-company-modal').classList.remove('hidden');
-    }
-
-    function closeAddCompanyModal() {
-      document.getElementById('add-company-modal').classList.add('hidden');
-    }
+    function openAddCompanyModal() { document.getElementById('add-company-modal').classList.remove('hidden'); }
+    function closeAddCompanyModal() { document.getElementById('add-company-modal').classList.add('hidden'); }
 
     function createNewCompany() {
-      const nameInput = document.getElementById('new-company-name-input').value.trim();
-      if (!nameInput) return alert("Please enter a valid company name!");
+      const name = document.getElementById('new-company-name-input').value.trim();
+      if (!name) return alert("Please enter valid name!");
 
-      const newComp = {
-        id: `c_${Date.now()}`,
-        name: nameInput,
-        address: 'Delhi, India',
-        gstin: 'N/A',
-        phone: ''
-      };
-
-      companies.push(newComp);
+      const newC = { id: `c_${Date.now()}`, name: name, address: 'Delhi, India', gstin: 'N/A', phone: '' };
+      companies.push(newC);
       localStorage.setItem('ledger_companies', JSON.stringify(companies));
       
-      activeCompanyId = newComp.id;
+      activeCompanyId = newC.id;
       localStorage.setItem('ledger_active_company_id', activeCompanyId);
 
       closeAddCompanyModal();
       document.getElementById('new-company-name-input').value = '';
       loadCompanyTransactions();
-      alert(`Company "${newComp.name}" created! Switch anytime from the top company dropdown.`);
     }
 
     function saveCompanyDetails(e) {
       e.preventDefault();
       const activeComp = getActiveCompany();
-
       activeComp.name = document.getElementById('set-company-name').value.trim();
       activeComp.gstin = document.getElementById('set-company-gstin').value.trim();
       activeComp.phone = document.getElementById('set-company-phone').value.trim();
@@ -1204,117 +1291,21 @@
 
       localStorage.setItem('ledger_companies', JSON.stringify(companies));
       renderCompanySelectors();
-      alert(`Updated profile details for "${activeComp.name}"!`);
+      alert(`Updated store profile: "${activeComp.name}"`);
     }
 
-    function setupUpiPaymentLinks() {
-      const upiUrl = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(RECEIVER_NAME)}&am=${PRO_PRICE}&cu=INR&tn=KhataPro30Days`;
-      const upiLinkBtn = document.getElementById('upi-pay-link');
-      const upiQrImg = document.getElementById('upi-qr-code');
-
-      if (upiLinkBtn) upiLinkBtn.href = upiUrl;
-      if (upiQrImg) upiQrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUrl)}`;
-    }
-
-    function formatDateToDDMMYYYY(dateStr) {
-      if (!dateStr) return '-';
-      const parts = dateStr.split('-');
-      if (parts.length !== 3) return dateStr;
-      return `${parts[2]}-${parts[1]}-${parts[0]}`;
-    }
-
-    function checkProSubscriptionExpiry() {
-      if (isProUser && proExpiry) {
-        if (Date.now() > proExpiry) {
-          isProUser = false;
-          localStorage.setItem('ledger_is_pro', JSON.stringify(false));
-          localStorage.removeItem('ledger_pro_expiry');
-        }
-      }
-    }
-
-    function getProDaysRemaining() {
-      if (!isProUser || !proExpiry) return 0;
-      const diffMs = proExpiry - Date.now();
-      if (diffMs <= 0) return 0;
-      return Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
-    }
-
-    function updateProStatusUI() {
-      const planBadge = document.getElementById('sidebar-plan-badge');
-      const planDesc = document.getElementById('settings-plan-desc');
-      const proFields = document.getElementById('pro-fields-container');
-      const settingsUpgradeBtn = document.getElementById('settings-upgrade-btn');
-
-      const remainingDays = getProDaysRemaining();
-
-      if (isProUser && remainingDays > 0) {
-        if (settingsUpgradeBtn) settingsUpgradeBtn.classList.add('hidden');
-        if(planBadge) planBadge.innerHTML = `<i data-lucide="crown" class="w-3 h-3 text-amber-300"></i> Pro (${remainingDays}d left)`;
-        if(planDesc) planDesc.innerText = `Pro Membership Active (${remainingDays} days remaining)`;
-        if(proFields) proFields.classList.remove('hidden');
-      } else {
-        if (settingsUpgradeBtn) settingsUpgradeBtn.classList.remove('hidden');
-        if(planBadge) planBadge.innerHTML = `<i data-lucide="shield" class="w-3 h-3"></i> Free Plan`;
-        if(planDesc) planDesc.innerText = `Free Plan (Receipt & Payment only)`;
-        if(proFields) proFields.classList.add('hidden');
-      }
-      lucide.createIcons();
-    }
-
-    function toggleVoucherFields() {
-      const type = document.getElementById('type').value;
-      if ((type === 'sale' || type === 'purchase') && !isProUser) {
-        alert('Sale & Purchase Vouchers require an active Pro Subscription (₹99/30 days).');
-        document.getElementById('type').value = 'receipt';
-        openUpgradeModal();
-        return;
-      }
-
-      if (isProUser && (type === 'sale' || type === 'purchase')) {
-        document.getElementById('pro-fields-container').classList.remove('hidden');
-      } else {
-        document.getElementById('pro-fields-container').classList.add('hidden');
-      }
-      calculateAmounts();
-    }
-
-    function calculateAmounts() {
-      const typeEl = document.getElementById('type');
-      const typeVal = typeEl ? typeEl.value : 'receipt';
-      const isVoucher = (typeVal === 'sale' || typeVal === 'purchase');
-
-      const qtyEl = document.getElementById('quantity');
-      const rateEl = document.getElementById('rate');
-      const gstEl = document.getElementById('gst-rate');
-
-      const qty = qtyEl ? (parseFloat(qtyEl.value) || 1) : 1;
-      const rate = rateEl ? (parseFloat(rateEl.value) || 0) : 0;
-      const gstPct = (isVoucher && gstEl) ? (parseFloat(gstEl.value) || 0) : 0;
-
-      const subtotal = qty * rate;
-      const gstAmount = (subtotal * gstPct) / 100;
-      const total = subtotal + gstAmount;
-
-      const curr = currentUser ? currentUser.currency : '₹';
-      document.getElementById('summary-subtotal').innerText = `${curr}${subtotal.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('summary-gst').innerText = `+${curr}${gstAmount.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('summary-total').innerText = `${curr}${total.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-    }
-
+    /* VIEW SWITCHER */
     function switchTab(tab) {
       document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('nav-active'));
 
-      const targetView = document.getElementById(`view-${tab}`);
-      if(targetView) targetView.classList.remove('hidden');
-      
-      const activeNavBtn = document.getElementById(`nav-${tab}`);
-      if(activeNavBtn) activeNavBtn.classList.add('nav-active');
+      const target = document.getElementById(`view-${tab}`);
+      if (target) target.classList.remove('hidden');
 
-      if (tab === 'gullak' && typeof window.updateGullakUI === 'function') {
-        window.updateGullakUI();
-      }
+      const btn = document.getElementById(`nav-${tab}`);
+      if (btn) btn.classList.add('nav-active');
+
+      if (tab === 'gullak') updateGullakUI();
     }
 
     function saveAndRender() {
@@ -1323,55 +1314,42 @@
       renderDashboardRecent();
       renderFullTable();
       updateCharts();
-
-      if (typeof window.syncLedgerToCloud === 'function') {
-        window.syncLedgerToCloud();
-      }
     }
 
     function renderKPIs() {
-      const curr = currentUser ? currentUser.currency : '₹';
-      
-      const sales = transactions.filter(t => t.type === 'sale').reduce((acc, t) => acc + (t.totalAmount || t.amount), 0);
-      const purchases = transactions.filter(t => t.type === 'purchase').reduce((acc, t) => acc + (t.totalAmount || t.amount), 0);
-      const receipts = transactions.filter(t => t.type === 'receipt').reduce((acc, t) => acc + (t.totalAmount || t.amount), 0);
-      const payments = transactions.filter(t => t.type === 'payment').reduce((acc, t) => acc + (t.totalAmount || t.amount), 0);
-      const totalGst = transactions.reduce((acc, t) => acc + (t.gstAmount || 0), 0);
-      
-      const netBalance = (sales + receipts) - (purchases + payments);
+      const sales = transactions.filter(t => t.type === 'sale').reduce((a, t) => a + (t.totalAmount || t.amount), 0);
+      const purchases = transactions.filter(t => t.type === 'purchase').reduce((a, t) => a + (t.totalAmount || t.amount), 0);
+      const receipts = transactions.filter(t => t.type === 'receipt').reduce((a, t) => a + (t.totalAmount || t.amount), 0);
+      const payments = transactions.filter(t => t.type === 'payment').reduce((a, t) => a + (t.totalAmount || t.amount), 0);
+      const totalGst = transactions.reduce((a, t) => a + (t.gstAmount || 0), 0);
 
-      document.getElementById('total-receipts').innerText = `${curr}${receipts.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('total-payments').innerText = `${curr}${payments.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('total-sales').innerText = `${curr}${sales.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('total-gst').innerText = `${curr}${totalGst.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
-      document.getElementById('card-total-balance').innerText = `${curr}${netBalance.toLocaleString('en-IN', {minimumFractionDigits: 2})}`;
+      const net = (sales + receipts) - (purchases + payments);
+
+      document.getElementById('total-receipts').innerText = `₹${receipts.toFixed(2)}`;
+      document.getElementById('total-payments').innerText = `₹${payments.toFixed(2)}`;
+      document.getElementById('total-sales').innerText = `₹${sales.toFixed(2)}`;
+      document.getElementById('total-gst').innerText = `₹${totalGst.toFixed(2)}`;
+      document.getElementById('card-total-balance').innerText = `₹${net.toFixed(2)}`;
     }
 
     function renderDashboardRecent() {
       const tbody = document.getElementById('dashboard-recent-rows');
       tbody.innerHTML = '';
-      const curr = currentUser ? currentUser.currency : '₹';
-
       if (transactions.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-500 font-semibold">No entries recorded for this company. Tap "+ Add Entry"!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-400 font-medium">No ledger entries saved yet. Tap "+ Add Entry" to begin.</td></tr>`;
         return;
       }
-
       transactions.slice().reverse().slice(0, 5).forEach(item => {
         const tr = document.createElement('tr');
-        const isPositive = item.type === 'sale' || item.type === 'receipt';
-        
+        const isPos = item.type === 'sale' || item.type === 'receipt';
         tr.innerHTML = `
-          <td class="py-3.5 text-slate-600 font-mono">${formatDateToDDMMYYYY(item.date)}</td>
-          <td class="py-3.5"><span class="${isPositive ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'} px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase">${item.type}</span></td>
-          <td class="py-3.5 font-bold text-slate-800">${item.partyName || '-'}</td>
-          <td class="py-3.5 text-slate-600">${item.description}</td>
-          <td class="py-3.5 text-slate-500">${curr}${(item.gstAmount || 0).toFixed(2)}</td>
-          <td class="py-3.5 font-extrabold ${isPositive ? 'text-emerald-600' : 'text-rose-500'}">
-            ${isPositive ? '+' : '-'}${curr}${(item.totalAmount || item.amount).toLocaleString('en-IN', {minimumFractionDigits: 2})}
-          </td>
-          <td class="py-3.5 text-right">
-            <button onclick="generateInvoicePDF(${item.id})" title="Print Invoice" class="text-indigo-600 bg-indigo-50 p-1.5 rounded-lg hover:bg-indigo-100 transition"><i data-lucide="file-text" class="w-4 h-4"></i></button>
+          <td class="py-3 text-slate-500 font-mono">${item.date}</td>
+          <td class="py-3"><span class="${isPos ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'} px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase">${item.type}</span></td>
+          <td class="py-3 font-bold text-slate-900">${item.partyName || '-'}</td>
+          <td class="py-3 text-slate-600">${item.description}</td>
+          <td class="py-3 font-black ${isPos ? 'text-emerald-600' : 'text-rose-600'}">${isPos ? '+' : '-'}₹${(item.totalAmount || item.amount).toFixed(2)}</td>
+          <td class="py-3 text-right">
+            <button onclick="generateInvoicePDF(${item.id})" class="text-indigo-600 bg-indigo-50 p-1.5 rounded-lg hover:bg-indigo-100"><i data-lucide="file-text" class="w-3.5 h-3.5"></i></button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -1379,33 +1357,25 @@
       lucide.createIcons();
     }
 
-    function renderFullTable(data = transactions) {
+    function renderFullTable() {
       const tbody = document.getElementById('full-transaction-rows');
       tbody.innerHTML = '';
-      const curr = currentUser ? currentUser.currency : '₹';
-
-      if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-slate-500 font-semibold">No matching records found.</td></tr>`;
+      if (transactions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-slate-400 font-medium">No records found.</td></tr>`;
         return;
       }
-
-      data.slice().reverse().forEach(item => {
+      transactions.slice().reverse().forEach(item => {
         const tr = document.createElement('tr');
-        const isPositive = item.type === 'sale' || item.type === 'receipt';
-        
+        const isPos = item.type === 'sale' || item.type === 'receipt';
         tr.innerHTML = `
-          <td class="py-3.5 text-slate-600 font-mono">${formatDateToDDMMYYYY(item.date)}</td>
-          <td class="py-3.5"><span class="${isPositive ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'} px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase">${item.type}</span></td>
-          <td class="py-3.5 font-bold text-slate-800">${item.partyName || '-'}</td>
-          <td class="py-3.5 text-slate-600">${item.description}</td>
-          <td class="py-3.5 text-slate-500">${item.quantity || 1} x ${curr}${item.rate || item.amount}</td>
-          <td class="py-3.5 text-slate-500">${(item.type === 'sale' || item.type === 'purchase') ? (item.gstRate || 0) + '%' : '-'}</td>
-          <td class="py-3.5 font-extrabold ${isPositive ? 'text-emerald-600' : 'text-rose-500'}">
-            ${curr}${(item.totalAmount || item.amount).toLocaleString('en-IN', {minimumFractionDigits: 2})}
-          </td>
-          <td class="py-3.5 text-right flex items-center justify-end gap-2">
-            <button onclick="generateInvoicePDF(${item.id})" title="Print Invoice" class="text-indigo-600 bg-indigo-50 p-1.5 rounded-lg hover:bg-indigo-100 transition"><i data-lucide="file-text" class="w-4 h-4"></i></button>
-            <button onclick="deleteTransaction(${item.id})" title="Delete" class="text-rose-400 hover:text-rose-600 p-1.5 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+          <td class="py-3 text-slate-500 font-mono">${item.date}</td>
+          <td class="py-3"><span class="${isPos ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'} px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase">${item.type}</span></td>
+          <td class="py-3 font-bold text-slate-900">${item.partyName || '-'}</td>
+          <td class="py-3 text-slate-600">${item.description}</td>
+          <td class="py-3 font-black ${isPos ? 'text-emerald-600' : 'text-rose-600'}">₹${(item.totalAmount || item.amount).toFixed(2)}</td>
+          <td class="py-3 text-right flex items-center justify-end gap-1.5">
+            <button onclick="generateInvoicePDF(${item.id})" class="text-indigo-600 bg-indigo-50 p-1.5 rounded-lg hover:bg-indigo-100"><i data-lucide="file-text" class="w-3.5 h-3.5"></i></button>
+            <button onclick="deleteTx(${item.id})" class="text-rose-600 hover:bg-rose-50 p-1.5 rounded-lg"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -1413,6 +1383,14 @@
       lucide.createIcons();
     }
 
+    function deleteTx(id) {
+      if (confirm("Delete this entry from register?")) {
+        transactions = transactions.filter(t => t.id !== id);
+        saveAndRender();
+      }
+    }
+
+    /* DIGITAL UTILITIES */
     let companySignatureDataUrl = localStorage.getItem('user_digital_signature') || '';
 
     function uploadDigitalSignature(event) {
@@ -1422,346 +1400,195 @@
       reader.onload = function(e) {
         companySignatureDataUrl = e.target.result;
         localStorage.setItem('user_digital_signature', companySignatureDataUrl);
-        alert('Digital Signature saved successfully!');
+        document.getElementById('sig-status').innerText = "✓ Signature attached successfully!";
       };
       reader.readAsDataURL(file);
     }
 
-    function inrWords(num) {
-      const a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
-      const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-      let n = ('000000000' + parseInt(Math.floor(num))).substr(-9);
-      let str = '';
-      let cr = parseInt(n.substr(0, 2)), lk = parseInt(n.substr(2, 2)), th = parseInt(n.substr(4, 2)), hu = parseInt(n.substr(6, 1)), re = parseInt(n.substr(7, 2));
-      if (cr > 0) str += (a[cr] || b[Math.floor(cr/10)] + ' ' + a[cr%10]) + 'Crore ';
-      if (lk > 0) str += (a[lk] || b[Math.floor(lk/10)] + ' ' + a[lk%10]) + 'Lakh ';
-      if (th > 0) str += (a[th] || b[Math.floor(th/10)] + ' ' + a[th%10]) + 'Thousand ';
-      if (hu > 0) str += a[hu] + 'Hundred ';
-      if (re > 0) str += (str != '' ? 'and ' : '') + (a[re] || b[Math.floor(re/10)] + ' ' + a[re%10]);
-      return (str.trim() || 'Zero') + ' Only';
+    function convertImageToPDF() {
+      const input = document.getElementById('img-file-input');
+      if (!input.files.length) return alert('Select an image first!');
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+        doc.addImage(e.target.result, 'JPEG', 10, 10, 190, 0);
+        doc.save(`Image_Export_${Date.now()}.pdf`);
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+
+    function convertExcelToPDF() {
+      const input = document.getElementById('excel-file-input');
+      if (!input.files.length) return alert('Select Excel file!');
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+        const html = XLSX.utils.sheet_to_html(wb.Sheets[wb.SheetNames[0]]);
+        const el = document.createElement('div');
+        el.innerHTML = `<div style="padding:20px; color:#000;">${html}</div>`;
+        html2pdf().from(el).set({ filename: `Excel_Table_${Date.now()}.pdf` }).save();
+      };
+      reader.readAsArrayBuffer(input.files[0]);
+    }
+
+    async function convertPdfToExcel() {
+      const input = document.getElementById('pdf-to-excel-input');
+      if (!input.files.length) return alert('Select a PDF file!');
+      const reader = new FileReader();
+      reader.onload = async function() {
+        const pdf = await pdfjsLib.getDocument(new Uint8Array(this.result)).promise;
+        let rows = [];
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const txt = await page.getTextContent();
+          let r = [];
+          txt.items.forEach((item, idx) => {
+            r.push(item.str);
+            if ((idx + 1) % 4 === 0) { rows.push([...r]); r = []; }
+          });
+          if (r.length) rows.push(r);
+        }
+        const ws = XLSX.utils.aoa_to_sheet(rows);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+        XLSX.writeFile(wb, `Extracted_Data_${Date.now()}.xlsx`);
+      };
+      reader.readAsArrayBuffer(input.files[0]);
+    }
+
+    async function convertPdfToImage() {
+      const input = document.getElementById('pdf-to-img-input');
+      if (!input.files.length) return alert('Select a PDF file!');
+      const reader = new FileReader();
+      reader.onload = async function() {
+        const pdf = await pdfjsLib.getDocument(new Uint8Array(this.result)).promise;
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1.5 });
+        const canvas = document.createElement('canvas');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+        const a = document.createElement('a');
+        a.href = canvas.toDataURL("image/png");
+        a.download = `PDF_Page1_${Date.now()}.png`;
+        a.click();
+      };
+      reader.readAsArrayBuffer(input.files[0]);
     }
 
     function generateInvoicePDF(id) {
       const item = transactions.find(t => t.id === id);
-      if (!item) return alert("Transaction record not found!");
-
+      if (!item) return alert("Record not found!");
       const activeComp = getActiveCompany();
-      const qty = Number(item.quantity) || 1;
-      const rate = Number(item.rate || item.amount || 0);
 
-      const isVoucher = (item.type === 'sale' || item.type === 'purchase');
-      const gstRate = isVoucher && item.gstRate !== undefined ? Number(item.gstRate) : 0;
-      const halfRate = (gstRate / 2).toFixed(2);
-      const totalAmt = Number(item.totalAmount || item.amount || 0);
+      document.getElementById('pdf-top-company-name').innerText = activeComp.name || 'Store';
+      document.getElementById('pdf-top-company-address').innerText = activeComp.address || 'Delhi, India';
+      document.getElementById('pdf-top-company-gstin').innerText = activeComp.gstin || 'N/A';
+      document.getElementById('pdf-top-company-phone').innerText = activeComp.phone || 'N/A';
 
-      let taxable = totalAmt;
-      let totalTax = 0;
-
-      if (item.subtotal) {
-        taxable = Number(item.subtotal);
-        totalTax = Number(item.gstAmount || ((taxable * gstRate) / 100));
-      } else {
-        taxable = totalAmt / (1 + (gstRate / 100));
-        totalTax = totalAmt - taxable;
-      }
-      const halfTax = (totalTax / 2).toFixed(2);
-      const grandTotal = (taxable + totalTax).toFixed(2);
-
-      const setT = (elemId, val) => {
-        const el = document.getElementById(elemId);
-        if (el) el.innerText = val;
-      };
-
-      setT('pdf-top-company-name', activeComp.name || 'Prism Store');
-      setT('pdf-top-company-address', activeComp.address || 'Delhi, India');
-      setT('pdf-top-company-gstin', activeComp.gstin || 'N/A');
-      setT('pdf-top-company-phone', activeComp.phone || 'N/A');
-
-      const partyName = item.partyName || item.customerName || 'Customer / Party';
-      setT('pdf-billed-name', partyName);
-      setT('pdf-billed-address', item.partyAddress || 'Delhi, India');
-      setT('pdf-billed-gstin', item.partyGstin || 'N/A');
-
-      setT('pdf-shipped-name', partyName);
-      setT('pdf-shipped-address', item.partyAddress || 'Delhi, India');
-      setT('pdf-shipped-gstin', item.partyGstin || 'N/A');
-
-      setT('pdf-item-desc', item.description || item.particulars || 'CAR HIRE CHARGES');
-      setT('pdf-item-notes', item.notes || '');
-      setT('pdf-item-hsn', item.hsn || '9966');
-      setT('pdf-item-qty', qty);
-      setT('pdf-item-price', taxable > 0 ? (taxable / qty).toFixed(2) : rate.toFixed(2));
-
-      setT('pdf-cgst-rate', halfRate + ' %');
-      setT('pdf-cgst-amt', halfTax);
-      setT('pdf-sgst-rate', halfRate + ' %');
-      setT('pdf-sgst-amt', halfTax);
-      setT('pdf-item-total', grandTotal);
-      setT('pdf-grand-total', grandTotal);
-
-      setT('pdf-tax-rate-summary', gstRate + '%');
-      setT('pdf-taxable-amt', taxable.toFixed(2));
-      setT('pdf-cgst-summary', halfTax);
-      setT('pdf-sgst-summary', halfTax);
-      setT('pdf-total-tax-amt', totalTax.toFixed(2));
-
-      setT('pdf-amount-in-words', 'Rupees ' + inrWords(grandTotal));
-      setT('pdf-company-name', activeComp.name || 'Prism Store');
+      document.getElementById('pdf-billed-name').innerText = item.partyName || 'Customer';
+      document.getElementById('pdf-shipped-name').innerText = item.partyName || 'Customer';
+      document.getElementById('pdf-item-desc').innerText = item.description || 'Goods';
+      document.getElementById('pdf-item-qty').innerText = item.quantity || 1;
+      document.getElementById('pdf-item-price').innerText = (item.rate || item.amount || 0).toFixed(2);
+      document.getElementById('pdf-item-total').innerText = (item.totalAmount || item.amount || 0).toFixed(2);
+      document.getElementById('pdf-grand-total').innerText = (item.totalAmount || item.amount || 0).toFixed(2);
 
       const sigImg = document.getElementById('pdf-sig-preview');
-      if (sigImg) {
-        if (companySignatureDataUrl) {
-          sigImg.src = companySignatureDataUrl;
-          sigImg.style.display = 'block';
-        } else {
-          sigImg.style.display = 'none';
-        }
+      if (companySignatureDataUrl) {
+        sigImg.src = companySignatureDataUrl;
+        sigImg.style.display = 'block';
+      } else {
+        sigImg.style.display = 'none';
       }
 
-      const element = document.getElementById('invoice-pdf-template');
-      element.style.display = 'block';
-
-      const opt = {
-        margin: [4, 4, 4, 4],
-        filename: `Invoice_${(activeComp.name || 'Bill').replace(/\s+/g, '_')}_${item.id}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-
-      html2pdf().set(opt).from(element).save().then(() => {
-        element.style.display = 'none';
-      }).catch(() => {
-        element.style.display = 'none';
-      });
+      const el = document.getElementById('invoice-pdf-template');
+      el.style.display = 'block';
+      html2pdf().from(el).set({ filename: `Bill_${item.id}.pdf` }).save().then(() => el.style.display = 'none');
     }
 
-    function convertImageToPDF() {
-      const fileInput = document.getElementById('img-file-input');
-      if (!fileInput.files || !fileInput.files.length) return alert('Please select an image file first!');
-
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const imgData = e.target.result;
-          const jsPDF = window.jspdf.jsPDF;
-          const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
-          const imgProps = doc.getImageProperties(imgData);
-          const pdfWidth = doc.internal.pageSize.getWidth();
-          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-          doc.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-          doc.save(`Image_Converted_${Date.now()}.pdf`);
-        } catch (err) { alert('Error generating PDF: ' + err.message); }
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function convertExcelToPDF() {
-      const fileInput = document.getElementById('excel-file-input');
-      if (!fileInput.files || !fileInput.files.length) return alert('Please select an Excel file (.xlsx or .xls) first!');
-
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const data = new Uint8Array(e.target.result);
-          const workbook = XLSX.read(data, { type: 'array' });
-          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-          const htmlTable = XLSX.utils.sheet_to_html(firstSheet);
-
-          const tempContainer = document.createElement('div');
-          tempContainer.innerHTML = `<div style="padding: 20px; font-family: sans-serif;"><h2 style="color: #4f46e5; margin-bottom: 10px;">Khata Bahi - Excel Export</h2>${htmlTable}</div>`;
-
-          html2pdf().from(tempContainer).set({ margin: 10, filename: `Excel_Export_${Date.now()}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } }).save();
-        } catch (err) { alert('Error parsing Excel sheet: ' + err.message); }
-      };
-      reader.readAsArrayBuffer(file);
-    }
-
-    async function convertPdfToExcel() {
-      const fileInput = document.getElementById('pdf-to-excel-input');
-      if (!fileInput.files || !fileInput.files.length) return alert('Please select a PDF file first!');
-
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-      reader.onload = async function() {
-        try {
-          const typedarray = new Uint8Array(this.result);
-          const pdf = await pdfjsLib.getDocument(typedarray).promise;
-          let extractedRows = [];
-
-          for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const textContent = await page.getTextContent();
-            let pageText = textContent.items.map(item => item.str);
-            let row = [];
-            pageText.forEach((text, index) => {
-              row.push(text);
-              if ((index + 1) % 4 === 0) { extractedRows.push([...row]); row = []; }
-            });
-            if (row.length > 0) extractedRows.push(row);
-          }
-
-          const ws = XLSX.utils.aoa_to_sheet(extractedRows);
-          const wb = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(wb, ws, "PDF_Export");
-          XLSX.writeFile(wb, `PDF_Converted_${Date.now()}.xlsx`);
-        } catch (err) { alert('Error converting PDF to Excel: ' + err.message); }
-      };
-      reader.readAsArrayBuffer(file);
-    }
-
-    async function convertPdfToImage() {
-      const fileInput = document.getElementById('pdf-to-img-input');
-      if (!fileInput.files || !fileInput.files.length) return alert('Please select a PDF file first!');
-
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-      reader.onload = async function() {
-        try {
-          const typedarray = new Uint8Array(this.result);
-          const pdf = await pdfjsLib.getDocument(typedarray).promise;
-          const page = await pdf.getPage(1);
-          const viewport = page.getViewport({ scale: 1.5 });
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
-
-          await page.render({ canvasContext: context, viewport: viewport }).promise;
-
-          const imageURL = canvas.toDataURL("image/png");
-          const a = document.createElement('a');
-          a.href = imageURL;
-          a.download = `PDF_Page1_${Date.now()}.png`;
-          a.click();
-        } catch (err) { alert('Error rendering PDF to Image: ' + err.message); }
-      };
-      reader.readAsArrayBuffer(file);
-    }
-
+    /* CALCULATORS */
     function calculateInterest() {
       const P = parseFloat(document.getElementById('calc-principal').value) || 0;
       const R = parseFloat(document.getElementById('calc-rate').value) || 0;
       const M = parseFloat(document.getElementById('calc-months').value) || 0;
-
-      if (!P || !R || !M) return alert("Please fill all calculator fields.");
-
+      if (!P || !R || !M) return alert("Please fill all fields!");
       const interest = (P * R * M) / 100;
       const total = P + interest;
-
-      const resBox = document.getElementById('interest-result');
-      resBox.classList.remove('hidden');
-      resBox.innerHTML = `
-        <p>Interest Amount: ₹${interest.toFixed(2)}</p>
-        <p class="text-indigo-700">Total Due with Interest: ₹${total.toFixed(2)}</p>
-      `;
+      const res = document.getElementById('interest-result');
+      res.classList.remove('hidden');
+      res.innerHTML = `<p>Interest Amount: ₹${interest.toFixed(2)}</p><p class="text-indigo-700 font-bold">Total Overdue Balance: ₹${total.toFixed(2)}</p>`;
     }
 
     function calculateGstSplit() {
       const total = parseFloat(document.getElementById('calc-gst-total').value) || 0;
       const slab = parseFloat(document.getElementById('calc-gst-slab').value) || 18;
-
-      if (!total) return alert("Please enter total amount.");
-
+      if (!total) return alert("Enter total amount!");
       const base = total / (1 + (slab / 100));
-      const gstVal = total - base;
-      const cgst = gstVal / 2;
-      const sgst = gstVal / 2;
-
-      const resBox = document.getElementById('gst-result');
-      resBox.classList.remove('hidden');
-      resBox.innerHTML = `
-        <p>Base Amount (Excl. Tax): ₹${base.toFixed(2)}</p>
-        <p>CGST (${slab/2}%): ₹${cgst.toFixed(2)}</p>
-        <p>SGST (${slab/2}%): ₹${sgst.toFixed(2)}</p>
-        <p class="font-bold text-emerald-700">Total Tax: ₹${gstVal.toFixed(2)}</p>
-      `;
+      const gst = total - base;
+      const res = document.getElementById('gst-result');
+      res.classList.remove('hidden');
+      res.innerHTML = `<p>Base Amount: ₹${base.toFixed(2)}</p><p>CGST/SGST: ₹${(gst/2).toFixed(2)} each</p><p class="text-emerald-700 font-bold">Total Tax: ₹${gst.toFixed(2)}</p>`;
     }
 
-    function deleteTransaction(id) {
-      if(confirm('Delete this entry from your history?')) {
-        transactions = transactions.filter(t => t.id !== id);
-        saveAndRender();
-      }
-    }
-
+    /* CHARTS */
     function initCharts() {
-      const ctxLine = document.getElementById('overviewChart').getContext('2d');
-      lineChart = new Chart(ctxLine, {
+      lineChart = new Chart(document.getElementById('overviewChart').getContext('2d'), {
         type: 'line',
-        data: { labels: [], datasets: [
-          { label: 'Inflow', data: [], borderColor: '#4f46e5', borderWidth: 3, pointRadius: 4, tension: 0.3 }
-        ] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        data: { labels: [], datasets: [{ label: 'Cash Flow', data: [], borderColor: '#4f46e5', tension: 0.35, borderWidth: 2.5 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { grid: { color: 'rgba(226, 232, 240, 0.6)' } }, x: { grid: { display: false } } } }
       });
-
-      const ctxDoughnut = document.getElementById('categoryChart').getContext('2d');
-      doughnutChart = new Chart(ctxDoughnut, {
+      doughnutChart = new Chart(document.getElementById('categoryChart').getContext('2d'), {
         type: 'doughnut',
-        data: { labels: [], datasets: [{ data: [], backgroundColor: ['#4f46e5', '#22c55e', '#06b6d4', '#eab308'] }] },
-        options: { responsive: true, maintainAspectRatio: false, cutout: '78%', plugins: { legend: { display: false } } }
+        data: { labels: [], datasets: [{ data: [], backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#ec4899'] }] },
+        options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { display: false } } }
       });
     }
 
     function updateCharts() {
-      const groupedByDate = {};
-      transactions.forEach(t => {
-        const formattedDate = formatDateToDDMMYYYY(t.date);
-        groupedByDate[formattedDate] = (groupedByDate[formattedDate] || 0) + (t.totalAmount || t.amount);
-      });
-
-      lineChart.data.labels = Object.keys(groupedByDate).length > 0 ? Object.keys(groupedByDate) : ['No Data'];
-      lineChart.data.datasets[0].data = Object.values(groupedByDate).length > 0 ? Object.values(groupedByDate) : [0];
-      lineChart.update();
-
-      const categoryMap = {};
-      transactions.forEach(t => categoryMap[t.category] = (categoryMap[t.category] || 0) + (t.totalAmount || t.amount));
-
-      doughnutChart.data.labels = Object.keys(categoryMap);
-      doughnutChart.data.datasets[0].data = Object.values(categoryMap);
+      const map = {};
+      transactions.forEach(t => map[t.category] = (map[t.category] || 0) + (t.totalAmount || t.amount));
+      doughnutChart.data.labels = Object.keys(map);
+      doughnutChart.data.datasets[0].data = Object.values(map);
       doughnutChart.update();
     }
 
     function openModal() { document.getElementById('modal').classList.remove('hidden'); calculateAmounts(); }
     function closeModal() { document.getElementById('modal').classList.add('hidden'); }
 
-    function openUpgradeModal() { 
-      setupUpiPaymentLinks();
-      document.getElementById('upgrade-modal').classList.remove('hidden'); 
-    }
-    function closeUpgradeModal() { document.getElementById('upgrade-modal').classList.add('hidden'); }
-
-    function verifyUpiPayment() {
-      const utr = document.getElementById('upi-utr-input').value.trim();
-      if (utr.length >= 8) {
-        activate30DaysPro(`UPI Ref: ${utr}`);
-      } else {
-        alert("Please enter a valid UTR Number.");
+    function toggleVoucherFields() {
+      const type = document.getElementById('type').value;
+      if ((type === 'sale' || type === 'purchase') && !isProUser) {
+        alert('Sale & Purchase Vouchers with GST require an active Pro Membership (₹99/30 days).');
+        document.getElementById('type').value = 'receipt';
+        openUpgradeModal();
+        return;
       }
+
+      const isVoucher = (type === 'sale' || type === 'purchase');
+      document.getElementById('pro-fields-container').classList.toggle('hidden', !isVoucher);
+      calculateAmounts();
     }
 
-    function activate30DaysPro(source = 'Payment') {
-      const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
-      const expiryTimestamp = Date.now() + thirtyDaysMs;
+    function calculateAmounts() {
+      const type = document.getElementById('type').value;
+      const isVoucher = (type === 'sale' || type === 'purchase');
+      const qty = parseFloat(document.getElementById('quantity').value) || 1;
+      const rate = parseFloat(document.getElementById('rate').value) || 0;
+      const gstPct = (isVoucher) ? (parseFloat(document.getElementById('gst-rate').value) || 0) : 0;
 
-      isProUser = true;
-      proExpiry = expiryTimestamp;
+      const subtotal = qty * rate;
+      const gstAmount = (subtotal * gstPct) / 100;
+      const total = subtotal + gstAmount;
 
-      localStorage.setItem('ledger_is_pro', JSON.stringify(true));
-      localStorage.setItem('ledger_pro_expiry', JSON.stringify(expiryTimestamp));
-      localStorage.setItem('isProUser', 'true');
-
-      updateProStatusUI();
-      closeUpgradeModal();
-      alert(`🎉 Khata Pro Activated via ${source}!\nYour subscription is valid for 30 days.`);
+      document.getElementById('summary-subtotal').innerText = `₹${subtotal.toFixed(2)}`;
+      document.getElementById('summary-gst').innerText = `+₹${gstAmount.toFixed(2)}`;
+      document.getElementById('summary-total').innerText = `₹${total.toFixed(2)}`;
     }
 
     document.getElementById('transaction-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      
       const type = document.getElementById('type').value;
       const isVoucher = (type === 'sale' || type === 'purchase');
       const amountVal = parseFloat(document.getElementById('rate').value) || 0;
@@ -1815,110 +1642,26 @@
     });
 
     function exportData() {
-      if (transactions.length === 0) return alert("No entries to export!");
-
-      let csvContent = "Date (DD-MM-YYYY),Voucher Type,Party Name,Description,Quantity,Rate per Unit,GST Rate,GST Amount,Total Amount,Payment Mode\n";
-
-      transactions.forEach(t => {
-        const formattedDate = formatDateToDDMMYYYY(t.date);
-        const party = `"${(t.partyName || '-').replace(/"/g, '""')}"`;
-        const desc = `"${t.description.replace(/"/g, '""')}"`;
-        const method = `"${(t.method || 'UPI').replace(/"/g, '""')}"`;
-        csvContent += `${formattedDate},${t.type.toUpperCase()},${party},${desc},${t.quantity || 1},${t.rate || t.amount},${t.gstRate || 0}%,${t.gstAmount || 0},${t.totalAmount || t.amount},${method}\n`;
-      });
-
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      if (!transactions.length) return alert("No transactions to export!");
+      let csv = "Date,Type,Party,Description,Amount\n";
+      transactions.forEach(t => csv += `${t.date},${t.type},"${t.partyName || ''}","${t.description}",${t.totalAmount || t.amount}\n`);
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `khata_register_${getActiveCompany().name}.csv`;
+      a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;' }));
+      a.download = `Khata_Statement_${getActiveCompany().name}.csv`;
       a.click();
     }
 
-    // SUPPORT & LEGAL MODALS LOGIC
-    const supportContent = {
-      about: {
-        title: "🌸 About Khata Bahi",
-        html: `
-          <p><strong>Khata Bahi</strong> is a high-speed digital accounting, bookkeeping, and document utilities platform engineered for Indian merchants, Kirana shopkeepers, and independent contractors.</p>
-          <p>It eliminates manual calculation errors in traditional paper ledger books, enables real-time GST invoicing, and helps separate business records across multiple companies seamlessly.</p>
-          <p class="font-semibold text-indigo-600">Built for simple, secure, and offline-ready merchant accounting.</p>
-        `
-      },
-      faq: {
-        title: "❓ Frequently Asked Questions",
-        html: `
-          <div class="space-y-3">
-            <div>
-              <p class="font-bold text-slate-800">Q1. Is my financial data kept private?</p>
-              <p>Yes. All conversions, PDF generation, and calculations run completely client-side in your browser. Cloud syncing only activates when you log in with Google.</p>
-            </div>
-            <div>
-              <p class="font-bold text-slate-800">Q2. How do multi-company ledgers work?</p>
-              <p>Each company profile stores its own independent transaction register and personal Gullak savings ledger.</p>
-            </div>
-            <div>
-              <p class="font-bold text-slate-800">Q3. How do I activate Khata Pro?</p>
-              <p>Go to Company Profile > Upgrade Pro (₹99/30d), complete the UPI transaction, and enter the UTR reference number.</p>
-            </div>
-          </div>
-        `
-      },
-      contact: {
-        title: "💬 Contact & Customer Support",
-        html: `
-          <p>Need help or want to request a custom feature for your shop?</p>
-          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1 mt-2">
-            <p><strong>Email Support:</strong> swadsangamindia@gmail.com</p>
-            <p><strong>Operating Hours:</strong> 9:00 AM - 7:00 PM IST (Mon - Sat)</p>
-          </div>
-        `
-      },
-      privacy: {
-        title: "🔒 Privacy Policy",
-        html: `
-          <p>We value your business confidentiality. Khata Bahi does not sell, rent, or trade your financial or customer data.</p>
-          <p>Documents uploaded to the utilities section (PDF, Excel, Images) are processed solely in memory within your browser session and are never uploaded to any remote server.</p>
-        `
-      },
-      terms: {
-        title: "📄 Terms & Conditions",
-        html: `
-          <p>By using Khata Bahi, you agree to generate tax invoices responsibly according to applicable GST regulations.</p>
-          <p>Pro subscriptions are non-refundable once activated. Khata Bahi provides client-side ledger computation tools as-is for self-employed merchants.</p>
-        `
-      },
-      disclaimer: {
-        title: "⚖️ Legal Disclaimer",
-        html: `
-          <p>The calculators and invoices generated by Khata Bahi are intended for merchant record-keeping and estimation purposes.</p>
-          <p>Please consult a certified Chartered Accountant or tax advisor for statutory audits and final GST return filings.</p>
-        `
-      }
-    };
-
-    function openSupportModal(type) {
-      const data = supportContent[type];
-      if (!data) return;
-      document.getElementById('support-modal-title').innerHTML = data.title;
-      document.getElementById('support-modal-body').innerHTML = data.html;
-      document.getElementById('support-modal').classList.remove('hidden');
-    }
-
-    function closeSupportModal() {
-      document.getElementById('support-modal').classList.add('hidden');
-    }
-
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
-
     setupUpiPaymentLinks();
     renderCompanySelectors();
     checkProSubscriptionExpiry();
     updateProStatusUI();
     initCharts();
+    updateGullakUI();
     saveAndRender();
   </script>
 
-  <!-- FIREBASE & GULLAK SCRIPTS -->
+  <!-- FIREBASE MODULE -->
   <script type="module">
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -1939,45 +1682,11 @@
     const provider = new GoogleAuthProvider();
 
     let activeUid = null;
-    let isSyncingFromCloud = false;
 
-    window.handleGoogleSignIn = window.loginWithGoogle = async function() {
-      try {
-        await signInWithPopup(auth, provider);
-      } catch (err) {
-        console.error("Login failed:", err);
-        alert("Login Error: " + err.message);
-      }
+    window.handleGoogleSignIn = async function() {
+      try { await signInWithPopup(auth, provider); }
+      catch (err) { alert("Login failed: " + err.message); }
     };
-
-    window.syncLedgerToCloud = async function() {
-      if (!activeUid || isSyncingFromCloud) return;
-      try {
-        const allTransactions = {};
-        const allGullaks = {};
-
-        companies.forEach(c => {
-          allTransactions[c.id] = JSON.parse(localStorage.getItem(`ledger_tx_${c.id}`)) || [];
-          allGullaks[c.id] = {
-            balance: Number(localStorage.getItem(`gullak_bal_${c.id}`)) || 0,
-            history: JSON.parse(localStorage.getItem(`gullak_hist_${c.id}`)) || []
-          };
-        });
-
-        await setDoc(doc(db, "users", activeUid), {
-          companies: companies,
-          activeCompanyId: activeCompanyId,
-          transactionsMap: allTransactions,
-          gullaksMap: allGullaks,
-          updatedAt: new Date().toISOString()
-        });
-      } catch (err) {
-        console.error("Cloud sync error:", err);
-      }
-    };
-
-    let unsubscribeSnapshot = null;
-    let previousUid = null;
 
     onAuthStateChanged(auth, (user) => {
       const nameEl = document.getElementById('user-display-name');
@@ -1986,193 +1695,17 @@
       const authBtn = document.getElementById('auth-action-btn');
 
       if (user) {
-        if (previousUid && previousUid !== user.uid) {
-          localStorage.clear();
-          if (typeof resetLocalStateToDefault === 'function') {
-            resetLocalStateToDefault();
-          }
-        }
-        previousUid = user.uid;
         activeUid = user.uid;
-
         if (nameEl) nameEl.innerText = user.displayName || "User";
         if (emailEl) emailEl.innerText = user.email || "";
         if (avatarEl) avatarEl.innerText = (user.displayName ? user.displayName[0] : 'U').toUpperCase();
-        
         if (authBtn) {
           authBtn.innerText = "Logout";
-          authBtn.className = "bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-sm";
-          authBtn.onclick = async () => {
-            if (unsubscribeSnapshot) unsubscribeSnapshot();
-            await auth.signOut();
-            localStorage.clear();
-            location.reload();
-          };
-        }
-
-        if (unsubscribeSnapshot) unsubscribeSnapshot();
-
-        unsubscribeSnapshot = onSnapshot(doc(db, "users", activeUid), (snap) => {
-          if (snap.exists()) {
-            const data = snap.data();
-            isSyncingFromCloud = true;
-
-            if (data.companies && data.companies.length > 0) {
-              companies = data.companies;
-              localStorage.setItem('ledger_companies', JSON.stringify(companies));
-            }
-            if (data.activeCompanyId) {
-              activeCompanyId = data.activeCompanyId;
-              localStorage.setItem('ledger_active_company_id', activeCompanyId);
-            }
-            if (data.transactionsMap) {
-              Object.entries(data.transactionsMap).forEach(([id, txs]) => {
-                localStorage.setItem(`ledger_tx_${id}`, JSON.stringify(txs));
-              });
-            }
-            if (data.gullaksMap) {
-              Object.entries(data.gullaksMap).forEach(([id, g]) => {
-                localStorage.setItem(`gullak_bal_${id}`, g.balance || 0);
-                localStorage.setItem(`gullak_hist_${id}`, JSON.stringify(g.history || []));
-              });
-            }
-
-            if (typeof loadCompanyTransactions === 'function') {
-              loadCompanyTransactions();
-            }
-
-            setTimeout(() => {
-              isSyncingFromCloud = false;
-            }, 300);
-
-          } else {
-            companies = [
-              { id: `c_${Date.now()}`, name: `${user.displayName ? user.displayName.split(' ')[0] : 'My'} Shop`, address: 'Delhi, India', gstin: 'N/A', phone: '' }
-            ];
-            activeCompanyId = companies[0].id;
-            transactions = [];
-            
-            localStorage.setItem('ledger_companies', JSON.stringify(companies));
-            localStorage.setItem('ledger_active_company_id', activeCompanyId);
-            localStorage.setItem(`ledger_tx_${activeCompanyId}`, JSON.stringify(transactions));
-            
-            renderCompanySelectors();
-            saveAndRender();
-            window.reloadGullakForActiveCompany();
-          }
-        }, (error) => {
-          console.error("Firestore Snapshot error:", error);
-        });
-      } else {
-        activeUid = null;
-        previousUid = null;
-
-        if (nameEl) nameEl.innerText = "Guest User";
-        if (emailEl) emailEl.innerText = "Not signed in";
-        if (avatarEl) avatarEl.innerText = "U";
-        if (authBtn) {
-          authBtn.innerText = "Sign In";
-          authBtn.className = "bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-sm";
-          authBtn.onclick = () => window.handleGoogleSignIn();
-        }
-
-        if (unsubscribeSnapshot) {
-          unsubscribeSnapshot();
-          unsubscribeSnapshot = null;
+          authBtn.className = "bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm";
+          authBtn.onclick = async () => { await auth.signOut(); localStorage.clear(); location.reload(); };
         }
       }
     });
-
-    /* GULLAK CONTROLLER LOGIC (COMPANY ISOLATED) */
-    let gullakBalance = 0;
-    let gullakHistory = [];
-
-    window.reloadGullakForActiveCompany = function() {
-      gullakBalance = Number(localStorage.getItem(`gullak_bal_${activeCompanyId}`)) || 0;
-      gullakHistory = JSON.parse(localStorage.getItem(`gullak_hist_${activeCompanyId}`)) || [];
-      window.updateGullakUI();
-    };
-
-    window.updateGullakUI = function() {
-      const balEl = document.getElementById('gullak-balance-display');
-      if (balEl) balEl.innerText = `₹${gullakBalance.toFixed(2)}`;
-      
-      const compLabel = document.getElementById('gullak-company-name');
-      if (compLabel) {
-        const comp = typeof getActiveCompany === 'function' ? getActiveCompany() : null;
-        if (comp) compLabel.innerText = comp.name;
-      }
-
-      const container = document.getElementById('gullak-history-list');
-      if (!container) return;
-
-      if (gullakHistory.length === 0) {
-        container.innerHTML = `<p class="text-[11px] text-slate-400 text-center py-2">इस कंपनी के लिए कोई बचत रिकॉर्ड नहीं है</p>`;
-        return;
-      }
-
-      container.innerHTML = gullakHistory.slice(0, 10).map(item => `
-        <div class="flex items-center justify-between p-2 rounded-xl border text-xs ${item.type === 'deposit' ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200'}">
-          <div>
-            <p class="font-bold text-slate-800">${item.note}</p>
-            <p class="text-[10px] text-slate-400">${item.date}</p>
-          </div>
-          <span class="font-bold ${item.type === 'deposit' ? 'text-emerald-600' : 'text-rose-500'}">
-            ${item.type === 'deposit' ? '+' : '-'}₹${item.amount.toFixed(2)}
-          </span>
-        </div>
-      `).join('');
-      if (window.lucide) lucide.createIcons();
-    };
-
-    window.depositGullak = function() {
-      const amtInput = document.getElementById('gullak-amount-input');
-      const noteInput = document.getElementById('gullak-note-input');
-      const amt = parseFloat(amtInput.value);
-      const note = noteInput.value.trim() || 'Saved in Gullak';
-      
-      if (!amt || amt <= 0) return alert("कृपया सही राशि डालें!");
-
-      gullakBalance += amt;
-      gullakHistory.unshift({ type: 'deposit', amount: amt, note: note, date: new Date().toLocaleDateString('en-GB') });
-
-      localStorage.setItem(`gullak_bal_${activeCompanyId}`, gullakBalance);
-      localStorage.setItem(`gullak_hist_${activeCompanyId}`, JSON.stringify(gullakHistory));
-      
-      amtInput.value = '';
-      noteInput.value = '';
-      window.updateGullakUI();
-
-      if (typeof window.syncLedgerToCloud === 'function') {
-        window.syncLedgerToCloud();
-      }
-    };
-
-    window.withdrawGullak = function() {
-      const amtInput = document.getElementById('gullak-amount-input');
-      const noteInput = document.getElementById('gullak-note-input');
-      const amt = parseFloat(amtInput.value);
-      const note = noteInput.value.trim() || 'Withdrawn from Gullak';
-      
-      if (!amt || amt <= 0) return alert("कृपया सही राशि डालें!");
-      if (amt > gullakBalance) return alert("गुल्लक में इतने पैसे नहीं हैं!");
-
-      gullakBalance -= amt;
-      gullakHistory.unshift({ type: 'withdraw', amount: amt, note: note, date: new Date().toLocaleDateString('en-GB') });
-
-      localStorage.setItem(`gullak_bal_${activeCompanyId}`, gullakBalance);
-      localStorage.setItem(`gullak_hist_${activeCompanyId}`, JSON.stringify(gullakHistory));
-      
-      amtInput.value = '';
-      noteInput.value = '';
-      window.updateGullakUI();
-
-      if (typeof window.syncLedgerToCloud === 'function') {
-        window.syncLedgerToCloud();
-      }
-    };
-
-    window.reloadGullakForActiveCompany();
   </script>
 </body>
 </html>
