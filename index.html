@@ -110,7 +110,7 @@
         <i data-lucide="shield" class="w-3.5 h-3.5 text-amber-300"></i> Free Tier
       </span>
 
-      <!-- Header Action Buttons -->
+      <!-- Action Buttons -->
       <button onclick="switchTab('calculator')" class="bg-amber-800 hover:bg-amber-700 text-amber-100 border border-amber-600/40 px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm transition" title="Open Financial Calculators">
         <i data-lucide="calculator" class="w-3.5 h-3.5 text-amber-300"></i> <span class="hidden sm:inline">Calc</span>
       </button>
@@ -127,7 +127,7 @@
         <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-amber-600"></i> Add Entry
       </button>
 
-      <!-- Google Login Avatar Pill -->
+      <!-- Google Login Button -->
       <div class="flex items-center pl-1.5 border-l border-amber-700/60">
         <button onclick="handleGoogleSignIn()" id="auth-action-btn" class="w-7 h-7 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs flex items-center justify-center shadow transition" title="Sign in with Google">
           U
@@ -179,7 +179,7 @@
         </button>
       </nav>
 
-      <!-- Bottom Net Cash Position -->
+      <!-- Bottom Net Cash Card -->
       <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 space-y-1">
         <div class="flex items-center justify-between">
           <span class="text-[10px] text-amber-800 font-bold uppercase tracking-wider">Net Cash Total</span>
@@ -193,7 +193,7 @@
     <!-- MAIN SCROLLABLE VIEWPORT -->
     <main class="flex-1 overflow-y-auto p-4 md:p-8 pb-28 md:pb-8 relative z-10">
 
-      <!-- 0. VIEW: ABOUT & OVERVIEW HUB (MASSIVE KNOWLEDGE REPOSITORY) -->
+      <!-- 0. VIEW: ABOUT & OVERVIEW HUB -->
       <div id="view-about" class="tab-view space-y-6">
         <section class="caphi-card p-6 md:p-8 space-y-8">
           <div class="max-w-4xl space-y-3">
@@ -233,7 +233,7 @@
             <div class="p-4 rounded-xl border border-amber-200 bg-amber-50/40 space-y-2">
               <div class="p-2.5 bg-amber-200 text-amber-900 rounded-xl w-fit"><i data-lucide="piggy-bank" class="w-5 h-5"></i></div>
               <h3 class="font-bold text-slate-900 text-sm heading-font">Offline Savings Gullak</h3>
-              <p class="text-xs text-slate-600">Stash away ₹40, ₹50, or daily leftover change. Now complete with individual deposit/withdrawal deletion controls.</p>
+              <p class="text-xs text-slate-600">Stash away ₹40, ₹50, or daily leftover change with individual deposit and withdrawal record deletion.</p>
             </div>
             <div class="p-4 rounded-xl border border-amber-200 bg-amber-50/40 space-y-2">
               <div class="p-2.5 bg-amber-200 text-amber-900 rounded-xl w-fit"><i data-lucide="wrench" class="w-5 h-5"></i></div>
@@ -844,7 +844,7 @@
   <!-- MOBILE BOTTOM APP NAV -->
   <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-amber-200 text-slate-600 flex justify-around items-center p-2 z-40 shadow-lg">
     <button onclick="switchTab('about')" id="m-nav-about" class="flex flex-col items-center gap-1 p-1 text-[10px] text-amber-800 font-bold">
-      <i data-lucide="home" class="w-5 h-5"></i> Hub
+      <i data-lucide="compass" class="w-5 h-5"></i> Hub
     </button>
     <button onclick="switchTab('dashboard')" id="m-nav-dashboard" class="flex flex-col items-center gap-1 p-1 text-[10px] font-semibold">
       <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Ledger
@@ -1192,106 +1192,6 @@
       } else {
         alert("Please enter a valid UPI Reference / UTR Number (at least 8 digits).");
       }
-    }
-
-    /* GULLAK LOGIC WITH INDIVIDUAL DELETION SUPPORT */
-    let gullakBalance = Number(localStorage.getItem(`gullak_bal_${activeCompanyId}`)) || 0;
-    let gullakHistory = JSON.parse(localStorage.getItem(`gullak_hist_${activeCompanyId}`)) || [];
-
-    function updateGullakUI() {
-      const balEl = document.getElementById('gullak-balance-display');
-      if (balEl) balEl.innerText = `₹${gullakBalance.toFixed(2)}`;
-      
-      const container = document.getElementById('gullak-history-list');
-      if (!container) return;
-
-      if (gullakHistory.length === 0) {
-        container.innerHTML = `<p class="text-[11px] text-slate-400 text-center py-3">गुल्लक में कोई रिकॉर्ड नहीं है।</p>`;
-        return;
-      }
-
-      container.innerHTML = gullakHistory.map((item, index) => `
-        <div class="flex items-center justify-between p-2 rounded-lg border border-amber-200 bg-white text-xs shadow-sm">
-          <div class="flex-1">
-            <p class="font-bold text-slate-900">${item.note}</p>
-            <p class="text-[10px] text-slate-400 font-mono">${item.date}</p>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="font-black ${item.type === 'deposit' ? 'text-emerald-600' : 'text-rose-600'}">
-              ${item.type === 'deposit' ? '+' : '-'}₹${item.amount.toFixed(2)}
-            </span>
-            <button onclick="deleteGullakRecord(${index})" class="text-slate-400 hover:text-rose-600 p-1" title="Delete Entry">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-            </button>
-          </div>
-        </div>
-      `).join('');
-      lucide.createIcons();
-    }
-
-    function depositGullak() {
-      const amtInput = document.getElementById('gullak-amount-input');
-      const noteInput = document.getElementById('gullak-note-input');
-      const amt = parseFloat(amtInput.value);
-      const note = noteInput.value.trim() || 'Saved in Gullak';
-      
-      if (!amt || amt <= 0) return alert("कृपया सही राशि डालें (जैसे: ₹40 या ₹50)!");
-
-      gullakBalance += amt;
-      gullakHistory.unshift({ type: 'deposit', amount: amt, note: note, date: new Date().toLocaleDateString('en-GB') });
-
-      localStorage.setItem(`gullak_bal_${activeCompanyId}`, gullakBalance);
-      localStorage.setItem(`gullak_hist_${activeCompanyId}`, JSON.stringify(gullakHistory));
-      
-      amtInput.value = '';
-      noteInput.value = '';
-      updateGullakUI();
-    }
-
-    function withdrawGullak() {
-      const amtInput = document.getElementById('gullak-amount-input');
-      const noteInput = document.getElementById('gullak-note-input');
-      const amt = parseFloat(amtInput.value);
-      const note = noteInput.value.trim() || 'Withdrawn from Gullak';
-      
-      if (!amt || amt <= 0) return alert("कृपया सही राशि डालें!");
-      if (amt > gullakBalance) return alert("गुल्लक में इतने पैसे नहीं हैं!");
-
-      gullakBalance -= amt;
-      gullakHistory.unshift({ type: 'withdraw', amount: amt, note: note, date: new Date().toLocaleDateString('en-GB') });
-
-      localStorage.setItem(`gullak_bal_${activeCompanyId}`, gullakBalance);
-      localStorage.setItem(`gullak_hist_${activeCompanyId}`, JSON.stringify(gullakHistory));
-      
-      amtInput.value = '';
-      noteInput.value = '';
-      updateGullakUI();
-    }
-
-    function deleteGullakRecord(index) {
-      if (!confirm("क्या आप इस गुल्लक एंट्री को हटाना चाहते हैं?")) return;
-      const record = gullakHistory[index];
-      
-      // Reverse balance adjustment
-      if (record.type === 'deposit') {
-        gullakBalance = Math.max(0, gullakBalance - record.amount);
-      } else if (record.type === 'withdraw') {
-        gullakBalance += record.amount;
-      }
-
-      gullakHistory.splice(index, 1);
-      localStorage.setItem(`gullak_bal_${activeCompanyId}`, gullakBalance);
-      localStorage.setItem(`gullak_hist_${activeCompanyId}`, JSON.stringify(gullakHistory));
-      updateGullakUI();
-    }
-
-    function clearAllGullakRecords() {
-      if (!confirm("क्या आप गुल्लक के सभी रिकॉर्ड और बैलेंस साफ़ करना चाहते हैं?")) return;
-      gullakBalance = 0;
-      gullakHistory = [];
-      localStorage.setItem(`gullak_bal_${activeCompanyId}`, 0);
-      localStorage.setItem(`gullak_hist_${activeCompanyId}`, JSON.stringify([]));
-      updateGullakUI();
     }
 
     /* MULTI-COMPANY HANDLERS */
@@ -1778,10 +1678,10 @@
     saveAndRender();
   </script>
 
-  <!-- FIREBASE SYNC MODULE -->
+  <!-- FIREBASE AUTH (MOBILE-SAFE REDIRECT) & CLOUD SYNC -->
   <script type="module">
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -1798,11 +1698,22 @@
     const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
 
-    let activeUid = null;
+    // Catch returning redirect from mobile authentication
+    getRedirectResult(auth).catch((err) => {
+      console.warn("Redirect Auth:", err.message);
+    });
 
     window.handleGoogleSignIn = async function() {
-      try { await signInWithPopup(auth, provider); }
-      catch (err) { alert("Login failed: " + err.message); }
+      try {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+          await signInWithRedirect(auth, provider);
+        } else {
+          await signInWithPopup(auth, provider);
+        }
+      } catch (err) {
+        alert("Login failed: " + err.message);
+      }
     };
 
     onAuthStateChanged(auth, (user) => {
