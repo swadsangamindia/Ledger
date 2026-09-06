@@ -179,7 +179,7 @@
         </button>
       </nav>
 
-      <!-- Bottom Net Cash Card -->
+      <!-- Bottom Net Cash Position -->
       <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 space-y-1">
         <div class="flex items-center justify-between">
           <span class="text-[10px] text-amber-800 font-bold uppercase tracking-wider">Net Cash Total</span>
@@ -193,7 +193,7 @@
     <!-- MAIN SCROLLABLE VIEWPORT -->
     <main class="flex-1 overflow-y-auto p-4 md:p-8 pb-28 md:pb-8 relative z-10">
 
-      <!-- 0. VIEW: ABOUT & OVERVIEW HUB -->
+      <!-- 0. VIEW: ABOUT & OVERVIEW HUB (MASSIVE KNOWLEDGE REPOSITORY) -->
       <div id="view-about" class="tab-view space-y-6">
         <section class="caphi-card p-6 md:p-8 space-y-8">
           <div class="max-w-4xl space-y-3">
@@ -1194,6 +1194,105 @@
       }
     }
 
+    /* GULLAK LOGIC WITH INDIVIDUAL RECORD DELETION */
+    let gullakBalance = Number(localStorage.getItem(`gullak_bal_${activeCompanyId}`)) || 0;
+    let gullakHistory = JSON.parse(localStorage.getItem(`gullak_hist_${activeCompanyId}`)) || [];
+
+    function updateGullakUI() {
+      const balEl = document.getElementById('gullak-balance-display');
+      if (balEl) balEl.innerText = `₹${gullakBalance.toFixed(2)}`;
+      
+      const container = document.getElementById('gullak-history-list');
+      if (!container) return;
+
+      if (gullakHistory.length === 0) {
+        container.innerHTML = `<p class="text-[11px] text-slate-400 text-center py-3">गुल्लक में कोई रिकॉर्ड नहीं है।</p>`;
+        return;
+      }
+
+      container.innerHTML = gullakHistory.map((item, index) => `
+        <div class="flex items-center justify-between p-2 rounded-lg border border-amber-200 bg-white text-xs shadow-sm">
+          <div class="flex-1">
+            <p class="font-bold text-slate-900">${item.note}</p>
+            <p class="text-[10px] text-slate-400 font-mono">${item.date}</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="font-black ${item.type === 'deposit' ? 'text-emerald-600' : 'text-rose-600'}">
+              ${item.type === 'deposit' ? '+' : '-'}₹${item.amount.toFixed(2)}
+            </span>
+            <button onclick="deleteGullakRecord(${index})" class="text-slate-400 hover:text-rose-600 p-1" title="Delete Entry">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function depositGullak() {
+      const amtInput = document.getElementById('gullak-amount-input');
+      const noteInput = document.getElementById('gullak-note-input');
+      const amt = parseFloat(amtInput.value);
+      const note = noteInput.value.trim() || 'Saved in Gullak';
+      
+      if (!amt || amt <= 0) return alert("कृपया सही राशि डालें (जैसे: ₹40 या ₹50)!");
+
+      gullakBalance += amt;
+      gullakHistory.unshift({ type: 'deposit', amount: amt, note: note, date: new Date().toLocaleDateString('en-GB') });
+
+      localStorage.setItem(`gullak_bal_${activeCompanyId}`, gullakBalance);
+      localStorage.setItem(`gullak_hist_${activeCompanyId}`, JSON.stringify(gullakHistory));
+      
+      amtInput.value = '';
+      noteInput.value = '';
+      updateGullakUI();
+    }
+
+    function withdrawGullak() {
+      const amtInput = document.getElementById('gullak-amount-input');
+      const noteInput = document.getElementById('gullak-note-input');
+      const amt = parseFloat(amtInput.value);
+      const note = noteInput.value.trim() || 'Withdrawn from Gullak';
+      
+      if (!amt || amt <= 0) return alert("कृपया सही राशि डालें!");
+      if (amt > gullakBalance) return alert("गुल्लक में इतने पैसे नहीं हैं!");
+
+      gullakBalance -= amt;
+      gullakHistory.unshift({ type: 'withdraw', amount: amt, note: note, date: new Date().toLocaleDateString('en-GB') });
+
+      localStorage.setItem(`gullak_bal_${activeCompanyId}`, gullakBalance);
+      localStorage.setItem(`gullak_hist_${activeCompanyId}`, JSON.stringify(gullakHistory));
+      
+      amtInput.value = '';
+      noteInput.value = '';
+      updateGullakUI();
+    }
+
+    function deleteGullakRecord(index) {
+      if (!confirm("क्या आप इस गुल्लक एंट्री को हटाना चाहते हैं?")) return;
+      const record = gullakHistory[index];
+      
+      if (record.type === 'deposit') {
+        gullakBalance = Math.max(0, gullakBalance - record.amount);
+      } else if (record.type === 'withdraw') {
+        gullakBalance += record.amount;
+      }
+
+      gullakHistory.splice(index, 1);
+      localStorage.setItem(`gullak_bal_${activeCompanyId}`, gullakBalance);
+      localStorage.setItem(`gullak_hist_${activeCompanyId}`, JSON.stringify(gullakHistory));
+      updateGullakUI();
+    }
+
+    function clearAllGullakRecords() {
+      if (!confirm("क्या आप गुल्लक के सभी रिकॉर्ड और बैलेंस साफ़ करना चाहते हैं?")) return;
+      gullakBalance = 0;
+      gullakHistory = [];
+      localStorage.setItem(`gullak_bal_${activeCompanyId}`, 0);
+      localStorage.setItem(`gullak_hist_${activeCompanyId}`, JSON.stringify([]));
+      updateGullakUI();
+    }
+
     /* MULTI-COMPANY HANDLERS */
     function renderCompanySelectors() {
       const desktopSel = document.getElementById('company-selector');
@@ -1678,7 +1777,7 @@
     saveAndRender();
   </script>
 
-  <!-- FIREBASE AUTH (MOBILE-SAFE REDIRECT) & CLOUD SYNC -->
+  <!-- FIREBASE AUTH & SYNC MODULE (WITH ROBUST REDIRECT + GUEST FIX) -->
   <script type="module">
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -1698,47 +1797,128 @@
     const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
 
-    // Catch returning redirect from mobile authentication
-    getRedirectResult(auth).catch((err) => {
-      console.warn("Redirect Auth:", err.message);
-    });
+    let activeUid = null;
+    let isSyncingFromCloud = false;
 
+    // 1. Process Mobile Redirect Callback on Page Load
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result && result.user) {
+          applyUserData(result.user);
+        }
+      })
+      .catch((err) => {
+        console.warn("Redirect result check:", err.message);
+      });
+
+    // 2. Trigger Login Action
     window.handleGoogleSignIn = async function() {
       try {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile) {
           await signInWithRedirect(auth, provider);
         } else {
-          await signInWithPopup(auth, provider);
+          const res = await signInWithPopup(auth, provider);
+          if (res && res.user) {
+            applyUserData(res.user);
+          }
         }
       } catch (err) {
         alert("Login failed: " + err.message);
       }
     };
 
-    onAuthStateChanged(auth, (user) => {
+    // 3. UI Update Helper
+    function applyUserData(user) {
+      if (!user) return;
+      activeUid = user.uid;
+
+      currentUser = {
+        name: user.displayName || "User",
+        email: user.email || "",
+        currency: "₹"
+      };
+      localStorage.setItem('ledger_user', JSON.stringify(currentUser));
+
       const nameEl = document.getElementById('user-display-name');
       const emailEl = document.getElementById('user-display-email');
       const avatarEl = document.getElementById('user-avatar');
-      const authBtn = document.getElementById('auth-action-btn');
-      const authBtnSettings = document.getElementById('auth-action-btn-settings');
+      const authHeaderBtn = document.getElementById('auth-action-btn');
+      const authSettingsBtn = document.getElementById('auth-action-btn-settings');
 
+      if (nameEl) nameEl.innerText = currentUser.name;
+      if (emailEl) emailEl.innerText = currentUser.email;
+      
+      const initial = (currentUser.name ? currentUser.name[0] : 'U').toUpperCase();
+      if (avatarEl) avatarEl.innerText = initial;
+      if (authHeaderBtn) authHeaderBtn.innerText = initial;
+
+      if (authSettingsBtn) {
+        authSettingsBtn.innerText = "Logout";
+        authSettingsBtn.className = "bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg shadow-sm";
+        authSettingsBtn.onclick = async () => {
+          await auth.signOut();
+          localStorage.removeItem('ledger_user');
+          location.reload();
+        };
+      }
+
+      const welcome = document.getElementById('welcome-heading');
+      if (welcome) welcome.innerText = `Welcome, ${currentUser.name} 🌸`;
+    }
+
+    // 4. Listen for Persistent Auth State
+    onAuthStateChanged(auth, (user) => {
       if (user) {
-        activeUid = user.uid;
-        if (nameEl) nameEl.innerText = user.displayName || "User";
-        if (emailEl) emailEl.innerText = user.email || "";
-        if (avatarEl) avatarEl.innerText = (user.displayName ? user.displayName[0] : 'U').toUpperCase();
-        if (authBtn) {
-          authBtn.innerText = (user.displayName ? user.displayName[0] : 'U').toUpperCase();
-          authBtn.title = "Logged in as " + (user.email || "User");
-        }
-        if (authBtnSettings) {
-          authBtnSettings.innerText = "Logout";
-          authBtnSettings.className = "bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg shadow-sm";
-          authBtnSettings.onclick = async () => { await auth.signOut(); localStorage.clear(); location.reload(); };
-        }
+        applyUserData(user);
+
+        onSnapshot(doc(db, "users", user.uid), (snap) => {
+          if (snap.exists()) {
+            const data = snap.data();
+            isSyncingFromCloud = true;
+            if (data.companies && data.companies.length > 0) {
+              companies = data.companies;
+              localStorage.setItem('ledger_companies', JSON.stringify(companies));
+            }
+            if (data.activeCompanyId) {
+              activeCompanyId = data.activeCompanyId;
+              localStorage.setItem('ledger_active_company_id', activeCompanyId);
+            }
+            if (data.transactionsMap) {
+              Object.entries(data.transactionsMap).forEach(([id, txs]) => {
+                localStorage.setItem(`ledger_tx_${id}`, JSON.stringify(txs));
+              });
+            }
+            if (typeof loadCompanyTransactions === 'function') {
+              loadCompanyTransactions();
+            }
+            setTimeout(() => { isSyncingFromCloud = false; }, 300);
+          }
+        }, (error) => {
+          console.warn("Firestore sync setup note:", error.message);
+        });
       }
     });
+
+    // 5. Cloud Save Hook
+    window.syncLedgerToCloud = async function() {
+      if (!activeUid || isSyncingFromCloud) return;
+      try {
+        const allTransactions = {};
+        companies.forEach(c => {
+          allTransactions[c.id] = JSON.parse(localStorage.getItem(`ledger_tx_${c.id}`)) || [];
+        });
+
+        await setDoc(doc(db, "users", activeUid), {
+          companies: companies,
+          activeCompanyId: activeCompanyId,
+          transactionsMap: allTransactions,
+          updatedAt: new Date().toISOString()
+        });
+      } catch (err) {
+        console.error("Cloud sync save error:", err);
+      }
+    };
   </script>
 </body>
 </html>
