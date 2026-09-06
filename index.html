@@ -1776,11 +1776,19 @@
     updateGullakUI();
     saveAndRender();
   </script>
-
-  <!-- FIREBASE AUTH & SYNC MODULE (WITH ROBUST REDIRECT + GUEST FIX) -->
+  <!-- FIREBASE AUTH (MOBILE-SAFE REDIRECT & PERSISTENT GUEST FIX) -->
   <script type="module">
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { 
+      getAuth, 
+      GoogleAuthProvider, 
+      signInWithPopup, 
+      signInWithRedirect, 
+      getRedirectResult, 
+      onAuthStateChanged,
+      setPersistence,
+      browserLocalPersistence 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -1800,63 +1808,41 @@
     let activeUid = null;
     let isSyncingFromCloud = false;
 
-    // 1. Process Mobile Redirect Callback on Page Load
-    getRedirectResult(auth)
-      .then((result) => {
-        if (result && result.user) {
-          applyUserData(result.user);
-        }
-      })
-      .catch((err) => {
-        console.warn("Redirect result check:", err.message);
-      });
+    // Ensure state persists in localStorage across mobile Chrome redirects
+    setPersistence(auth, browserLocalPersistence).catch(console.error);
 
-    // 2. Trigger Login Action
-    window.handleGoogleSignIn = async function() {
-      try {
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (isMobile) {
-          await signInWithRedirect(auth, provider);
-        } else {
-          const res = await signInWithPopup(auth, provider);
-          if (res && res.user) {
-            applyUserData(res.user);
-          }
-        }
-      } catch (err) {
-        alert("Login failed: " + err.message);
-      }
-    };
-
-    // 3. UI Update Helper
     function applyUserData(user) {
       if (!user) return;
       activeUid = user.uid;
 
       currentUser = {
-        name: user.displayName || "User",
+        name: user.displayName || user.email.split('@')[0] || "User",
         email: user.email || "",
         currency: "₹"
       };
       localStorage.setItem('ledger_user', JSON.stringify(currentUser));
 
+      // Update both buttons & labels
       const nameEl = document.getElementById('user-display-name');
       const emailEl = document.getElementById('user-display-email');
       const avatarEl = document.getElementById('user-avatar');
-      const authHeaderBtn = document.getElementById('auth-action-btn');
-      const authSettingsBtn = document.getElementById('auth-action-btn-settings');
+      const headerBtn = document.getElementById('auth-action-btn');
+      const settingsBtn = document.getElementById('auth-action-btn-settings');
 
       if (nameEl) nameEl.innerText = currentUser.name;
       if (emailEl) emailEl.innerText = currentUser.email;
-      
+
       const initial = (currentUser.name ? currentUser.name[0] : 'U').toUpperCase();
       if (avatarEl) avatarEl.innerText = initial;
-      if (authHeaderBtn) authHeaderBtn.innerText = initial;
+      if (headerBtn) {
+        headerBtn.innerText = initial;
+        headerBtn.title = "Logged in: " + currentUser.email;
+      }
 
-      if (authSettingsBtn) {
-        authSettingsBtn.innerText = "Logout";
-        authSettingsBtn.className = "bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg shadow-sm";
-        authSettingsBtn.onclick = async () => {
+      if (settingsBtn) {
+        settingsBtn.innerText = "Logout";
+        settingsBtn.className = "bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg shadow-sm";
+        settingsBtn.onclick = async () => {
           await auth.signOut();
           localStorage.removeItem('ledger_user');
           location.reload();
@@ -1867,11 +1853,23 @@
       if (welcome) welcome.innerText = `Welcome, ${currentUser.name} 🌸`;
     }
 
-    // 4. Listen for Persistent Auth State
+    // 1. Process the redirect callback when returning from Google accounts screen
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result && result.user) {
+          applyUserData(result.user);
+        }
+      })
+      .catch((err) => {
+        console.warn("Redirect Auth Check:", err.message);
+      });
+
+    // 2. Auth listener for session restore
     onAuthStateChanged(auth, (user) => {
       if (user) {
         applyUserData(user);
 
+        // Firestore real-time backup sync
         onSnapshot(doc(db, "users", user.uid), (snap) => {
           if (snap.exists()) {
             const data = snap.data();
@@ -1895,12 +1893,27 @@
             setTimeout(() => { isSyncingFromCloud = false; }, 300);
           }
         }, (error) => {
-          console.warn("Firestore sync setup note:", error.message);
+          console.warn("Firestore listener note:", error.message);
         });
       }
     });
 
-    // 5. Cloud Save Hook
+    window.handleGoogleSignIn = async function() {
+      try {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+          await signInWithRedirect(auth, provider);
+        } else {
+          const res = await signInWithPopup(auth, provider);
+          if (res && res.user) {
+            applyUserData(res.user);
+          }
+        }
+      } catch (err) {
+        alert("Login failed: " + err.message);
+      }
+    };
+
     window.syncLedgerToCloud = async function() {
       if (!activeUid || isSyncingFromCloud) return;
       try {
